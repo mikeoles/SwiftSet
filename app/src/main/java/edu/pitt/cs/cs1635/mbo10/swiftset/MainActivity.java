@@ -9,12 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<SortingGroup> mainSortingOptions;
+    public static ArrayList<SortingGroup> mainOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
+        for(int i=0; i<mainOptions.size(); i++){
+            Button newButton = new Button(this);
+            SortingGroup s = mainOptions.get(i);
+            newButton.setText(s.getName());
+            newButton.setBackgroundColor(0xFF99D6D6);
+            l.addView(newButton);
+        }
     }
 
     @Override
@@ -48,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Creates the different sorting group classes that exercises can be sorted by
     public void createSortingClasses(){
-        mainSortingOptions.add(new PushPullLegs());
-
+        mainOptions.add(new PushPullLegs());
+        mainOptions.add(new MuscleGroup());
     }
 }
