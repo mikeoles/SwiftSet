@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<SortingGroup> mainOptions;
+    public static ArrayList<SortingGroup> mainOptions = new ArrayList<SortingGroup>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +24,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        createSortingClasses();
 
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
         for(int i=0; i<mainOptions.size(); i++){
             Button newButton = new Button(this);
             SortingGroup s = mainOptions.get(i);
             newButton.setText(s.getName());
-            newButton.setBackgroundColor(0xFF99D6D6);
             l.addView(newButton);
         }
     }
