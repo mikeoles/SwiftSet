@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> mainOptions = new ArrayList<SortingGroup>();
+    ExerciseDatabaseHelper exerciseDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        createSortingClasses();
 
+        createSortingClasses();
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
         for(int i=0; i<mainOptions.size(); i++){
             Button newButton = new Button(this);
