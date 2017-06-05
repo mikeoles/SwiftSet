@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +28,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ExerciseDatabaseHelper exDbHelper = new ExerciseDatabaseHelper(this);
+
+        try {
+            exDbHelper.createDataBase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+
+        try {
+            exDbHelper.openDataBase();
+        }catch(SQLException sqle){
+            throw new Error("Unable to open database");
+        }
+
         createSortingClasses();
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
         for(int i=0; i<mainOptions.size(); i++){
@@ -34,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
             newButton.setText(s.getName());
             l.addView(newButton);
         }
+        Button newButton = new Button(this);
+        newButton.setText(exDbHelper.toString());
+        l.addView(newButton);
     }
 
     @Override
