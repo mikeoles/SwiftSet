@@ -19,7 +19,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> mainOptions = new ArrayList<SortingGroup>();
-    ExerciseDatabaseHelper exerciseDb;
+    private ExerciseDb db;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +30,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ExerciseDatabaseHelper exDbHelper = new ExerciseDatabaseHelper(this);
-
-        try {
-            exDbHelper.createDataBase();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-
-        try {
-            exDbHelper.openDataBase();
-        }catch(SQLException sqle){
-            throw new Error("Unable to open database");
-        }
+        db = new ExerciseDb(this);
 
         createSortingClasses();
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
@@ -51,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             l.addView(newButton);
         }
         Button newButton = new Button(this);
-        newButton.setText(exDbHelper.toString());
+        newButton.setText(db.dbString());
         l.addView(newButton);
     }
 
@@ -81,5 +71,11 @@ public class MainActivity extends AppCompatActivity {
     public void createSortingClasses(){
         mainOptions.add(new PushPullLegs());
         mainOptions.add(new MuscleGroup());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 }
