@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> mainOptions = new ArrayList<SortingGroup>();
     private ExerciseDb db;
-
+    private String sortGroupName;
 
 
     @Override
@@ -38,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
             Button newButton = new Button(this);
             SortingGroup s = mainOptions.get(i);
             newButton.setText(s.getName());
+            sortGroupName = s.getName();
+            newButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(),CategorySelector.class);
+                    intent.putExtra("sorting_category_name",sortGroupName);
+                    startActivity(intent);
+                }
+            });
             l.addView(newButton);
         }
         Button newButton = new Button(this);
@@ -71,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
     public void createSortingClasses(){
         mainOptions.add(new PushPullLegs());
         mainOptions.add(new MuscleGroup());
+    }
+
+    public void viewExercises(View view) {
+        Intent intent = new Intent(this, ExerciseSelector.class);
+        startActivity(intent);
     }
 
     @Override
