@@ -18,6 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CategorySelector" />
+        <activity
+            android:name=".ExerciseSelector"
+            android:label="@string/title_activity_exercise_selector"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ExerciseViewer"></activity>
     </application>
 
 </manifest>
