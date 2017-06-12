@@ -46,11 +46,15 @@ public class SortingGroup {
         cantFollow.add(cf);
     }
 
+
+    //Getters and Setters
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) {this.name = name;}
+
+    public ArrayList<SortingCategory> getCategories() {return categories;}
+
+    public void setCategories(ArrayList<SortingCategory> categories) {this.categories = categories;}
 }

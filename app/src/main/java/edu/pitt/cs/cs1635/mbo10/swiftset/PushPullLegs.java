@@ -6,9 +6,6 @@ package edu.pitt.cs.cs1635.mbo10.swiftset;
 public class PushPullLegs extends SortingGroup {
     public PushPullLegs(){
         this.setName("Push,Pull,Legs");
-        this.addOption("Push");
-        this.addOption("Pull");
-        this.addOption("Legs");
         this.addCantFollow(new MuscleGroup());
     }
 }

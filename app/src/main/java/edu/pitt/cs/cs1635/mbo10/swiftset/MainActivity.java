@@ -18,10 +18,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<SortingGroup> mainOptions = new ArrayList<SortingGroup>();
-    private ExerciseDb db;
-    private String sortGroupName;
-
+    public static ArrayList<SortingGroup> currentOptions = new ArrayList<SortingGroup>();//all the current ways the exercises can still be sorted
+    private ExerciseDb db; //Database that holds all exercise
+    private String sortGroupName; //Temp variable needs to be field to be used in onclick class
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
         db = new ExerciseDb(this);
 
-        createSortingClasses();
+        addMainMenuOptions();
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
-        for(int i=0; i<mainOptions.size(); i++){
+
+        for(int i=0; i<currentOptions.size(); i++){
             Button newButton = new Button(this);
-            SortingGroup s = mainOptions.get(i);
+            SortingGroup s = currentOptions.get(i);
             newButton.setText(s.getName());
             sortGroupName = s.getName();
             newButton.setOnClickListener(new View.OnClickListener() {
@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
             });
             l.addView(newButton);
         }
-        Button newButton = new Button(this);
-        newButton.setText(db.dbString());
-        l.addView(newButton);
     }
 
     @Override
@@ -77,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Creates the different sorting group classes that exercises can be sorted by
-    public void createSortingClasses(){
-        mainOptions.add(new PushPullLegs());
-        mainOptions.add(new MuscleGroup());
+    public void addMainMenuOptions(){
+        currentOptions.add(new PushPullLegs());
+        currentOptions.add(new MuscleGroup());
     }
 
     public void viewExercises(View view) {
@@ -91,5 +88,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         db.close();
+    }
+
+    //returns a sortingGroup based on its name
+    public static SortingGroup getSGByName(String name){
+        for(SortingGroup s:currentOptions){
+            if(s.getName().equals(name)){
+                return s;
+            }
+        }
+        return null;
     }
 }

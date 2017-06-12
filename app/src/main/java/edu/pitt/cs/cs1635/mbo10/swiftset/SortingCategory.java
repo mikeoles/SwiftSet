@@ -35,4 +35,13 @@ public class SortingCategory {
     public void addNewOptions(SortingGroup newOptions){
         this.newOptions.add(newOptions);
     }
+
+    //Getters and Setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
