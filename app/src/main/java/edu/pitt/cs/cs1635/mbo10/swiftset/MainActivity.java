@@ -10,7 +10,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ListView;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         db = new ExerciseDb(this);
 
         addMainMenuOptions();
-        LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
+        ListView l = (ListView) findViewById(R.id.allOptions);
 
         for(int i=0; i<currentOptions.size(); i++){
             Button newButton = new Button(this);

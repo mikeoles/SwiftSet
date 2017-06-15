@@ -22,6 +22,7 @@ public class CategorySelector extends AppCompatActivity {
         if(((LinearLayout) l).getChildCount() > 0){
             ((LinearLayout) l).removeAllViews();
         }
+
         for(SortingCategory sc:categories){
             Button newButton = new Button(this);
             newButton.setText(sc.getName());
