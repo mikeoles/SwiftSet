@@ -1,0 +1,2 @@
+-After a catergory is selected by the user perform a query on the database
+-Print out the results of that query in a list on the ExerciseSelector.java class
