@@ -10,7 +10,7 @@ public class PushPullLegs extends SortingGroup {
         
         SortingCategory push = new SortingCategory("Push","PPL","Push");
         this.addOption(push);
-        SortingCategory = new SortingCategory("Pull","PPL","Pull");
+        SortingCategory pull = new SortingCategory("Pull","PPL","Pull");
         this.addOption(pull);
         SortingCategory legs = new SortingCategory("Legs","PPL","Legs");
         this.addOption(legs);        

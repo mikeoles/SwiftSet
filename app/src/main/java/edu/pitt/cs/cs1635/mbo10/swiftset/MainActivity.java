@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,17 +36,20 @@ public class MainActivity extends AppCompatActivity {
 
         addMainMenuOptions();
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
+        final ArrayList<String> names=new ArrayList<>();
 
         for(int i=0; i<currentOptions.size(); i++){
             Button newButton = new Button(this);
             SortingGroup s = currentOptions.get(i);
             newButton.setText(s.getName());
-            sortGroupName = s.getName();
+            newButton.setId(i);
+            names.add(s.getName());
+            sortGroupName = s.getName();;
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(),CategorySelector.class);
-                    intent.putExtra("sorting_category_name",sortGroupName);
+                    intent.putExtra("sorting_category_name",names.get(v.getId()));
                     startActivity(intent);
                 }
             });
@@ -77,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Creates the different sorting group classes that exercises can be sorted by
     public void addMainMenuOptions(){
-        currentOptions.add(new PushPullLegs());
         currentOptions.add(new MuscleGroup());
+        currentOptions.add(new PushPullLegs());
     }
 
     public void viewExercises(View view) {
