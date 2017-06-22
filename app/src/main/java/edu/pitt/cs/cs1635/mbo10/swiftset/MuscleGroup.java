@@ -7,8 +7,10 @@ public class MuscleGroup extends SortingGroup {
     public MuscleGroup(){
         this.setName("Muscle Group");
         SortingCategory chest = new SortingCategory("Chest","Primary","Chest");
+        chest.addNewOptions(new ChestMovementPatterns());
         this.addOption(chest);
         SortingCategory triceps = new SortingCategory("Triceps","Primary","Triceps");
+        triceps.addNewOptions(new TricepMovementPatterns());
         this.addOption(triceps);
         SortingCategory lats = new SortingCategory("Lats","Primary","Lats");
         this.addOption(lats);

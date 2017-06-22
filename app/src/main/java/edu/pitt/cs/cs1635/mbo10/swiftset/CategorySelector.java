@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class CategorySelector extends AppCompatActivity {
@@ -24,10 +25,24 @@ public class CategorySelector extends AppCompatActivity {
             ((LinearLayout) l).removeAllViews();
         }
 
+        final ArrayList<SortingCategory> names=new ArrayList<>();
+
+        int i =0;
         for(SortingCategory sc:categories){
+            names.add(sc);
             Button newButton = new Button(this);
             newButton.setText(sc.getName());
+            newButton.setId(i);
+            newButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), MainActivity.class);
+                    intent.putExtra("chosen_sorting_category", (Serializable)names.get(v.getId()));
+                    startActivity(intent);
+                }
+            });
             l.addView(newButton);
+            i++;
         }
     }
 
@@ -35,8 +50,9 @@ public class CategorySelector extends AppCompatActivity {
     private SortingGroup getCategory(){
         String sgName = "";
         Bundle extras = getIntent().getExtras();
-        sgName = extras.getString("sorting_category_name");
+        sgName = extras.getString("sorting_group_name");
         SortingGroup sg = MainActivity.getSGByName(sgName);
+        MainActivity.markSGUsedByName(sgName);
         return sg;
     }
 }

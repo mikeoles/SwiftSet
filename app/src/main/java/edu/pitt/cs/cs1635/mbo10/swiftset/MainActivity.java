@@ -2,8 +2,6 @@ package edu.pitt.cs.cs1635.mbo10.swiftset;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,18 +10,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-
-
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<SortingGroup> currentOptions = new ArrayList<SortingGroup>();//all the current ways the exercises can still be sorted
+    public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
+    public static ArrayList<SortingGroup> usedOptions = new ArrayList<>();//all the sorting groups that have already been used
     private ExerciseDb db; //Database that holds all exercise
     private String sortGroupName; //Temp variable needs to be field to be used in onclick class
+    private static boolean firstTimeCreated = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +28,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         db = new ExerciseDb(this);
-
-        addMainMenuOptions();
+        if(firstTimeCreated) {
+            addMainMenuOptions();
+            firstTimeCreated = false;
+        }else{
+            Bundle extras = getIntent().getExtras();
+            SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
+            ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
+            Log.v("olesy",""+newOptions.size() + ":" + newOptions.get(0).getName());
+            for(SortingGroup sg:newOptions){
+                currentOptions.add(sg);
+            }
+        }
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
         final ArrayList<String> names=new ArrayList<>();
 
@@ -44,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
             newButton.setText(s.getName());
             newButton.setId(i);
             names.add(s.getName());
-            sortGroupName = s.getName();;
+            sortGroupName = s.getName();
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(),CategorySelector.class);
-                    intent.putExtra("sorting_category_name",names.get(v.getId()));
+                    intent.putExtra("sorting_group_name",names.get(v.getId()));
                     startActivity(intent);
                 }
             });
@@ -104,5 +109,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    //returns a sortingGroup based on its name
+    public static boolean markSGUsedByName(String name){
+        for(SortingGroup s:currentOptions){
+            if(s.getName().equals(name)){
+                usedOptions.add(s);
+                currentOptions.remove(s);
+                return true;
+            }
+        }
+        return false;
     }
 }

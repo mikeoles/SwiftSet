@@ -16,11 +16,11 @@ public class SortingGroup {
     //All of the sorting groups that cant be used after this sorting group is used
     //Ex: You can't sort by Upper/Lower after Muscle Group is called
     //TODO after a category is chosen remove all of the cant follow from the mainOptions
-    public ArrayList<SortingGroup> cantFollow;
+    public ArrayList<SortingGroup> cantFollow = new ArrayList<>();
 
     //All of the categories that can be chosen from this sorting group
     //Ex: Muscle Groups categories: Chest, Triceps, Quads, Lats...
-    public ArrayList<SortingCategory> categories;
+    public ArrayList<SortingCategory> categories = new ArrayList<>();;
 
     public SortingGroup(){
         this("");

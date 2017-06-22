@@ -1,17 +1,17 @@
 package edu.pitt.cs.cs1635.mbo10.swiftset;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by Oles on 6/10/2017.
  */
-public class SortingCategory {
+public class SortingCategory implements Serializable{
     public String name;
     //Options that are now made available because this sorting group was chosen
     //Ex: Fly is available after chest is chosen
-    //TODO after a category is chosen check the newOptions has map to see if any new sorting groups need to be added to the mainOptions
-    public ArrayList<SortingGroup> newOptions;
+    public ArrayList<SortingGroup> newOptions = new ArrayList<>();
     //The name of the column in the database that this category will sort by
     public String dbColumnName;
     //The value that you will select from dbColumnName when shrinking the exercise field
@@ -43,5 +43,13 @@ public class SortingCategory {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ArrayList<SortingGroup> getNewOptions() {
+        return newOptions;
+    }
+
+    public void setNewOptions(ArrayList<SortingGroup> newOptions) {
+        this.newOptions = newOptions;
     }
 }
