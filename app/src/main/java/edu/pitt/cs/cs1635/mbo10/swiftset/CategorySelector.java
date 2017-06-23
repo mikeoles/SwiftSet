@@ -37,7 +37,7 @@ public class CategorySelector extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
-                    intent.putExtra("chosen_sorting_category", (Serializable)names.get(v.getId()));
+                    intent.putExtra("chosen_sorting_category", (Serializable) names.get(v.getId()));
                     startActivity(intent);
                 }
             });

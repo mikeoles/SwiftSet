@@ -1,9 +1,11 @@
 package edu.pitt.cs.cs1635.mbo10.swiftset;
 
+import java.io.Serializable;
+
 /**
  * Created by Oles on 5/30/2017.
  */
-public class PushPullLegs extends SortingGroup {
+public class PushPullLegs extends SortingGroup implements Serializable{
     public PushPullLegs(){
         this.setName("Push,Pull,Legs");
         this.addCantFollow(new MuscleGroup());

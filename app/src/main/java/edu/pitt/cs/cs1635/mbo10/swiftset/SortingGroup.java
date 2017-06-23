@@ -1,5 +1,6 @@
 package edu.pitt.cs.cs1635.mbo10.swiftset;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,7 +10,7 @@ import java.util.HashMap;
  * Ex: Push/Pull/Legs, Muscle Group, Equipment used
  * @
  */
-public class SortingGroup {
+public class SortingGroup implements Serializable{
 
     public String name;
 

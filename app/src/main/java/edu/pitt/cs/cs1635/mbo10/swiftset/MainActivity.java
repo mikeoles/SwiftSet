@@ -17,8 +17,9 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> usedOptions = new ArrayList<>();//all the sorting groups that have already been used
     private ExerciseDb db; //Database that holds all exercise
-    private String sortGroupName; //Temp variable needs to be field to be used in onclick class
+    //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
             Bundle extras = getIntent().getExtras();
             SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
             ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
-            Log.v("olesy",""+newOptions.size() + ":" + newOptions.get(0).getName());
             for(SortingGroup sg:newOptions){
                 currentOptions.add(sg);
             }
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
             newButton.setText(s.getName());
             newButton.setId(i);
             names.add(s.getName());
-            sortGroupName = s.getName();
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

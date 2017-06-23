@@ -1,9 +1,13 @@
 package edu.pitt.cs.cs1635.mbo10.swiftset;
 
+import android.util.Log;
+
+import java.io.Serializable;
+
 /**
  * Created by Oles on 5/30/2017.
  */
-public class MuscleGroup extends SortingGroup {
+public class MuscleGroup extends SortingGroup implements Serializable {
     public MuscleGroup(){
         this.setName("Muscle Group");
         SortingCategory chest = new SortingCategory("Chest","Primary","Chest");
