@@ -10,12 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
-    public static ArrayList<SortingGroup> usedOptions = new ArrayList<>();//all the sorting groups that have already been used
+    public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
     private ExerciseDb db; //Database that holds all exercise
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        db = new ExerciseDb(this);
+        db = new ExerciseDb(this);//creates exercise database
+
         if(firstTimeCreated) {
             addMainMenuOptions();
             firstTimeCreated = false;
@@ -40,25 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 currentOptions.add(sg);
             }
         }
-        LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
-        final ArrayList<String> names=new ArrayList<>();
 
-        for(int i=0; i<currentOptions.size(); i++){
-            Button newButton = new Button(this);
-            SortingGroup s = currentOptions.get(i);
-            newButton.setText(s.getName());
-            newButton.setId(i);
-            names.add(s.getName());
-            newButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(),CategorySelector.class);
-                    intent.putExtra("sorting_group_name",names.get(v.getId()));
-                    startActivity(intent);
-                }
-            });
-            l.addView(newButton);
-        }
+        addButtons();
     }
 
     @Override
@@ -100,25 +86,40 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
-    //returns a sortingGroup based on its name
-    public static SortingGroup getSGByName(String name){
-        for(SortingGroup s:currentOptions){
-            if(s.getName().equals(name)){
-                return s;
-            }
-        }
-        return null;
-    }
 
     //returns a sortingGroup based on its name
-    public static boolean markSGUsedByName(String name){
+    public static boolean removeSortingGroup(SortingGroup sg){
         for(SortingGroup s:currentOptions){
-            if(s.getName().equals(name)){
-                usedOptions.add(s);
+            if(s.getClass().equals(sg.getClass())){
+                removedOptions.add(s);
                 currentOptions.remove(s);
                 return true;
             }
         }
         return false;
+    }
+
+    //Adds buttons for every sorting group to the main page
+    public void addButtons(){
+        LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
+        final ArrayList<SortingGroup> names=new ArrayList<>();//Helps the onClick function find what group was selected
+
+        //Add new buttons for each of the sorting groups available to the user
+        for(int i=0; i<currentOptions.size(); i++){
+            Button newButton = new Button(this);
+            SortingGroup s = currentOptions.get(i);
+            newButton.setText(s.getName());
+            newButton.setId(i);
+            names.add(s);
+            newButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(),CategorySelector.class);
+                    intent.putExtra("chosen_sorting_group",names.get(v.getId()));//Sends the chosen sorting group to the CategorySelector class when clicked
+                    startActivity(intent);
+                }
+            });
+            l.addView(newButton);
+        }
     }
 }

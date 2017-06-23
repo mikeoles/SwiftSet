@@ -17,15 +17,28 @@ public class CategorySelector extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_selector);
+
+        addButtons();
+    }
+
+    //Gets the sorting group that has been chosen by the user in the main activity
+    private SortingGroup getCategory(){
+        Bundle extras = getIntent().getExtras();
+        SortingGroup chosenSG = (SortingGroup) extras.getSerializable("chosen_sorting_group");
+        MainActivity.removeSortingGroup(chosenSG);
+        ArrayList<SortingGroup> cantFollowChosen = chosenSG.getCantFollow();
+        for(SortingGroup cf:cantFollowChosen){
+            MainActivity.removeSortingGroup(cf);
+        }
+        return chosenSG;
+    }
+
+    //Adds buttons for each category to the screen
+    private void addButtons(){
         SortingGroup selectedGroup = getCategory();
         ArrayList<SortingCategory> categories = selectedGroup.getCategories();
-
         LinearLayout l = (LinearLayout) findViewById(R.id.categoryList);
-        if(((LinearLayout) l).getChildCount() > 0){
-            ((LinearLayout) l).removeAllViews();
-        }
-
-        final ArrayList<SortingCategory> names=new ArrayList<>();
+        final ArrayList<SortingCategory> names=new ArrayList<>();//helps get the selected category onlcik
 
         int i =0;
         for(SortingCategory sc:categories){
@@ -33,26 +46,17 @@ public class CategorySelector extends AppCompatActivity {
             Button newButton = new Button(this);
             newButton.setText(sc.getName());
             newButton.setId(i);
+            //sends the selected category back to the main class when selected
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
-                    intent.putExtra("chosen_sorting_category", (Serializable) names.get(v.getId()));
+                    intent.putExtra("chosen_sorting_category",names.get(v.getId()));
                     startActivity(intent);
                 }
             });
             l.addView(newButton);
             i++;
         }
-    }
-
-    //Gets the sorting group that has been chosen by the user in the main activity
-    private SortingGroup getCategory(){
-        String sgName = "";
-        Bundle extras = getIntent().getExtras();
-        sgName = extras.getString("sorting_group_name");
-        SortingGroup sg = MainActivity.getSGByName(sgName);
-        MainActivity.markSGUsedByName(sgName);
-        return sg;
     }
 }
