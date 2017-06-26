@@ -16,7 +16,7 @@ public class SortingGroup implements Serializable{
 
     //All of the sorting groups that cant be used after this sorting group is used
     //Ex: You can't sort by Upper/Lower after Muscle Group is called
-    private ArrayList<SortingGroup> cantFollow = new ArrayList<>();
+    private ArrayList<Class> cantFollow = new ArrayList<>();
 
     //All of the categories that can be chosen from this sorting group
     //Ex: Muscle Groups categories: Chest, Triceps, Quads, Lats...
@@ -38,7 +38,7 @@ public class SortingGroup implements Serializable{
     }
 
     //add a new category that this group can be divided into
-    protected void addCantFollow(SortingGroup cf) {
+    protected void addCantFollow(Class cf) {
         cantFollow.add(cf);
     }
 
@@ -49,5 +49,5 @@ public class SortingGroup implements Serializable{
 
     public ArrayList<SortingCategory> getCategories() {return categories;}
 
-    public ArrayList<SortingGroup> getCantFollow() {return cantFollow;}
+    public ArrayList<Class> getCantFollow() {return cantFollow;}
 }

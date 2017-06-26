@@ -99,6 +99,19 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    //returns a sortingGroup based on its name
+    public static boolean removeSortingGroup(Class sg){
+        for(SortingGroup s:currentOptions){
+            if(s.getClass().equals(sg)){
+                removedOptions.add(s);
+                currentOptions.remove(s);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     //Adds buttons for every sorting group to the main page
     public void addButtons(){
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);

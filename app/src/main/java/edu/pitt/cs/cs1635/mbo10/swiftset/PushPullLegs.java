@@ -8,8 +8,7 @@ import java.io.Serializable;
 public class PushPullLegs extends SortingGroup implements Serializable{
     public PushPullLegs(){
         this.setName("Push,Pull,Legs");
-        this.addCantFollow(new MuscleGroup());
-        
+        this.addCantFollow(MuscleGroup.class);
         SortingCategory push = new SortingCategory("Push","PPL","Push");
         this.addOption(push);
         SortingCategory pull = new SortingCategory("Pull","PPL","Pull");

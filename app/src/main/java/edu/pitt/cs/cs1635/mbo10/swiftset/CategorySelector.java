@@ -26,19 +26,18 @@ public class CategorySelector extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         SortingGroup chosenSG = (SortingGroup) extras.getSerializable("chosen_sorting_group");
         MainActivity.removeSortingGroup(chosenSG);
-        ArrayList<SortingGroup> cantFollowChosen = chosenSG.getCantFollow();
-        for(SortingGroup cf:cantFollowChosen){
-            MainActivity.removeSortingGroup(cf);
-        }
         return chosenSG;
     }
 
     //Adds buttons for each category to the screen
     private void addButtons(){
         SortingGroup selectedGroup = getCategory();
+
+        removeCantFollows(selectedGroup);
+
         ArrayList<SortingCategory> categories = selectedGroup.getCategories();
         LinearLayout l = (LinearLayout) findViewById(R.id.categoryList);
-        final ArrayList<SortingCategory> names=new ArrayList<>();//helps get the selected category onlcik
+        final ArrayList<SortingCategory> names=new ArrayList<>();//helps get the selected category onclick
 
         int i =0;
         for(SortingCategory sc:categories){
@@ -57,6 +56,14 @@ public class CategorySelector extends AppCompatActivity {
             });
             l.addView(newButton);
             i++;
+        }
+    }
+
+    //removes the sorting groups from the list that cant be used anymore based on what the user chose
+    private void removeCantFollows(SortingGroup selectedGroup) {
+        ArrayList<Class> cantFollowChosen = selectedGroup.getCantFollow();
+        for(Class cf:cantFollowChosen){
+            MainActivity.removeSortingGroup(cf);
         }
     }
 }

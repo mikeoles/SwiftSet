@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class MuscleGroup extends SortingGroup implements Serializable {
     public MuscleGroup(){
         this.setName("Muscle Group");
+        this.addCantFollow(PushPullLegs.class);
         SortingCategory chest = new SortingCategory("Chest","Primary","Chest");
         chest.addNewOptions(new ChestMovementPatterns());
         this.addOption(chest);

@@ -23,7 +23,7 @@
             android:name=".ExerciseSelector"
             android:label="@string/title_activity_exercise_selector"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ExerciseViewer"></activity>
+        <activity android:name=".ExerciseViewer" />
     </application>
 
 </manifest>
