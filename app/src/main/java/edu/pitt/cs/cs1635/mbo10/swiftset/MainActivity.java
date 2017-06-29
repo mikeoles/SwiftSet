@@ -1,6 +1,7 @@
 package edu.pitt.cs.cs1635.mbo10.swiftset;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
-    private ExerciseDb db; //Database that holds all exercise
+    private static ExerciseDb db; //Database that holds all exercise
+    private static ExerciseDb validDb; // Updated to hold the remaining exercises
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         db = new ExerciseDb(this);//creates exercise database
+        validDb = db;
 
         if(firstTimeCreated) {
             addMainMenuOptions();
@@ -39,12 +42,21 @@ public class MainActivity extends AppCompatActivity {
             Bundle extras = getIntent().getExtras();
             SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
             ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
+            String dbSortCategory = chosenSc.getDbColumnName();
+            String dbSortBy = chosenSc.getSortBy();
             for(SortingGroup sg:newOptions){
                 currentOptions.add(sg);
             }
+            validDb = dbSearch(db,dbSortBy,dbSortCategory);
         }
 
         addButtons();
+    }
+
+    //TODO implement this method
+    //Sorts through the remaining exercises and eliminates the ones that no longer fit
+    private ExerciseDb dbSearch(ExerciseDb db, String dbSortBy, String dbSortCategory) {
+        return null;
     }
 
     @Override
@@ -134,5 +146,10 @@ public class MainActivity extends AppCompatActivity {
             });
             l.addView(newButton);
         }
+    }
+
+    //Getters and Setters
+    public static ExerciseDb getValidDb() {
+        return validDb;
     }
 }

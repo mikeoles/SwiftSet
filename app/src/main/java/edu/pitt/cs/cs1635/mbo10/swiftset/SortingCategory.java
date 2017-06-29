@@ -14,21 +14,22 @@ public class SortingCategory implements Serializable{
     public ArrayList<SortingGroup> newOptions = new ArrayList<>();
     //The name of the column in the database that this category will sort by
     public String dbColumnName;
+
     //The value that you will select from dbColumnName when shrinking the exercise field
     //TODO need to check if this is a number to convert to an int
-    public String selectFromDb;
+    public String sortBy;
 
-    public SortingCategory(String name, ArrayList<SortingGroup> newOptions, String dbColumnName, String selectFromDb) {
+    public SortingCategory(String name, ArrayList<SortingGroup> newOptions, String dbColumnName, String sortBy) {
         this.name = name;
         this.newOptions = newOptions;
         this.dbColumnName = dbColumnName;
-        this.selectFromDb = selectFromDb;
+        this.sortBy = sortBy;
     }
 
-    public SortingCategory(String name, String dbColumnName, String selectFromDb) {
+    public SortingCategory(String name, String dbColumnName, String sortBy) {
         this.name = name;
         this.dbColumnName = dbColumnName;
-        this.selectFromDb = selectFromDb;
+        this.sortBy = sortBy;
         this.newOptions = new ArrayList<SortingGroup>();
     }
 
@@ -51,5 +52,21 @@ public class SortingCategory implements Serializable{
 
     public void setNewOptions(ArrayList<SortingGroup> newOptions) {
         this.newOptions = newOptions;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public String getDbColumnName() {
+        return dbColumnName;
+    }
+
+    public void setDbColumnName(String dbColumnName) {
+        this.dbColumnName = dbColumnName;
     }
 }

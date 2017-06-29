@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 public class ExerciseSelector extends AppCompatActivity {
 
     @Override
@@ -19,8 +21,9 @@ public class ExerciseSelector extends AppCompatActivity {
         setTitle("Choose An Exercise");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        String[] searchResults = {"Bench Press", "Squat", "Deadlift"};
+        ExerciseDb remaining = MainActivity.getValidDb();
+        ArrayList<String> s = remaining.getColumnsList();
+        String[] searchResults = s.toArray(new String[s.size()]);;
         ListAdapter la = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,searchResults);
         ListView exListView = (ListView) findViewById(R.id.exerciseList);
         exListView.setAdapter(la);
