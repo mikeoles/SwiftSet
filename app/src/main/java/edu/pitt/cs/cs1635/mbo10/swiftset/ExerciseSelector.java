@@ -21,7 +21,7 @@ public class ExerciseSelector extends AppCompatActivity {
         setTitle("Choose An Exercise");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ExerciseDb remaining = MainActivity.getValidDb();
+        ExerciseDb remaining = MainActivity.getRemainingDb();
         ArrayList<String> s = remaining.getColumnsList();
         String[] searchResults = s.toArray(new String[s.size()]);;
         ListAdapter la = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,searchResults);

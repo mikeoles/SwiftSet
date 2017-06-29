@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -14,7 +15,8 @@ import java.util.ArrayList;
  */
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    private static final String DATABASE_NAME = "exDatabase.db";
+    private static final String DATABASE_NAME = "exDatabaseOne.db";
+    private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
 
@@ -27,18 +29,28 @@ public class ExerciseDb extends SQLiteAssetHelper {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         String [] sqlSelect = {"0 _id", "FullName"};
-        String sqlTables = "exercises";
 
-        qb.setTables(sqlTables);
+        qb.setTables(EXERCISE_TABLE);
         Cursor c = qb.query(db, null, null, null,
                 null, null, null);
 
         ArrayList<String> columns = new ArrayList<>();
         c.moveToFirst();
-        while (c.moveToNext()) {
-            columns.add(c.getString(c.getColumnIndex(EXERCISE_NAME_COL)));
+        try {
+            do {
+                String colName = c.getString(c.getColumnIndex(EXERCISE_NAME_COL));
+                columns.add(colName);
+            } while (c.moveToNext());
+        }catch (ArrayIndexOutOfBoundsException ae){
         }
 
         return columns;
+    }
+
+    //Removes all of the rows where the column dbSortCategory does not contain dbSortBy
+    public void removeRows(String dbSortBy, String dbSortCategory) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(EXERCISE_TABLE,dbSortCategory + " = " + dbSortBy,null);
+        db.close();
     }
 }
