@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
 
-
+    //Todo add the names of all the chosen sorting categories to the main page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Todo fix so the database is not permanently altered
         db = new ExerciseDb(this);//creates exercise database
         remainingDb = db;
 
@@ -45,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
             }
             String dbSortCategory = chosenSc.getDbColumnName();
             String dbSortBy = chosenSc.getSortBy();
-            dbSearch(remainingDb,dbSortBy,dbSortCategory);
+            dbSearch(remainingDb, dbSortBy, dbSortCategory);
         }
+
+        Button viewAll = (Button) findViewById(R.id.viewAll);
+        viewAll.setText("View All Exercises (" + remainingDb.numRows() + ")");
 
         addButtons();
     }

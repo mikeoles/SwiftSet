@@ -2,6 +2,7 @@ package edu.pitt.cs.cs1635.mbo10.swiftset;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  */
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    private static final String DATABASE_NAME = "exDatabaseOne.db";
+    private static final String DATABASE_NAME = "exDatabaseTwo.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
@@ -47,7 +48,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
                 String url = c.getString(c.getColumnIndex(URL_COL));
                 urls.add(url);
             } while (c.moveToNext());
-        }catch (ArrayIndexOutOfBoundsException ae){
+        }catch (CursorIndexOutOfBoundsException ae){
         }
         db.close();
         return columns;
@@ -56,8 +57,18 @@ public class ExerciseDb extends SQLiteAssetHelper {
     //Removes all of the rows where the column dbSortCategory does not contain dbSortBy
     public void removeRows(String dbSortBy, String dbSortCategory) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(EXERCISE_TABLE, "[" + dbSortCategory + "]" + " != " + "'" + dbSortBy + "'",null);
+        db.delete(EXERCISE_TABLE, "[" + dbSortCategory + "]" + " != " + "'" + dbSortBy + "'", null);
         db.close();
+    }
+
+    //Returns the number of rows in the exercise table
+    public int numRows(){
+        String countQuery = "SELECT  * FROM " + EXERCISE_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        return cnt;
     }
 
     //Getters and Setters

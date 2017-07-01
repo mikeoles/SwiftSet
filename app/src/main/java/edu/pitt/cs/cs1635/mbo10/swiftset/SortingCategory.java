@@ -16,7 +16,6 @@ public class SortingCategory implements Serializable{
     public String dbColumnName;
 
     //The value that you will select from dbColumnName when shrinking the exercise field
-    //TODO need to check if this is a number to convert to an int
     public String sortBy;
 
     public SortingCategory(String name, ArrayList<SortingGroup> newOptions, String dbColumnName, String sortBy) {
