@@ -2,6 +2,7 @@ package edu.pitt.cs.cs1635.mbo10.swiftset;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,19 +11,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String ORIGINAL_DB_PATH = "/data/data/edu.pitt.cs.cs1635.mbo10.swiftset/databases/MainExerciseDatabase.db";
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
-    private static ExerciseDb db; //Database that holds all exercise
     private static ExerciseDb remainingDb; // Updated to hold the remaining exercises
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
+    private static boolean firstTimeSelected = true;
 
-    //Todo add the names of all the chosen sorting categories to the main page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,16 +38,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Todo fix so the database is not permanently altered
-        db = new ExerciseDb(this);//creates exercise database
-        remainingDb = db;
-
         if(firstTimeCreated) {
+            try {
+                remainingDb = createDatabase();
+            }catch (IOException e) {
+                Log.e("Error","IOException from creating database");
+            }
             addMainMenuOptions();
             firstTimeCreated = false;
         }else{
             Bundle extras = getIntent().getExtras();
             SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
+            String scName = chosenSc.getName();
+            TextView sortingPath = (TextView) findViewById(R.id.sortingPath);
+            if(firstTimeSelected) {
+                sortingPath.setText(scName);
+            }else{
+                sortingPath.setText(sortingPath.getText().toString() + ">" + scName);
+            }
+
             ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
             for(SortingGroup sg:newOptions){
                 currentOptions.add(sg);
@@ -47,12 +64,37 @@ public class MainActivity extends AppCompatActivity {
             String dbSortCategory = chosenSc.getDbColumnName();
             String dbSortBy = chosenSc.getSortBy();
             dbSearch(remainingDb, dbSortBy, dbSortCategory);
+            firstTimeSelected = false;
         }
 
         Button viewAll = (Button) findViewById(R.id.viewAll);
         viewAll.setText("View All Exercises (" + remainingDb.numRows() + ")");
 
         addButtons();
+    }
+
+    private ExerciseDb createDatabase() throws IOException {
+        final String inFileName = ORIGINAL_DB_PATH;;
+        File dbFile = new File(inFileName);
+        FileInputStream fis = new FileInputStream(dbFile);
+
+        String outFileName = Environment.getExternalStorageDirectory()+"/"+ExerciseDb.DATABASE_NAME;
+
+        // Open the empty db as the output stream
+        OutputStream output = new FileOutputStream(outFileName);
+
+        // Transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer))>0){
+            output.write(buffer, 0, length);
+        }
+
+        // Close the streams
+        output.flush();
+        output.close();
+        fis.close();
+        return new ExerciseDb(this);
     }
 
     //Sorts through the remaining exercises and eliminates the ones that no longer fit
@@ -96,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        db.close();
+        remainingDb.close();
     }
 
 
