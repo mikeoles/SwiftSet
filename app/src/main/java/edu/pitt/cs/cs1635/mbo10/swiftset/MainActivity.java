@@ -23,7 +23,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String ORIGINAL_DB_PATH = "/data/data/edu.pitt.cs.cs1635.mbo10.swiftset/databases/MainExerciseDatabase.db";
+    public static final String DB_PATH = "/data/data/edu.pitt.cs.cs1635.mbo10.swiftset/databases/";
+    public static final String ORIGINAL_DB_NAME = "MainExerciseDatabase.db";
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
     private static ExerciseDb remainingDb; // Updated to hold the remaining exercises
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 remainingDb = createDatabase();
             }catch (IOException e) {
                 Log.e("Error","IOException from creating database");
-            }
+           }
             addMainMenuOptions();
             firstTimeCreated = false;
         }else{
@@ -74,15 +75,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ExerciseDb createDatabase() throws IOException {
-        final String inFileName = ORIGINAL_DB_PATH;;
+        final String inFileName = DB_PATH + ORIGINAL_DB_NAME;
         File dbFile = new File(inFileName);
         FileInputStream fis = new FileInputStream(dbFile);
-
-        String outFileName = Environment.getExternalStorageDirectory()+"/"+ExerciseDb.DATABASE_NAME;
-
+        String outFileName = DB_PATH + ExerciseDb.DATABASE_NAME;
         // Open the empty db as the output stream
         OutputStream output = new FileOutputStream(outFileName);
-
         // Transfer bytes from the inputfile to the outputfile
         byte[] buffer = new byte[1024];
         int length;
@@ -94,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
         output.flush();
         output.close();
         fis.close();
-        return new ExerciseDb(this);
+        ExerciseDb ret = new ExerciseDb(this);
+        return ret;
     }
 
     //Sorts through the remaining exercises and eliminates the ones that no longer fit
