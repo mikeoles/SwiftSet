@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -13,9 +12,6 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Oles on 6/9/2017.
- */
 public class ExerciseDb extends SQLiteAssetHelper {
 
     public static final String DATABASE_NAME = "main_exercises.db";
@@ -48,8 +44,10 @@ public class ExerciseDb extends SQLiteAssetHelper {
                 urls.put(colName,url);
             } while (c.moveToNext());
         }catch (CursorIndexOutOfBoundsException ae){
+            Log.e("Cursor Error", ae.toString());
         }
         db.close();
+        c.close();
         return columns;
     }
 

@@ -2,7 +2,6 @@ package edu.pitt.cs.cs1635.mbo10.swiftset;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Oles on 5/29/2017.

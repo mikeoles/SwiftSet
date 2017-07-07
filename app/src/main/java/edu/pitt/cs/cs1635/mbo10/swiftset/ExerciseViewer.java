@@ -16,6 +16,7 @@ public class ExerciseViewer extends AppCompatActivity {
         String selectedUrl = extras.getString("selected_url");
 
         TextView t = (TextView) findViewById(R.id.exerciseTitle);
-        t.setText(selectedExercise + "\n" + selectedUrl);
+        String text = selectedExercise + "\n" + selectedUrl;
+        t.setText(text);
     }
 }

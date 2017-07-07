@@ -4,20 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
     private static boolean firstTimeSelected = true;
+    private static String sortingPathString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +37,15 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Bundle extras = getIntent().getExtras();
             SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
+            assert chosenSc != null;
             String scName = chosenSc.getName();
             TextView sortingPath = (TextView) findViewById(R.id.sortingPath);
             if(firstTimeSelected) {
-                sortingPath.setText(scName);
+                sortingPathString = scName;
             }else{
-                sortingPath.setText(sortingPath.getText().toString() + ">" + scName);
+                sortingPathString = sortingPathString + ">" + scName;
             }
+            sortingPath.setText(sortingPathString);
 
             ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
             for(SortingGroup sg:newOptions){
@@ -63,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button viewAll = (Button) findViewById(R.id.viewAll);
-        viewAll.setText("View All Exercises (" + remainingDb.numRows() + ")");
+        String allExercises = "View All Exercises (" + remainingDb.numRows() + ")";
+        viewAll.setText(allExercises);
 
         addButtons();
     }
