@@ -10,6 +10,7 @@ import android.util.Log;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Oles on 6/9/2017.
@@ -21,7 +22,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
     private static final String URL_COL = "Url";
-    private static final ArrayList<String> urls = new ArrayList<>();
+    private static final HashMap<String,String> urls = new HashMap<>();
 
     public ExerciseDb(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,7 +47,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
                 String colName = c.getString(c.getColumnIndex(EXERCISE_NAME_COL));
                 columns.add(colName);
                 String url = c.getString(c.getColumnIndex(URL_COL));
-                urls.add(url);
+                urls.put(colName,url);
             } while (c.moveToNext());
         }catch (CursorIndexOutOfBoundsException ae){
         }
@@ -73,7 +74,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
 
     //Getters and Setters
 
-    public static ArrayList<String> getUrls() {
+    public HashMap<String,String> getUrls() {
         return urls;
     }
 }
