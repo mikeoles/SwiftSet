@@ -1,5 +1,6 @@
 package edu.pitt.cs.cs1635.mbo10.swiftset;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
@@ -17,7 +18,7 @@ import java.util.HashMap;
  */
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    public static final String DATABASE_NAME = "tempDb.db";
+    public static final String DATABASE_NAME = "main_exercises.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
@@ -32,12 +33,9 @@ public class ExerciseDb extends SQLiteAssetHelper {
     //Also fills a matching arrayList of the urls of all the exercises
     public ArrayList<String> getColumnsList(){
         SQLiteDatabase db = getReadableDatabase();
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-
-        String [] sqlSelect = {"0 _id", "FullName"};
-
-        qb.setTables(EXERCISE_TABLE);
-        Cursor c = qb.query(db, null, null, null,
+        String where = "[Eliminated] == '0'";
+        String[] tableColumns = {EXERCISE_NAME_COL,URL_COL};
+        Cursor c = db.query(EXERCISE_TABLE,tableColumns,where, null,
                 null, null, null);
 
         ArrayList<String> columns = new ArrayList<>();
@@ -58,13 +56,24 @@ public class ExerciseDb extends SQLiteAssetHelper {
     //Removes all of the rows where the column dbSortCategory does not contain dbSortBy
     public void removeRows(String dbSortBy, String dbSortCategory) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(EXERCISE_TABLE, "[" + dbSortCategory + "]" + " != " + "'" + dbSortBy + "'", null);
+        String where = "[" + dbSortCategory + "] != '" + dbSortBy + "'";
+        ContentValues cv = new ContentValues();
+        cv.put("Eliminated","1");
+        db.update(EXERCISE_TABLE,cv,where,null);
+        db.close();
+    }
+
+    public void resetDatabase() {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("Eliminated","0");
+        db.update(EXERCISE_TABLE,cv,null,null);
         db.close();
     }
 
     //Returns the number of rows in the exercise table
     public int numRows(){
-        String countQuery = "SELECT  * FROM " + EXERCISE_TABLE;
+        String countQuery = "SELECT  * FROM " + EXERCISE_TABLE + " WHERE [Eliminated] == '0'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int cnt = cursor.getCount();

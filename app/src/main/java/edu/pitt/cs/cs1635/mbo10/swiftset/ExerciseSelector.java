@@ -1,6 +1,7 @@
 package edu.pitt.cs.cs1635.mbo10.swiftset;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,7 +42,6 @@ public class ExerciseSelector extends AppCompatActivity {
                 Intent intent = new Intent(view.getContext(), ExerciseViewer.class);
                 intent.putExtra("selected_exercise", selectedFromList);
                 intent.putExtra("selected_url", selectedUrl);
-                Log.v("test123", "HERE");
                 startActivity(intent);
             }
         });
