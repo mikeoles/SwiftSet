@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'

@@ -16,4 +16,13 @@
         android:id="@+id/exerciseTitle"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtube_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exerciseTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

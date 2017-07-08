@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -146,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
 
     //Adds buttons for every sorting group to the main page
     public void addButtons(){
