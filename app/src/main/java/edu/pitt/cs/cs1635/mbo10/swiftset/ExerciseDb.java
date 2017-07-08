@@ -31,7 +31,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
         SQLiteDatabase db = getReadableDatabase();
         String where = "[Eliminated] == '0'";
         String[] tableColumns = {EXERCISE_NAME_COL,URL_COL};
-        Cursor c = db.query(EXERCISE_TABLE,tableColumns,where, null,
+        Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, null,
                 null, null, null);
 
         ArrayList<String> columns = new ArrayList<>();
@@ -54,7 +54,11 @@ public class ExerciseDb extends SQLiteAssetHelper {
     //Removes all of the rows where the column dbSortCategory does not contain dbSortBy
     public void removeRows(String dbSortBy, String dbSortCategory) {
         SQLiteDatabase db = getWritableDatabase();
-        String where = "[" + dbSortCategory + "] != '" + dbSortBy + "'";
+        String[] sortByList = dbSortBy.split("|");
+        String where = "[" + dbSortCategory + "] != '" + sortByList[0] + "'";
+        for(int i=1 ;i<sortByList.length; i++){
+            where += " AND [" + dbSortCategory + "] != '" + sortByList[i] + "'";
+        }
         ContentValues cv = new ContentValues();
         cv.put("Eliminated","1");
         db.update(EXERCISE_TABLE,cv,where,null);

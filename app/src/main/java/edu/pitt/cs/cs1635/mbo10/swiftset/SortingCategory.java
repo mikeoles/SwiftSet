@@ -14,13 +14,6 @@ public class SortingCategory implements Serializable{
     //The value that you will select from dbColumnName when shrinking the exercise field
     public String sortBy;
 
-    public SortingCategory(String name, ArrayList<SortingGroup> newOptions, String dbColumnName, String sortBy) {
-        this.name = name;
-        this.newOptions = newOptions;
-        this.dbColumnName = dbColumnName;
-        this.sortBy = sortBy;
-    }
-
     public SortingCategory(String name, String dbColumnName, String sortBy) {
         this.name = name;
         this.dbColumnName = dbColumnName;
