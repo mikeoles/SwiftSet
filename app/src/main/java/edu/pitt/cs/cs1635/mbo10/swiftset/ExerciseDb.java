@@ -61,6 +61,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
         db.close();
     }
 
+    //At the start of the program makes sure all possible exercises are available to the user
     public void resetDatabase() {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -80,7 +81,6 @@ public class ExerciseDb extends SQLiteAssetHelper {
     }
 
     //Getters and Setters
-
     public HashMap<String,String> getUrls() {
         return urls;
     }

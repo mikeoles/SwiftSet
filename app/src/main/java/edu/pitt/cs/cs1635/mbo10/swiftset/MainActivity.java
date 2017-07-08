@@ -35,33 +35,47 @@ public class MainActivity extends AppCompatActivity {
             remainingDb.resetDatabase();
             firstTimeCreated = false;
         }else{
+            //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
             Bundle extras = getIntent().getExtras();
             SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
             assert chosenSc != null;
-            String scName = chosenSc.getName();
-            TextView sortingPath = (TextView) findViewById(R.id.sortingPath);
-            if(firstTimeSelected) {
-                sortingPathString = scName;
-            }else{
-                sortingPathString = sortingPathString + ">" + scName;
-            }
-            sortingPath.setText(sortingPathString);
 
+            String scName = chosenSc.getName();
+            updateSortingPath(scName);
+
+            //New groups that can be added becuase of the chose sorting category (Ex: Fly can be added after Chest is chosen)
             ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
             for(SortingGroup sg:newOptions){
                 currentOptions.add(sg);
             }
+
             String dbSortCategory = chosenSc.getDbColumnName();
             String dbSortBy = chosenSc.getSortBy();
             dbSearch(remainingDb, dbSortBy, dbSortCategory);
+
             firstTimeSelected = false;
         }
+        setViewAllText();
+        addButtons();
+    }
 
+    //Sets the text for the view all button with the number of exercises remaining in the pool displayed
+    private void setViewAllText() {
         Button viewAll = (Button) findViewById(R.id.viewAll);
         String allExercises = "View All Exercises (" + remainingDb.numRows() + ")";
         viewAll.setText(allExercises);
+    }
 
-        addButtons();
+    //Updates the displayed sorting path with the new category exercises are being sorted by
+    private String updateSortingPath(String scName) {
+        TextView sortingPath = (TextView) findViewById(R.id.sortingPath);
+        if(firstTimeSelected) {
+            sortingPathString = scName;
+        }else{
+            sortingPathString = sortingPathString + ">" + scName;
+        }
+        sortingPath.setText(sortingPathString);
+        return sortingPathString;
     }
 
     //Sorts through the remaining exercises and eliminates the ones that no longer fit

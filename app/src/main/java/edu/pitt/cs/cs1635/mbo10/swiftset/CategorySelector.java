@@ -22,7 +22,7 @@ public class CategorySelector extends AppCompatActivity {
     }
 
     //Gets the sorting group that has been chosen by the user in the main activity
-    private SortingGroup getCategory(){
+    private SortingGroup getGroup(){
         Bundle extras = getIntent().getExtras();
         SortingGroup chosenSG = (SortingGroup) extras.getSerializable("chosen_sorting_group");
         MainActivity.removeSortingGroup(chosenSG);
@@ -31,20 +31,22 @@ public class CategorySelector extends AppCompatActivity {
 
     //Adds buttons for each category to the screen
     private void addButtons(){
-        SortingGroup selectedGroup = getCategory();
+        SortingGroup selectedGroup = getGroup();
 
         removeCantFollows(selectedGroup);
 
+        //Categories from this group are used as options for th user
         ArrayList<SortingCategory> categories = selectedGroup.getCategories();
         LinearLayout l = (LinearLayout) findViewById(R.id.categoryList);
         final ArrayList<SortingCategory> names=new ArrayList<>();//helps get the selected category onclick
 
-        int i =0;
-        for(SortingCategory sc:categories){
-            names.add(sc);
+        //Loops through each category from the group and creates a button for them
+        for(int i=0; i<categories.size();i++){
+            names.add(categories.get(i));
             Button newButton = new Button(this);
-            newButton.setText(sc.getName());
+            newButton.setText(categories.get(i).getName());
             newButton.setId(i);
+
             //sends the selected category back to the main class when selected
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,7 +57,6 @@ public class CategorySelector extends AppCompatActivity {
                 }
             });
             l.addView(newButton);
-            i++;
         }
     }
 

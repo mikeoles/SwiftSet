@@ -28,6 +28,7 @@ public class ExerciseSelector extends AppCompatActivity {
         final HashMap<String,String> urls = remaining.getUrls();
         String[] searchResults = s.toArray(new String[s.size()]);
 
+        //Creates a list with each exercise and stores the exercise name and url in the intent
         ListAdapter la = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchResults);
         final ListView exListView = (ListView) findViewById(R.id.exerciseList);
         exListView.setAdapter(la);
