@@ -33,10 +33,17 @@ public class CategorySelector extends AppCompatActivity {
 
         removeCantFollows(selectedGroup);
 
-        //Categories from this group are used as options for th user
+        //Categories from this group are used as options for the user
         ArrayList<SortingCategory> categories = selectedGroup.getCategories();
         LinearLayout l = (LinearLayout) findViewById(R.id.categoryList);
         final ArrayList<SortingCategory> names=new ArrayList<>();//helps get the selected category onclick
+
+        if(categories.size()==1){
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("chosen_sorting_category",categories.get(0));
+            startActivity(intent);
+            return;
+        }
 
         //Loops through each category from the group and creates a button for them
         for(int i=0; i<categories.size();i++){

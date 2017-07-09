@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
         currentOptions.add(new Tempo());
         currentOptions.add(new Joints());
         currentOptions.add(new Unilateral());
+        currentOptions.add(new Stability());
+        currentOptions.add(new Sport());
     }
 
     public void viewExercises(View view) {
