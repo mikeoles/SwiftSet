@@ -6,7 +6,9 @@ public class ChestMovementPatterns extends SortingGroup implements Serializable 
     public ChestMovementPatterns(){
         this.setName("Movement Patterns");
         this.addOption(new SortingCategory("Fly", "Movement", "Fly"));
-        this.addOption( new SortingCategory("Horizontal Press","Movement","Horizontal"));
+        SortingCategory horizontalpress = new SortingCategory("Horizontal Press","Movement","Horizontal");
+        horizontalpress.addNewOptions(new Angle());
+        this.addOption(horizontalpress);
         this.addOption( new SortingCategory("Pushups","Movement","Pushups"));
     }
 }

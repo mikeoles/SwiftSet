@@ -55,9 +55,14 @@ public class ExerciseDb extends SQLiteAssetHelper {
     public void removeRows(String dbSortBy, String dbSortCategory) {
         SQLiteDatabase db = getWritableDatabase();
         String[] sortByList = dbSortBy.split("|");
-        String where = "[" + dbSortCategory + "] != '" + sortByList[0] + "'";
-        for(int i=1 ;i<sortByList.length; i++){
-            where += " AND [" + dbSortCategory + "] != '" + sortByList[i] + "'";
+        String where;
+        if(dbSortCategory.equals("Equipment")){
+            where = "[" + dbSortCategory + "] LIKE '%" + sortByList[0] + "%'";
+        }else {
+            where = "[" + dbSortCategory + "] != '" + sortByList[0] + "'";
+            for (int i = 1; i < sortByList.length; i++) {
+                where += " AND [" + dbSortCategory + "] != '" + sortByList[i] + "'";
+            }
         }
         ContentValues cv = new ContentValues();
         cv.put("Eliminated","1");

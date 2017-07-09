@@ -25,11 +25,11 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         Bundle extras = getIntent().getExtras();
         String selectedExercise = extras.getString("selected_exercise");
         String selectedUrl = extras.getString("selected_url");
+        assert selectedUrl != null;
         youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("=") + 1);
 
         TextView t = (TextView) findViewById(R.id.exerciseTitle);
-        String text = selectedExercise;
-        t.setText(text);
+        t.setText(selectedExercise);
 
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(Config.YOUTUBE_API_KEY, this);

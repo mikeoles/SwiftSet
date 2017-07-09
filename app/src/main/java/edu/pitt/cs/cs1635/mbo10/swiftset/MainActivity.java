@@ -38,15 +38,16 @@ public class MainActivity extends AppCompatActivity {
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
             Bundle extras = getIntent().getExtras();
             SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
-            assert chosenSc != null;
 
             String scName = chosenSc.getName();
             updateSortingPath(scName);
 
-            //New groups that can be added becuase of the chose sorting category (Ex: Fly can be added after Chest is chosen)
+            //New groups that can be added because of the chose sorting category (Ex: Fly can be added after Chest is chosen)
             ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
             for(SortingGroup sg:newOptions){
-                currentOptions.add(sg);
+                if(!removedOptions.contains(sg)) {
+                    currentOptions.add(sg);
+                }
             }
 
             String dbSortCategory = chosenSc.getDbColumnName();
@@ -106,8 +107,12 @@ public class MainActivity extends AppCompatActivity {
 
     //Creates the different sorting group classes that exercises can be sorted by
     public void addMainMenuOptions(){
+        currentOptions.add(new Equipment());
         currentOptions.add(new MuscleGroup());
         currentOptions.add(new PushPullLegs());
+        currentOptions.add(new Tempo());
+        currentOptions.add(new Joints());
+        currentOptions.add(new Unilateral());
     }
 
     public void viewExercises(View view) {
