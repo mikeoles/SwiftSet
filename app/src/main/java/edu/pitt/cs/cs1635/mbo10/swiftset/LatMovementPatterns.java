@@ -8,8 +8,12 @@ public class LatMovementPatterns extends SortingGroup implements Serializable {
         SortingCategory horizontalpull = new SortingCategory("Horizontal Pull", "Movement", "Horizontal");
         horizontalpull.addNewOptions(new Angle());
         this.addOption(horizontalpull);
-        this.addOption( new SortingCategory("Vertical Pull","Movement","Vertical"));
+        SortingCategory verticalpull = new SortingCategory("Vertical Pull","Movement","Vertical");
+        verticalpull.addNewOptions(new Grip());
+        this.addOption(verticalpull);
         this.addOption(new SortingCategory("Pullover Variation", "Movement", "Pullover"));
-        this.addOption(new SortingCategory("Pullup Variations", "Movement", "Pullup"));
+        SortingCategory pullup = new SortingCategory("Pullup Variations", "Movement", "Pullup");
+        pullup.addNewOptions(new Grip());
+        this.addOption(pullup);
     }
 }

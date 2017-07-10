@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    public static final String DATABASE_NAME = "main_exercises.db";
+    public static final String DATABASE_NAME = "main_exercises_1.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
@@ -54,16 +54,22 @@ public class ExerciseDb extends SQLiteAssetHelper {
     //Removes all of the rows where the column dbSortCategory does not contain dbSortBy
     public void removeRows(String dbSortBy, String dbSortCategory) {
         SQLiteDatabase db = getWritableDatabase();
-        String[] sortByList = dbSortBy.split("|");
+        String[] sortByList;
+        if(dbSortBy.contains("/")) {
+            sortByList = dbSortBy.split("/");
+        }else{
+            sortByList = new String[]{dbSortBy};
+        }
         String where;
         if(dbSortCategory.equals("Equipment")){
-            where = "[" + dbSortCategory + "] LIKE '%" + sortByList[0] + "%'";
+            where = "[" + dbSortCategory + "] NOT LIKE '%" + sortByList[0] + "%'";
         }else {
             where = "[" + dbSortCategory + "] != '" + sortByList[0] + "'";
             for (int i = 1; i < sortByList.length; i++) {
                 where += " AND [" + dbSortCategory + "] != '" + sortByList[i] + "'";
             }
         }
+        Log.v("olesy",where);
         ContentValues cv = new ContentValues();
         cv.put("Eliminated","1");
         db.update(EXERCISE_TABLE,cv,where,null);

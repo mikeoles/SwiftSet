@@ -9,5 +9,6 @@ public class Tempo extends SortingGroup implements Serializable {
         this.addOption( new SortingCategory("Explosive","Tempo","Explosive"));
         this.addOption( new SortingCategory("Isometric","Tempo","Isometric"));
         this.addOption( new SortingCategory("Eccentric","Tempo","Eccentric"));
+        this.addOption( new SortingCategory("Dead Stop","Tempo","Deadstop"));
     }
 }

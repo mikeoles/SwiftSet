@@ -19,13 +19,17 @@ public class MuscleGroup extends SortingGroup implements Serializable {
         lats.addNewOptions(new LatMovementPatterns());
         this.addOption(lats);
         SortingCategory reardelts = new SortingCategory("Rear Delts","Primary","Rear Delts");
+        reardelts.addNewOptions(new Grip());
         this.addOption(reardelts);
         SortingCategory triceps = new SortingCategory("Triceps","Primary","Triceps");
+        triceps.addNewOptions(new Grip());
         triceps.addNewOptions(new TricepMovementPatterns());
         this.addOption(triceps);
         SortingCategory biceps = new SortingCategory("Biceps","Primary","Biceps");
+        biceps.addNewOptions(new Grip());
         this.addOption(biceps);
         SortingCategory forearms = new SortingCategory("Forearms","Primary","Forearms");
+        forearms.addNewOptions(new ForearmMovementPatterns());
         this.addOption(forearms);
         SortingCategory neck = new SortingCategory("Neck","Primary","Neck");
         this.addOption(neck);
