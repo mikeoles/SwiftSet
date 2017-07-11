@@ -14,8 +14,12 @@ public class Equipment extends SortingGroup implements Serializable {
         this.addOption(dumbbell);
         SortingCategory machine = new SortingCategory("Machine","Equipment","Machine");
         this.addOption(machine);
+        SortingCategory smith = new SortingCategory("Smith Machine","Equipment","Smith");
+        this.addOption(smith);
         SortingCategory cable = new SortingCategory("Cable","Equipment","Cable");
         this.addOption(cable);
+        SortingCategory landmine = new SortingCategory("Landmine","Equipment","Landmine");
+        this.addOption(landmine);
         SortingCategory kettlebell = new SortingCategory("Kettlebell","Equipment","Kettlebell");
         this.addOption(kettlebell);
         SortingCategory medball = new SortingCategory("Medball","Equipment","Medball");
@@ -24,7 +28,7 @@ public class Equipment extends SortingGroup implements Serializable {
         this.addOption(chains);
         SortingCategory bands = new SortingCategory("Bands","Equipment","Bands");
         this.addOption(bands);
-        SortingCategory bosu = new SortingCategory("Bosu Ball","Equipment","Bosu Ball");
+        SortingCategory bosu = new SortingCategory("Bosu Ball","Equipment","Bosu");
         this.addOption(bosu);
     }
 }

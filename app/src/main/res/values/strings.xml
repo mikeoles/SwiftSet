@@ -5,4 +5,17 @@
     <string name="player_error">Error initializing YouTube player: %s</string>
     <string name="seek_to">Jump To</string>
     <string name="seek_to_hint">Seconds</string>
+    <string name="field_eliminated">Eliminated</string>
+    <string name="field_name">Name</string>
+    <string name="field_primary">Primary</string>
+    <string name="field_equipment">Equipment</string>
+    <string name="field_movement">Movement</string>
+    <string name="field_angle">Angle</string>
+    <string name="field_tempo">Tempo</string>
+    <string name="field_unilateral">Unilateral</string>
+    <string name="field_joint">Joint</string>
+    <string name="field_stability">Stability</string>
+    <string name="field_sport">Sport</string>
+    <string name="field_grip">Grip</string>
+    <string name="field_url">Url</string>
 </resources>
