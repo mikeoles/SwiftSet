@@ -1,4 +1,4 @@
-package edu.pitt.cs.cs1635.mbo10.swiftset;
+package com.michaeloles.swiftset;
 
 import android.os.Bundle;
 import android.widget.TextView;

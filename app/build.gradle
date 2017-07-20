@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "edu.pitt.cs.cs1635.mbo10.swiftset"
+        applicationId "com.michaeloles.swiftset"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1

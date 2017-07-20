@@ -1,4 +1,4 @@
-package edu.pitt.cs.cs1635.mbo10.swiftset;
+package com.michaeloles.swiftset;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
     private static boolean firstTimeSelected = true;
+    //TODO Make path string work with back buton
+
     private static String sortingPathString = "";
 
     @Override
