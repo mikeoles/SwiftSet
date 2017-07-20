@@ -10,7 +10,7 @@ public class MuscleGroup extends SortingGroup implements Serializable {
         SortingCategory chest = new SortingCategory("Chest","Primary","Chest");
         chest.addNewOptions(new ChestMovementPatterns());
         this.addOption(chest);
-        SortingCategory shoulder = new SortingCategory("Shoulder","Primary","Shoulder");
+        SortingCategory shoulder = new SortingCategory("Shoulders","Primary","Shoulders");
         shoulder.addNewOptions(new ShoulderMovementPatterns());
         this.addOption(shoulder);
         SortingCategory traps = new SortingCategory("Traps","Primary","Traps");

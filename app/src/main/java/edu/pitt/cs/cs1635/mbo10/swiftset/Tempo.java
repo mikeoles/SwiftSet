@@ -11,5 +11,6 @@ public class Tempo extends SortingGroup implements Serializable {
         this.addOption( new SortingCategory("Eccentric","Tempo","Eccentric"));
         this.addOption( new SortingCategory("Dead Stop","Tempo","Deadstop"));
         this.addOption( new SortingCategory("Pause Reps","Tempo","Pause"));
+        this.addOption( new SortingCategory("Partial Reps","Tempo","Partial"));
     }
 }

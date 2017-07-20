@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    public static final String DATABASE_NAME = "main_exercises_1.db";
+    public static final String DATABASE_NAME = "main_exercises_2.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
@@ -68,6 +68,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
             for (int i = 1; i < sortByList.length; i++) {
                 where += " AND [" + dbSortCategory + "] != '" + sortByList[i] + "'";
             }
+            where += " OR [" + dbSortCategory + "] is null";
         }
         Log.v("olesy",where);
         ContentValues cv = new ContentValues();

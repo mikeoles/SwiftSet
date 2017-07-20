@@ -10,7 +10,7 @@ public class Equipment extends SortingGroup implements Serializable {
         this.addOption(barbell);
         SortingCategory trapbar = new SortingCategory("Trap Bar","Equipment","Trap Bar");
         this.addOption(trapbar);
-        SortingCategory dumbbell = new SortingCategory("Dumbell","Equipment","Dumbbell");
+        SortingCategory dumbbell = new SortingCategory("Dumbbell","Equipment","Dumbbell");
         this.addOption(dumbbell);
         SortingCategory machine = new SortingCategory("Machine","Equipment","Machine");
         this.addOption(machine);
@@ -30,5 +30,17 @@ public class Equipment extends SortingGroup implements Serializable {
         this.addOption(bands);
         SortingCategory bosu = new SortingCategory("Bosu Ball","Equipment","Bosu");
         this.addOption(bosu);
+        SortingCategory sled = new SortingCategory("Sled/Prowler","Equipment","Sled");
+        this.addOption(sled);
+        SortingCategory plate = new SortingCategory("Weight Plate","Equipment","Plate");
+        this.addOption(plate);
+        SortingCategory safetyBar = new SortingCategory("Safety Bar","Equipment","Safety Bar");
+        this.addOption(safetyBar);
+        SortingCategory weightedBelt = new SortingCategory("Weighted Belt","Equipment","Weighted Belt");
+        this.addOption(weightedBelt);
+        SortingCategory other = new SortingCategory("Other","Equipment","Other");
+        this.addOption(other);
+        SortingCategory gluteham = new SortingCategory("Glute Ham Machine","Equipment","Glute Ham");
+        this.addOption(gluteham);
     }
 }
