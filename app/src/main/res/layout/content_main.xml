@@ -39,7 +39,17 @@
                 android:text="View All Exercises"
                 android:id="@+id/viewAll"
                 android:layout_gravity="center_horizontal"
-                android:onClick="viewExercises" />
+                android:onClick="viewExercises"
+                android:background="@color/colorPrimary" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                android:id="@+id/reset"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="10dp"
+                android:onClick="reset" />
 
         </LinearLayout>
     </ScrollView>

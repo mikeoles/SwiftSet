@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
     private static boolean firstTimeSelected = true;
-    //TODO Make path string work with back buton
+    //TODO Make path string work with back button
 
     private static String sortingPathString = "";
 
@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if(firstTimeCreated) {
+            sortingPathString = "";
+            removedOptions.clear();
             remainingDb = new ExerciseDb(this);
             addMainMenuOptions();
             remainingDb.resetDatabase();
@@ -60,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
         }
         setViewAllText();
         addButtons();
+    }
+
+    //Resets all of the progress from the user in selecting an exercise and returns to the main activity
+    public void reset(View view){
+        firstTimeCreated = false;
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     //Sets the text for the view all button with the number of exercises remaining in the pool displayed
