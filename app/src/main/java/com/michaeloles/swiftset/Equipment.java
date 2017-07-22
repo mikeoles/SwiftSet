@@ -2,6 +2,7 @@ package com.michaeloles.swiftset;
 
 import java.io.Serializable;
 
+//Todo allow for selection of multiple
 
 public class Equipment extends SortingGroup implements Serializable {
     public Equipment(){
@@ -26,7 +27,7 @@ public class Equipment extends SortingGroup implements Serializable {
         this.addOption(medball);
         SortingCategory chains = new SortingCategory("Chains","Equipment","Chains");
         this.addOption(chains);
-        SortingCategory bands = new SortingCategory("Bands","Equipment","Bands");
+        SortingCategory bands = new SortingCategory("Bands","Equipment","Banded");
         this.addOption(bands);
         SortingCategory bosu = new SortingCategory("Bosu Ball","Equipment","Bosu");
         this.addOption(bosu);
@@ -38,9 +39,11 @@ public class Equipment extends SortingGroup implements Serializable {
         this.addOption(safetyBar);
         SortingCategory weightedBelt = new SortingCategory("Weighted Belt","Equipment","Weighted Belt");
         this.addOption(weightedBelt);
-        SortingCategory other = new SortingCategory("Other","Equipment","Other");
-        this.addOption(other);
         SortingCategory gluteham = new SortingCategory("Glute Ham Machine","Equipment","Glute Ham");
         this.addOption(gluteham);
+        SortingCategory hangingBand = new SortingCategory("Haning Band","Equipment","Hanging Band");
+        this.addOption(hangingBand);
+        SortingCategory other = new SortingCategory("Other","Equipment","Other");
+        this.addOption(other);
     }
 }

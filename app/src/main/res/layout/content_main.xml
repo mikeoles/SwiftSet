@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.michaeloles.swiftset.MainActivity"
     tools:showIn="@layout/activity_main">
@@ -26,12 +26,24 @@
             android:layout_alignParentStart="true"
             android:id="@+id/allOptions">
 
-            <TextView
-                android:layout_width="match_parent"
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/sortingPath"
-                android:layout_gravity="center_horizontal" />
+                android:id="@+id/horizontalScrollView"
+                android:scrollIndicators="none">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sortingPath"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp">
+
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <Button
                 android:layout_width="fill_parent"
@@ -40,17 +52,20 @@
                 android:id="@+id/viewAll"
                 android:layout_gravity="center_horizontal"
                 android:onClick="viewExercises"
-                android:background="@color/colorPrimary" />
+                android:background="@color/colorPrimaryDark"
+                android:layout_marginTop="10dp" />
 
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Reset"
                 android:id="@+id/reset"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimaryDark"
                 android:layout_marginTop="10dp"
-                android:onClick="reset" />
+                android:onClick="reset"
+                android:layout_marginBottom="10dp" />
 
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

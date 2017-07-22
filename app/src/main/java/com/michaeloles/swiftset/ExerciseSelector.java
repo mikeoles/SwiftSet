@@ -12,8 +12,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class ExerciseSelector extends AppCompatActivity {
+
+    int numberOfExercises = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +27,9 @@ public class ExerciseSelector extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ExerciseDb remaining = MainActivity.getRemainingDb();
-        ArrayList<String> s = remaining.getColumnsList();
+        ArrayList<String> colList = remaining.getColumnsList();
         final HashMap<String,String> urls = remaining.getUrls();
-        String[] searchResults = s.toArray(new String[s.size()]);
+        String[] searchResults = colList.toArray(new String[colList.size()]);
 
         //Creates a list with each exercise and stores the exercise name and url in the intent
         ListAdapter la = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchResults);
@@ -44,6 +47,22 @@ public class ExerciseSelector extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    public void chooseRandom(View view){
+        ExerciseDb remaining = MainActivity.getRemainingDb();
+        ArrayList<String> colList = remaining.getColumnsList();
+        final HashMap<String,String> urls = remaining.getUrls();
+
+        Random r = new Random();
+        int rand = r.nextInt(colList.size());
+
+        String selectedFromList = colList.get(rand);
+        String selectedUrl = urls.get(selectedFromList);
+        Intent intent = new Intent(view.getContext(), ExerciseViewer.class);
+        intent.putExtra("selected_exercise", selectedFromList);
+        intent.putExtra("selected_url", selectedUrl);
+        startActivity(intent);
     }
 
 }

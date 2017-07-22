@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * @
  */
 public class SortingGroup implements Serializable{
-    //TODO random button
 
     public String name;
 
