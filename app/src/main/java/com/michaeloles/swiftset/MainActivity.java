@@ -68,8 +68,11 @@ public class MainActivity extends AppCompatActivity {
         currentOptions.clear();
         chosenOptions.clear();
         remainingDb = new ExerciseDb(this);
-        addMainMenuOptions();
         remainingDb.resetDatabase();
+        addMainMenuOptions();
+        //Refresh Activity
+        finish();
+        startActivity(getIntent());
     }
 
     //Sets the text for the view all button with the number of exercises remaining in the pool displayed
