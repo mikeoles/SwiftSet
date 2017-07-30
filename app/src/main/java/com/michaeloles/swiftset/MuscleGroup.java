@@ -43,7 +43,7 @@ public class MuscleGroup extends SortingGroup implements Serializable {
         SortingCategory hamstrings = new SortingCategory("Hamstrings","Primary","Hamstrings");
         hamstrings.addNewOptions(new HamstringMovementPatterns());
         this.addOption(hamstrings);
-        SortingCategory calves = new SortingCategory("Calves","Primary","Calves");
+        SortingCategory calves = new SortingCategory("Calves","Primary","Calf");
         this.addOption(calves);
         SortingCategory glute = new SortingCategory("Glutes","Primary","Glutes");
         this.addOption(glute);
