@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
-
-    public static final String DATABASE_NAME = "main_exercises_2.db";
+    //TODO 1 arm cable fron traise cable
+    public static final String DATABASE_NAME = "main_exercises_3.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
@@ -33,6 +33,8 @@ public class ExerciseDb extends SQLiteAssetHelper {
         String[] tableColumns = {EXERCISE_NAME_COL,URL_COL};
         Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, null,
                 null, null, null);
+
+
 
         ArrayList<String> columns = new ArrayList<>();
         c.moveToFirst();

@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Todo search feature
+
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
     public static ArrayList<String> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(firstTimeCreated) {
             removedOptions.clear();
+            currentOptions.clear();
+            chosenOptions.clear();
             remainingDb = new ExerciseDb(this);
             addMainMenuOptions();
             remainingDb.resetDatabase();
@@ -64,13 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Resets all of the progress from the user in selecting an exercise and returns to the main activity
     public void reset(View view){
-        removedOptions.clear();
-        currentOptions.clear();
-        chosenOptions.clear();
-        remainingDb = new ExerciseDb(this);
-        remainingDb.resetDatabase();
-        addMainMenuOptions();
-        //Refresh Activity
+        firstTimeCreated = true;
+        //Refresh Activity with as first time created to reset the database
         finish();
         startActivity(getIntent());
     }
