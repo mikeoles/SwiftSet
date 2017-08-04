@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     //Todo search feature
+    //Add list of chosen options
 
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
@@ -64,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
         setViewAllText();
         updateSortingPath(this);
         addButtons(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        firstTimeCreated = true;
+        //Refresh Activity with as first time created to reset the database
+        finish();
+        startActivity(getIntent());
     }
 
     //Resets all of the progress from the user in selecting an exercise and returns to the main activity

@@ -24,27 +24,27 @@ public class PushPullLegs extends SortingGroup implements Serializable{
     //Initializes push pull legs with standard values
     //May add a feature to allow the user to chose custom values in the future
     private void initStandardValues() {
-        pullMuscles.add("lats");
-        pullMuscles.add("traps");
-        pullMuscles.add("rear delts");
-        pullMuscles.add("biceps");
+        pullMuscles.add("Lats");
+        pullMuscles.add("Traps");
+        pullMuscles.add("Rear Delts");
+        pullMuscles.add("Biceps");
 
-        pushMuscles.add("chest");
-        pushMuscles.add("triceps");
-        pushMuscles.add("shoulders");
+        pushMuscles.add("Chest");
+        pushMuscles.add("Triceps");
+        pushMuscles.add("Shoulders");
 
-        legsMuscles.add("quads");
-        legsMuscles.add("hamstrings");
-        legsMuscles.add("calves");
-        legsMuscles.add("glutes");
-        legsMuscles.add("hips");
+        legsMuscles.add("Quads");
+        legsMuscles.add("Hamstrings");
+        legsMuscles.add("Calf");
+        legsMuscles.add("Glutes");
+        legsMuscles.add("Hips");
     }
 
     //Formates the muscles into a string which can be parsed and sorted by the sqlite database
     private String formatString(ArrayList<String> array){
         StringBuilder formatted = new StringBuilder();
         for(String s:array){
-            s = s + "|";
+            s = s + "/";
             formatted.append(s);
         }
         formatted.deleteCharAt(formatted.length()-1);

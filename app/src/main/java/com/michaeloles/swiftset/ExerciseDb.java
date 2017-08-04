@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
-    //TODO 1 arm cable fron traise cable
+    //TODO 1 arm cable front raise dumbbell to cable
     public static final String DATABASE_NAME = "main_exercises_3.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
@@ -66,11 +66,11 @@ public class ExerciseDb extends SQLiteAssetHelper {
         if(dbSortCategory.equals("Equipment")){
             where = "[" + dbSortCategory + "] NOT LIKE '%" + sortByList[0] + "%'";
         }else {
-            where = "[" + dbSortCategory + "] != '" + sortByList[0] + "'";
+            where = "([" + dbSortCategory + "] != '" + sortByList[0] + "'";
             for (int i = 1; i < sortByList.length; i++) {
                 where += " AND [" + dbSortCategory + "] != '" + sortByList[i] + "'";
             }
-            where += " OR [" + dbSortCategory + "] is null";
+            where += ") OR [" + dbSortCategory + "] is null";
         }
         Log.v("olesy",where);
         ContentValues cv = new ContentValues();

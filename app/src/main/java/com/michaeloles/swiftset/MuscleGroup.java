@@ -17,6 +17,7 @@ public class MuscleGroup extends SortingGroup implements Serializable {
         this.addOption(traps);
         SortingCategory lats = new SortingCategory("Lats","Primary","Lats");
         lats.addNewOptions(new LatMovementPatterns());
+        lats.addNewOptions(new Grip());
         this.addOption(lats);
         SortingCategory reardelts = new SortingCategory("Rear Delts","Primary","Rear Delts");
         reardelts.addNewOptions(new Grip());
