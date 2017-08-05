@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
-    //TODO 1 arm cable front raise dumbbell to cable
-    public static final String DATABASE_NAME = "main_exercises_3.db";
+
+    public static final String DATABASE_NAME = "main_exercises_4.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
@@ -72,7 +72,6 @@ public class ExerciseDb extends SQLiteAssetHelper {
             }
             where += ") OR [" + dbSortCategory + "] is null";
         }
-        Log.v("olesy",where);
         ContentValues cv = new ContentValues();
         cv.put("Eliminated","1");
         db.update(EXERCISE_TABLE,cv,where,null);

@@ -39,8 +39,8 @@
                     android:id="@+id/sortingPath"
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="10dp"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp">
+                    android:minHeight="5dp"
+                    android:minWidth="10dp">
 
                 </LinearLayout>
             </HorizontalScrollView>

@@ -97,12 +97,11 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout sortingPath = (LinearLayout) findViewById(R.id.sortingPath);
 
         for(int i=0; i<chosenOptions.size(); i++){
-            TextView b = new TextView(this);
+            Button b = new Button(this);
             String name = chosenOptions.get(i);
             b.setTextSize(9);
             b.setHeight(10);
             b.setText(name);
-
             sortingPath.addView(b);
         }
     }
