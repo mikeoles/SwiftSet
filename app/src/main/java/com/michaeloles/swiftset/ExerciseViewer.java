@@ -29,7 +29,6 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         assert selectedUrl != null;
         youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("=") + 1).toLowerCase();
         if(youtubeCode.contains("&")){
-            //TODO get start time
             String[] parts = youtubeCode.split("&");
             youtubeCode = parts[0];//The code in the url the speifies the current video
             String timecode = parts[1];//The part of the url that specifices the start time
