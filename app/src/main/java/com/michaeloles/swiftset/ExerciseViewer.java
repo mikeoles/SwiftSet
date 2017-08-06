@@ -16,6 +16,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     private static final int RECOVERY_REQUEST = 1;
     private YouTubePlayerView youTubeView;
     private static String youtubeCode = "";
+    private static int startTimeMillis = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +27,24 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         String selectedExercise = extras.getString("selected_exercise");
         String selectedUrl = extras.getString("selected_url");
         assert selectedUrl != null;
-        youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("=") + 1);
+        youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("=") + 1).toLowerCase();
+        if(youtubeCode.contains("&")){
+            //TODO get start time
+            String[] parts = youtubeCode.split("&");
+            youtubeCode = parts[0];//The code in the url the speifies the current video
+            String timecode = parts[1];//The part of the url that specifices the start time
+            if(timecode.contains("m")){//if both minutes and seconds are noted in url
+                parts = timecode.split("m");
+                startTimeMillis = Integer.parseInt(parts[0]) * 60000;//Convert the url minutes time to milliseconds
+                timecode = parts[1];
+            }
 
+            if(timecode.contains("s")){
+                timecode = timecode.substring(0, timecode.length() - 1);//remove trailing s from string to get number of seconds
+            }
+
+            startTimeMillis += Integer.parseInt(timecode) * 1000;
+        }
         TextView t = (TextView) findViewById(R.id.exerciseTitle);
         t.setText(selectedExercise);
 
@@ -38,7 +55,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
-            player.cueVideo(youtubeCode);
+            player.cueVideo(youtubeCode,startTimeMillis);
         }
     }
 
