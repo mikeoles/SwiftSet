@@ -2,10 +2,10 @@ package com.michaeloles.swiftset;
 
 import java.io.Serializable;
 
-//Todo allow for selection of multiple
-
 public class Equipment extends SortingGroup implements Serializable {
     public Equipment(){
+        this.isMultiChoice = true;
+
         this.setName("Equipment");
         SortingCategory barbell = new SortingCategory("Barbell","Equipment","Barbell");
         this.addOption(barbell);

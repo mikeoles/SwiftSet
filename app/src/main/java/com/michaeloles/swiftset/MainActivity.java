@@ -19,9 +19,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Todo search feature
-    //Add list of chosen options
-
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
     public static ArrayList<String> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user

@@ -12,14 +12,15 @@ import java.util.ArrayList;
 public class SortingGroup implements Serializable{
 
     public String name;
-
     //All of the sorting groups that cant be used after this sorting group is used
     //Ex: You can't sort by Upper/Lower after Muscle Group is called
     private ArrayList<Class> cantFollow = new ArrayList<>();
-
     //All of the categories that can be chosen from this sorting group
     //Ex: Muscle Groups categories: Chest, Triceps, Quads, Lats...
     public ArrayList<SortingCategory> categories = new ArrayList<>();
+    //Is the user allowed to select more than one category from this group at the same time
+    //Ex: can select both dumbbell and barbell exercises but not incline and decline exercises at same time
+    public boolean isMultiChoice = false;
 
     public SortingGroup(){
         this("");

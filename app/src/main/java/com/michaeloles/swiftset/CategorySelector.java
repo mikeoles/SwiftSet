@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class CategorySelector extends AppCompatActivity {
         LinearLayout l = (LinearLayout) findViewById(R.id.categoryList);
         final ArrayList<SortingCategory> names=new ArrayList<>();//helps get the selected category onclick
 
+        //If there is only one possible option that can be chosen, select it automatically for the user
         if(categories.size()==1){
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("chosen_sorting_category",categories.get(0));
@@ -45,23 +47,37 @@ public class CategorySelector extends AppCompatActivity {
             return;
         }
 
-        //Loops through each category from the group and creates a button for them
-        for(int i=0; i<categories.size();i++){
-            names.add(categories.get(i));
-            Button newButton = new Button(this);
-            newButton.setText(categories.get(i).getName());
-            newButton.setId(i);
+        if(selectedGroup.isMultiChoice){
+            for (int i = 0; i < categories.size(); i++) {
+                names.add(categories.get(i));
+                CheckBox newCheckbox = new CheckBox(this);
+                newCheckbox.setText(categories.get(i).getName());
+                newCheckbox.setId(i);
 
-            //sends the selected category back to the main class when selected
-            newButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), MainActivity.class);
-                    intent.putExtra("chosen_sorting_category",names.get(v.getId()));
-                    startActivity(intent);
-                }
-            });
-            l.addView(newButton);
+                //Todo allow for selection of multiple
+                //When multiple equipment are selected, return a string of each with a / in between
+
+                l.addView(newCheckbox);
+            }
+        }else{
+            //Loops through each category from the group and creates a button for them
+            for (int i = 0; i < categories.size(); i++) {
+                names.add(categories.get(i));
+                Button newButton = new Button(this);
+                newButton.setText(categories.get(i).getName());
+                newButton.setId(i);
+
+                //sends the selected category back to the main class when selected
+                newButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), MainActivity.class);
+                        intent.putExtra("chosen_sorting_category", names.get(v.getId()));
+                        startActivity(intent);
+                    }
+                });
+                l.addView(newButton);
+            }
         }
     }
 

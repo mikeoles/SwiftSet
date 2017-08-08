@@ -62,16 +62,21 @@ public class ExerciseDb extends SQLiteAssetHelper {
         }else{
             sortByList = new String[]{dbSortBy};
         }
-        String where;
+
+        String where, sqlSearchKey;
+
         if(dbSortCategory.equals("Equipment")){
-            where = "[" + dbSortCategory + "] NOT LIKE '%" + sortByList[0] + "%'";
+            sqlSearchKey = "NOT LIKE";
         }else {
-            where = "([" + dbSortCategory + "] != '" + sortByList[0] + "'";
-            for (int i = 1; i < sortByList.length; i++) {
-                where += " AND [" + dbSortCategory + "] != '" + sortByList[i] + "'";
-            }
-            where += ") OR [" + dbSortCategory + "] is null";
+            sqlSearchKey = "!=";
         }
+
+        where = "([" + dbSortCategory + "] " + sqlSearchKey + " '" + sortByList[0] + "'";
+        for (int i = 1; i < sortByList.length; i++) {
+            where += " AND [" + dbSortCategory + "] " + sqlSearchKey + " '" + sortByList[i] + "'";
+        }
+        where += ") OR [" + dbSortCategory + "] is null";
+
         ContentValues cv = new ContentValues();
         cv.put("Eliminated","1");
         db.update(EXERCISE_TABLE,cv,where,null);
