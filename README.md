@@ -2,7 +2,7 @@
 
 **Android fitness app that allows users a quickly find the perfrect exercise for any situation from over 350+ exercises in our database**
 
-[Google Play Store Download](https://play.google.com/store/apps/details?id=com.michaeloles.swiftset
+[Google Play Store Download](https://play.google.com/store/apps/details?id=com.michaeloles.swiftset)
 
 Quickly narrow down the exercise you need by selecting from different categories:
 - Equipment
