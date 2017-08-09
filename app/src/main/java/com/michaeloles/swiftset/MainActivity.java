@@ -44,19 +44,27 @@ public class MainActivity extends AppCompatActivity {
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
             Bundle extras = getIntent().getExtras();
-            SortingCategory chosenSc = (SortingCategory) extras.getSerializable("chosen_sorting_category");
-            chosenOptions.add(chosenSc.getName());
+            ArrayList<SortingCategory> chosenScList = (ArrayList<SortingCategory>) extras.getSerializable("chosen_sorting_category");
 
-            //New groups that can be added because of the chose sorting category (Ex: Fly Movement Pattern can be added after Chest is chosen)
-            ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
-            for(SortingGroup sg:newOptions){
-                if(!removedOptions.contains(sg) && !currentOptions.contains(sg)) {
-                    currentOptions.add(sg);
+            String dbSortCategory = "";
+            String dbSortBy = "";
+            for(int i=0;i<chosenScList.size();i++) {
+                SortingCategory chosenSc = chosenScList.get(i);
+                chosenOptions.add(chosenSc.getName());
+
+                //New groups that can be added because of the chose sorting category (Ex: Fly Movement Pattern can be added after Chest is chosen)
+                ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
+                for (SortingGroup sg : newOptions) {
+                    if (!removedOptions.contains(sg) && !currentOptions.contains(sg)) {
+                        currentOptions.add(sg);
+                    }
                 }
-            }
 
-            String dbSortCategory = chosenSc.getDbColumnName();
-            String dbSortBy = chosenSc.getSortBy();
+                if(i==0) {
+                   dbSortCategory = chosenSc.getDbColumnName();
+                }
+                dbSortBy += chosenSc.getSortBy() + "/";
+            }
             dbSearch(remainingDb, dbSortBy, dbSortCategory);
         }
         setViewAllText();

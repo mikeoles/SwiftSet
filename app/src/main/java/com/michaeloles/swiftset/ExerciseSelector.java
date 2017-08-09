@@ -6,11 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import java.util.Random;
 
 public class ExerciseSelector extends AppCompatActivity {
 
-    int numberOfExercises = 0;
     EditText searchText;
-    ListAdapter adapter;
+    ArrayAdapter adapter;
     ArrayList listItems;
+    String[] searchResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +36,11 @@ public class ExerciseSelector extends AppCompatActivity {
         ExerciseDb remaining = MainActivity.getRemainingDb();
         ArrayList<String> colList = remaining.getColumnsList();
         final HashMap<String,String> urls = remaining.getUrls();
-        final String[] searchResults = colList.toArray(new String[colList.size()]);
+        searchResults = colList.toArray(new String[colList.size()]);
         listItems = new ArrayList<>(Arrays.asList(searchResults));
+        searchText=(EditText)findViewById(R.id.exsearch);
+        initList(urls);
 
-        initList(urls,searchResults);
         searchText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -49,9 +50,9 @@ public class ExerciseSelector extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.toString().equals("")){
-                    initList(urls,searchResults);// reset listview
+                    initList(urls);// reset listview
                 }else{
-                    searchItem(s.toString(),searchResults);// perform search
+                    searchItem(s.toString());// perform search
                 }
             }
 
@@ -62,17 +63,18 @@ public class ExerciseSelector extends AppCompatActivity {
 
     }
 
-    private void searchItem(String textToSearch,String[] items) {
-        for(String item:items){
+    private void searchItem(String textToSearch) {
+        for(String item:searchResults){
+            Log.v("olesy", textToSearch);
             if(!item.contains(textToSearch)){
                 listItems.remove(item);
             }
         }
 
-        adapter.notify();
+        adapter.notifyDataSetChanged();
     }
 
-    private void initList(final HashMap<String,String> urls, String[] searchResults) {
+    private void initList(final HashMap<String,String> urls) {
         //Creates a list with each exercise and stores the exercise name and url in the intent
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchResults);
         final ListView exListView = (ListView) findViewById(R.id.exerciseList);

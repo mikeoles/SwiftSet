@@ -76,7 +76,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
             where += " AND [" + dbSortCategory + "] " + sqlSearchKey + " '" + sortByList[i] + "'";
         }
         where += ") OR [" + dbSortCategory + "] is null";
-
+Log.v("olesy",where);
         ContentValues cv = new ContentValues();
         cv.put("Eliminated","1");
         db.update(EXERCISE_TABLE,cv,where,null);
