@@ -1,5 +1,6 @@
 package com.michaeloles.swiftset;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -102,7 +104,8 @@ public class CategorySelector extends AppCompatActivity {
 
     //Adds a select button to the layout to return which checkboxes have been selected
     private void createSelectButton() {
-        Button button = new Button(this);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.catRelativeLayout);
+        Button button = new Button(this); // your button;
         button.setText("Select");
         button.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -115,7 +118,10 @@ public class CategorySelector extends AppCompatActivity {
                 }
             }
         });
-        l.addView(button);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(button, lp);
     }
 
     //Creates an arraylist of sorting categories to return based on a list of strings that the user has selected
