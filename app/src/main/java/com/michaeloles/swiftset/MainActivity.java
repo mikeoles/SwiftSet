@@ -2,6 +2,7 @@ package com.michaeloles.swiftset;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -187,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
     //Adds buttons for every sorting group to the main page
     public void addButtons(Context context){
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
+
         final ArrayList<SortingGroup> names=new ArrayList<>();//Helps the onClick function find what group was selected
 
         //Add new buttons for each of the sorting groups available to the user
@@ -195,13 +198,14 @@ public class MainActivity extends AppCompatActivity {
             SortingGroup s = currentOptions.get(i);
             newButton.setText(s.getName());
             newButton.setId(i);
+            newButton.setPadding(0,0,0,0);
             final TypedValue value = new TypedValue();
-            context.getTheme ().resolveAttribute(R.attr.colorPrimary, value, true);
+            context.getTheme ().resolveAttribute(R.attr.colorAccent, value, true);
             GradientDrawable gd = new GradientDrawable();
-            gd.setColor(value.data); // Changes this drawbale to use a single color instead of a gradient
-            gd.setAlpha(150);
-            gd.setStroke(1, 0xFF000000);
+            gd.setColor(Color.WHITE); // Changes this drawbale to use a single color instead of a gradient
+            gd.setStroke(1, value.data);
             newButton.setBackground(gd);
+
             names.add(s);
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override

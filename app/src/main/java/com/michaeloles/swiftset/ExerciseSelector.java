@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +21,8 @@ import java.util.Random;
 
 public class ExerciseSelector extends AppCompatActivity {
 
-    EditText searchText;
+    SearchView searchView;
     ArrayAdapter adapter;
-    ArrayList listItems;
     String[] searchResults;
 
     @Override
@@ -37,41 +37,20 @@ public class ExerciseSelector extends AppCompatActivity {
         ArrayList<String> colList = remaining.getColumnsList();
         final HashMap<String,String> urls = remaining.getUrls();
         searchResults = colList.toArray(new String[colList.size()]);
-        listItems = new ArrayList<>(Arrays.asList(searchResults));
-        searchText=(EditText)findViewById(R.id.exsearch);
         initList(urls);
-
-        searchText.addTextChangedListener(new TextWatcher() {
-
+        searchView= (SearchView)findViewById(R.id.exSearch);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")){
-                    initList(urls);// reset listview
-                }else{
-                    searchItem(s.toString());// perform search
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
-
-    }
-
-    private void searchItem(String textToSearch) {
-        for(String item:searchResults){
-            Log.v("olesy", textToSearch);
-            if(!item.contains(textToSearch)){
-                listItems.remove(item);
-            }
-        }
-
-        adapter.notifyDataSetChanged();
     }
 
     private void initList(final HashMap<String,String> urls) {

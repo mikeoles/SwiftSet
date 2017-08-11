@@ -20,22 +20,25 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         style="@style/AppTheme"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryDark"
         android:onClick="chooseRandom" />
 
-    <EditText
-        android:id="@+id/exsearch"
-        android:layout_width="match_parent"
+    <SearchView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Search"
-        android:layout_below="@id/random"
-        />
-        <ListView
+        android:id="@+id/exSearch"
+        android:layout_below="@+id/random"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/exerciseList"
-            android:layout_below="@+id/exsearch"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/exSearch"
+        android:divider="@color/colorAccent"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="false" />
 
 </RelativeLayout>

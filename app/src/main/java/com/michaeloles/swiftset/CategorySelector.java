@@ -1,9 +1,13 @@
 package com.michaeloles.swiftset;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,7 +30,7 @@ public class CategorySelector extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_selector);
 
-        addButtons();
+        addButtons(this);
     }
 
     //Gets the sorting group that has been chosen by the user in the main activity
@@ -38,7 +42,8 @@ public class CategorySelector extends AppCompatActivity {
     }
 
     //Adds buttons for each category to the screen
-    private void addButtons(){
+    //TODO refactor large method
+    private void addButtons(Context context){
         SortingGroup selectedGroup = getGroup();
 
         removeCantFollows(selectedGroup);
@@ -107,11 +112,11 @@ public class CategorySelector extends AppCompatActivity {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.catRelativeLayout);
         Button button = new Button(this); // your button;
         button.setText("Select");
-        button.setOnClickListener(new View.OnClickListener(){
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //If at least one category is selected pass a string containing those categories to the mainActivity
-                if(selectedStrings.size()>0) {
+                if (selectedStrings.size() > 0) {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("chosen_sorting_category", createCategoriesArray(selectedStrings));
                     startActivity(intent);

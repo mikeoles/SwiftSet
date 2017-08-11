@@ -40,7 +40,9 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="10dp"
                     android:minHeight="5dp"
-                    android:minWidth="10dp">
+                    android:minWidth="10dp"
+                    android:divider="@color/colorAccent"
+                    android:dividerPadding="1dp">
 
                 </LinearLayout>
             </HorizontalScrollView>
