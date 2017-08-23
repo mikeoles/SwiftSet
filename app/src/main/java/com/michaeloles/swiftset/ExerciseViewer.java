@@ -1,6 +1,7 @@
 package com.michaeloles.swiftset;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.content.Intent;
 import android.widget.Toast;
@@ -27,11 +28,12 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         String selectedExercise = extras.getString("selected_exercise");
         String selectedUrl = extras.getString("selected_url");
         assert selectedUrl != null;
-        youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("=") + 1).toLowerCase();
+        youtubeCode = selectedUrl.substring(selectedUrl.indexOf("=") + 1);
         if(youtubeCode.contains("&")){
             String[] parts = youtubeCode.split("&");
             youtubeCode = parts[0];//The code in the url the speifies the current video
-            String timecode = parts[1];//The part of the url that specifices the start time
+            String timecode = parts[1].toLowerCase();//The part of the url that specifices the start time
+            timecode = timecode.substring(2, timecode.length());//Remove the first part of the time url (t=)
             if(timecode.contains("m")){//if both minutes and seconds are noted in url
                 parts = timecode.split("m");
                 startTimeMillis = Integer.parseInt(parts[0]) * 60000;//Convert the url minutes time to milliseconds
@@ -40,9 +42,10 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
             if(timecode.contains("s")){
                 timecode = timecode.substring(0, timecode.length() - 1);//remove trailing s from string to get number of seconds
+                startTimeMillis += Integer.parseInt(timecode) * 1000;
             }
 
-            startTimeMillis += Integer.parseInt(timecode) * 1000;
+
         }
         TextView t = (TextView) findViewById(R.id.exerciseTitle);
         t.setText(selectedExercise);
@@ -54,7 +57,8 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
-            player.cueVideo(youtubeCode,startTimeMillis);
+            Log.v("olesy", youtubeCode + "-code starttime:" + startTimeMillis);
+            player.cueVideo(youtubeCode, startTimeMillis);
         }
     }
 
