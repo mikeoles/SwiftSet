@@ -18,6 +18,12 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
+//TODO Flexibility Section
+//TODO Add abs
+//TODO bugfix - no pushups
+//TODO feature - save exercises into workout
+//TODO bugfix - stability/balance exercises
+
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
