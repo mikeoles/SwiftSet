@@ -24,22 +24,33 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_viewer);
 
+        //Get Url From Calling Activity
         Bundle extras = getIntent().getExtras();
         String selectedExercise = extras.getString("selected_exercise");
         String selectedUrl = extras.getString("selected_url");
         assert selectedUrl != null;
-        youtubeCode = selectedUrl.substring(selectedUrl.indexOf("=") + 1);
+
+        //seperate the youtube video code and time from the url
+        if(selectedExercise.toLowerCase().contains("youtu.be")){//different depending on youtube.com and youtu.be urls
+            youtubeCode = selectedUrl.substring(selectedUrl.indexOf("/") + 1);
+        }else{
+            youtubeCode = selectedUrl.substring(selectedUrl.indexOf("=") + 1);
+        }
+
         if(youtubeCode.contains("&")){
             String[] parts = youtubeCode.split("&");
             youtubeCode = parts[0];//The code in the url the speifies the current video
             String timecode = parts[1].toLowerCase();//The part of the url that specifices the start time
             timecode = timecode.substring(2, timecode.length());//Remove the first part of the time url (t=)
+
+            if(!timecode.contains("m")&&!timecode.contains("s")){//timecode is just listed as an interger of seconds
+                startTimeMillis += Integer.parseInt(timecode) * 1000;
+            }
             if(timecode.contains("m")){//if both minutes and seconds are noted in url
                 parts = timecode.split("m");
                 startTimeMillis = Integer.parseInt(parts[0]) * 60000;//Convert the url minutes time to milliseconds
                 timecode = parts[1];
             }
-
             if(timecode.contains("s")){
                 timecode = timecode.substring(0, timecode.length() - 1);//remove trailing s from string to get number of seconds
                 startTimeMillis += Integer.parseInt(timecode) * 1000;
