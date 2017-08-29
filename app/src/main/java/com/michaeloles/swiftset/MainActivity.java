@@ -7,20 +7,15 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-//TODO Flexibility Section
-//TODO Add abs
-//TODO bugfix - no pushups
 //TODO feature - save exercises into workout
 //TODO bugfix - stability/balance exercises
 

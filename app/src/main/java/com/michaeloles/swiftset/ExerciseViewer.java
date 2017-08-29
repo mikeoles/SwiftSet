@@ -1,6 +1,7 @@
 package com.michaeloles.swiftset;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.content.Intent;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     private YouTubePlayerView youTubeView;
     private static String youtubeCode = "";
     private static int startTimeMillis = 0;
+    private static String selectedExercise = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         setContentView(R.layout.activity_exercise_viewer);
 
         Bundle extras = getIntent().getExtras();
-        String selectedExercise = extras.getString("selected_exercise");
+        selectedExercise = extras.getString("selected_exercise");
         String selectedUrl = extras.getString("selected_url");
         assert selectedUrl != null;
         youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("=") + 1).toLowerCase();
@@ -78,5 +80,10 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
     protected Provider getYouTubePlayerProvider() {
         return youTubeView;
+    }
+
+    public void saveExercise(View view){
+        int numExercises = SavedExercises.addExercise(selectedExercise);
+        Toast.makeText(this,"Saved! (" + numExercises + " exercises in current workout)",Toast.LENGTH_SHORT);
     }
 }
