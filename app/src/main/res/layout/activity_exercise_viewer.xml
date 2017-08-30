@@ -32,7 +32,8 @@
         android:layout_height="wrap_content"
         android:text="Save Exercise To Workout"
         android:id="@+id/button"
-        android:layout_centerVertical="true"
+        android:onClick="saveExercise"
+        android:layout_below="@+id/youtube_view"
         android:layout_centerHorizontal="true"
-        android:onClick="saveExercise" />
+        android:layout_marginTop="50dp" />
 </RelativeLayout>

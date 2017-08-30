@@ -16,9 +16,6 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-//TODO feature - save exercises into workout
-//TODO bugfix - stability/balance exercises
-
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
@@ -149,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewExercises(View view) {
         Intent intent = new Intent(this, ExerciseSelector.class);
+        startActivity(intent);
+    }
+
+    public void viewWorkouts(View view) {
+        Intent intent = new Intent(this, WorkoutViewer.class);
         startActivity(intent);
     }
 

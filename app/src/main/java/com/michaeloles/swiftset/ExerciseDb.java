@@ -34,8 +34,6 @@ public class ExerciseDb extends SQLiteAssetHelper {
         Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, null,
                 null, null, null);
 
-
-
         ArrayList<String> columns = new ArrayList<>();
         c.moveToFirst();
         try {
@@ -78,8 +76,8 @@ public class ExerciseDb extends SQLiteAssetHelper {
         where += ") OR [" + dbSortCategory + "] is null";
 Log.v("olesy",where);
         ContentValues cv = new ContentValues();
-        cv.put("Eliminated","1");
-        db.update(EXERCISE_TABLE,cv,where,null);
+        cv.put("Eliminated", "1");
+        db.update(EXERCISE_TABLE, cv, where, null);
         db.close();
     }
 
@@ -97,9 +95,32 @@ Log.v("olesy",where);
         String countQuery = "SELECT  * FROM " + EXERCISE_TABLE + " WHERE [Eliminated] == '0'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        int cnt = cursor.getCount();
+        int count = cursor.getCount();
         cursor.close();
-        return cnt;
+        return count;
+    }
+
+    //Given an exercise name, return the url of that name
+    //If name not found return an empty string
+    public String getUrlByExerciseName(String name){
+        String url = "";
+        SQLiteDatabase db = getReadableDatabase();
+        String where = "[Name] == '" + name +"'";
+        String[] tableColumns = {EXERCISE_NAME_COL,URL_COL};
+        Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, null,
+                null, null, null);
+        int count = c.getCount();
+        if(count==1) {
+            c.moveToFirst();
+            try {
+                url = c.getString(c.getColumnIndex(URL_COL));
+            } catch (CursorIndexOutOfBoundsException ae) {
+                Log.e("Cursor Error", ae.toString());
+            }
+        }
+        db.close();
+        c.close();
+        return url;
     }
 
     //Getters and Setters

@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.michaeloles.swiftset">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:versionCode="2"
-        android:versionName="1.2"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:versionCode="2"
+        android:versionName="1.2">
         <activity
-            android:name="com.michaeloles.swiftset.MainActivity"
+            android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -20,13 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.michaeloles.swiftset.CategorySelector" />
+        <activity android:name=".CategorySelector" />
         <activity
-            android:name="com.michaeloles.swiftset.ExerciseSelector"
+            android:name=".ExerciseSelector"
             android:label="@string/title_activity_exercise_selector"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.michaeloles.swiftset.ExerciseViewer" />
+        <activity android:name=".ExerciseViewer" />
+        <activity android:name=".WorkoutViewer"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

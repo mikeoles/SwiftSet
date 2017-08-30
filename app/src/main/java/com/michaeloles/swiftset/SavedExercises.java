@@ -14,4 +14,8 @@ public class SavedExercises {
         savedExerciseList.add(selectedExercise);
         return savedExerciseList.size();
     }
+
+    public static ArrayList<String> getSavedExerciseList() {
+        return savedExerciseList;
+    }
 }

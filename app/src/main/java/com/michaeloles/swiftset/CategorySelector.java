@@ -56,7 +56,7 @@ public class CategorySelector extends AppCompatActivity {
         //If there is only one possible option that can be chosen, select it automatically for the user
         if(categories.size()==1){
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("chosen_sorting_category",categories.get(0));
+            intent.putExtra("chosen_sorting_category",categories);
             startActivity(intent);
             return;
         }
