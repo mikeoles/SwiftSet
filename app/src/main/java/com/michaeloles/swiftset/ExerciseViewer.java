@@ -29,6 +29,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_viewer);
 
+        //Get Url From Calling Activity
         Bundle extras = getIntent().getExtras();
         selectedExercise = extras.getString("selected_exercise");
         ExerciseDb remaining = MainActivity.getRemainingDb();
@@ -72,7 +73,8 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
-            player.cueVideo(youtubeCode,startTimeMillis);
+            Log.v("olesy", youtubeCode + "-code starttime:" + startTimeMillis);
+            player.cueVideo(youtubeCode, startTimeMillis);
         }
     }
 
