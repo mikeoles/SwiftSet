@@ -2,6 +2,7 @@ package com.michaeloles.swiftset;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.content.Intent;
 import android.widget.Toast;
@@ -18,6 +19,10 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     private YouTubePlayerView youTubeView;
     private static String youtubeCode = "";
     private static int startTimeMillis = 0;
+    private static String selectedExercise = "";
+    private static String selectedUrl = "";
+
+    //TODO Don't play youtube video without url
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +31,9 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
         //Get Url From Calling Activity
         Bundle extras = getIntent().getExtras();
-        String selectedExercise = extras.getString("selected_exercise");
-        String selectedUrl = extras.getString("selected_url");
-        assert selectedUrl != null;
+        selectedExercise = extras.getString("selected_exercise");
+        ExerciseDb remaining = MainActivity.getRemainingDb();
+        selectedUrl = remaining.getUrlByExerciseName(selectedExercise);
 
         //seperate the youtube video code and time from the url
         if(selectedExercise.toLowerCase().contains("youtu.be")){//different depending on youtube.com and youtu.be urls
@@ -55,14 +60,14 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
                 timecode = timecode.substring(0, timecode.length() - 1);//remove trailing s from string to get number of seconds
                 startTimeMillis += Integer.parseInt(timecode) * 1000;
             }
-
-
         }
+
         TextView t = (TextView) findViewById(R.id.exerciseTitle);
         t.setText(selectedExercise);
-
-        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
-        youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
+        if(selectedExercise.length()>0){
+            youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
+            youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
+        }
     }
 
     @Override
@@ -93,5 +98,10 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
     protected Provider getYouTubePlayerProvider() {
         return youTubeView;
+    }
+
+    public void saveExercise(View view){
+        int numExercises = SavedExercises.addExercise(selectedExercise,this);
+        Toast.makeText(this,"Saved! (" + numExercises + " exercises in current workout)",Toast.LENGTH_SHORT).show();
     }
 }

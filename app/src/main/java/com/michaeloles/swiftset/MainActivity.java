@@ -7,13 +7,11 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -41,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             remainingDb = new ExerciseDb(this);
             addMainMenuOptions();
             remainingDb.resetDatabase();
+            SavedExercises.resetExerciseList(this);
             firstTimeCreated = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
@@ -148,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewExercises(View view) {
         Intent intent = new Intent(this, ExerciseSelector.class);
+        startActivity(intent);
+    }
+
+    public void viewWorkouts(View view) {
+        Intent intent = new Intent(this, WorkoutViewer.class);
         startActivity(intent);
     }
 
