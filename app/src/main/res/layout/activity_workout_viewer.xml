@@ -18,11 +18,13 @@
         android:layout_centerHorizontal="true"
         android:onClick="viewSavedWorkouts" />
 
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
         android:layout_alignParentTop="false"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/viewWorkouts">
 
@@ -42,17 +44,28 @@
         android:onClick="saveWorkout"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/scrollView"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/deleteButton"
+        android:layout_alignStart="@+id/deleteButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear"
+        android:text="New Workout"
         android:id="@+id/clearButton"
-        android:layout_below="@+id/saveWorkoutButton"
-        android:layout_alignLeft="@+id/saveWorkoutButton"
-        android:layout_alignStart="@+id/saveWorkoutButton"
+        android:onClick="clearWorkout"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:onClick="clearWorkout" />
+        android:layout_below="@+id/saveWorkoutButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/deleteButton"
+        android:layout_marginTop="30dp"
+        android:onClick="deleteWorkout"
+        android:singleLine="false"
+        android:layout_below="@+id/clearButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

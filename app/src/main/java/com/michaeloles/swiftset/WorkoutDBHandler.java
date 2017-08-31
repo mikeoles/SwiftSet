@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +56,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
     public void deleteWorkout(String workoutName){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_WORKOUTS + " WHERE " + COLUMN_WORKOUTNAME + "='" + workoutName + "';");
+        db.close();
     }
 
     //Returns a list of the users workouts that are stored in the database
@@ -70,8 +72,9 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
                 String workoutName = c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME));
                 String exerciseNames = c.getString(c.getColumnIndex(COLUMN_EXERCISENAMES));
                 ArrayList<String> list = new ArrayList<String>(Arrays.asList(exerciseNames.split(",")));
-                workoutList.add(new Workout(workoutName,list));
+                workoutList.add(new Workout(workoutName, list));
             }
+            c.moveToNext();
         }
         db.close();
         return workoutList;
