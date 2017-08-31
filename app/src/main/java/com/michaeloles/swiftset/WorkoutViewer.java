@@ -1,6 +1,7 @@
 package com.michaeloles.swiftset;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +55,7 @@ public class WorkoutViewer extends AppCompatActivity {
     //Called when the user saves a workout
     //Gets a name for the workout and then saves it to the sqlite database
     public void saveWorkout(View view) {
+        final Context context = view.getContext();
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Saving Workout");
@@ -65,16 +67,15 @@ public class WorkoutViewer extends AppCompatActivity {
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
+                Workout w = new Workout(name);
+                dbHandler = new WorkoutDBHandler(context, null, null, 1);
+                dbHandler.addWorkout(w);
+                SavedExercises.clearSavedList(context);
+                Toast.makeText(context, "Workout " + name + " saved", Toast.LENGTH_SHORT).show();
             }
         });
 
         alert.show();
-
-        Workout w = new Workout(name);
-        dbHandler = new WorkoutDBHandler(this,null,null,1);
-        dbHandler.addWorkout(w);
-        SavedExercises.clearSavedList(this);
-        Toast.makeText(this,"Workout " + name + " saved",Toast.LENGTH_SHORT).show();
     }
 
     //Removes all exercise from the workout and clears the exercies from the activity
