@@ -9,12 +9,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.michaeloles.swiftset.WorkoutViewer">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Workouts"
+        android:id="@+id/viewWorkouts"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="viewSavedWorkouts" />
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" >
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/viewWorkouts">
 
         <LinearLayout
             android:orientation="vertical"
@@ -22,4 +32,27 @@
             android:layout_height="match_parent"
             android:id="@+id/workoutExerciseList"></LinearLayout>
     </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/saveWorkoutButton"
+        android:layout_marginTop="30dp"
+        android:onClick="saveWorkout"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/scrollView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:id="@+id/clearButton"
+        android:layout_below="@+id/saveWorkoutButton"
+        android:layout_alignLeft="@+id/saveWorkoutButton"
+        android:layout_alignStart="@+id/saveWorkoutButton"
+        android:layout_marginTop="30dp"
+        android:onClick="clearWorkout" />
+
 </RelativeLayout>

@@ -74,7 +74,6 @@ public class ExerciseDb extends SQLiteAssetHelper {
             where += " AND [" + dbSortCategory + "] " + sqlSearchKey + " '" + sortByList[i] + "'";
         }
         where += ") OR [" + dbSortCategory + "] is null";
-Log.v("olesy",where);
         ContentValues cv = new ContentValues();
         cv.put("Eliminated", "1");
         db.update(EXERCISE_TABLE, cv, where, null);
@@ -105,7 +104,7 @@ Log.v("olesy",where);
     public String getUrlByExerciseName(String name){
         String url = "";
         SQLiteDatabase db = getReadableDatabase();
-        String where = "[Name] == '" + name +"'";
+        String where = "[" + EXERCISE_NAME_COL + "] == '" + name +"'";
         String[] tableColumns = {EXERCISE_NAME_COL,URL_COL};
         Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, null,
                 null, null, null);

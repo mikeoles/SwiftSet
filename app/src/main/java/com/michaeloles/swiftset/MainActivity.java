@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             remainingDb = new ExerciseDb(this);
             addMainMenuOptions();
             remainingDb.resetDatabase();
+            SavedExercises.resetExerciseList(this);
             firstTimeCreated = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool

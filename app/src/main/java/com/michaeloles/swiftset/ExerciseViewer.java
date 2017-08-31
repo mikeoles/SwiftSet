@@ -99,7 +99,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     }
 
     public void saveExercise(View view){
-        int numExercises = SavedExercises.addExercise(selectedExercise);
-        Toast.makeText(this,"Saved! (" + numExercises + " exercises in current workout)",Toast.LENGTH_SHORT);
+        int numExercises = SavedExercises.addExercise(selectedExercise,this);
+        Toast.makeText(this,"Saved! (" + numExercises + " exercises in current workout)",Toast.LENGTH_SHORT).show();
     }
 }
