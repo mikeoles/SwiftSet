@@ -55,7 +55,9 @@
                 android:layout_gravity="center_horizontal"
                 android:onClick="viewExercises"
                 android:background="@color/colorPrimaryDark"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
 
             <Button
                 android:layout_width="fill_parent"
@@ -65,7 +67,9 @@
                 android:layout_gravity="center_horizontal"
                 android:onClick="viewWorkouts"
                 android:background="@color/colorPrimaryDark"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
 
             <Button
                 android:layout_width="fill_parent"
@@ -75,7 +79,8 @@
                 android:background="@color/colorPrimaryDark"
                 android:layout_marginTop="10dp"
                 android:onClick="reset"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                android:textColor="#ffffff" />
 
         </LinearLayout>
     </ScrollView>

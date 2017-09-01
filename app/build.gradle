@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+    compile 'ch.acra:acra:4.9.2'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
