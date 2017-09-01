@@ -65,7 +65,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_WORKOUTS + " WHERE 1";
 
-        Cursor c = db.rawQuery(query,null);
+        Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         while(!c.isAfterLast()){
             if(c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME))!=null){
@@ -78,5 +78,15 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         }
         db.close();
         return workoutList;
+    }
+
+    //Returns the number of rows in the exercise table
+    public int numWorkouts(){
+        String countQuery = "SELECT  * FROM " + TABLE_WORKOUTS;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
     }
 }

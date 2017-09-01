@@ -22,8 +22,6 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     private static String selectedExercise = "";
     private static String selectedUrl = "";
 
-    //TODO Don't play youtube video without url
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +71,6 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
-            Log.v("olesy", youtubeCode + "-code starttime:" + startTimeMillis);
             player.cueVideo(youtubeCode, startTimeMillis);
         }
     }

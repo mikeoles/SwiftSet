@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class WorkoutViewer extends AppCompatActivity {
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
         ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
-        addExerciseButtons(exerciseList);
+        addExerciseButtons(exerciseList,"");
     }
 
     //Called when the user saves a workout
@@ -49,6 +50,7 @@ public class WorkoutViewer extends AppCompatActivity {
                 name = input.getText().toString();
                 Workout w = new Workout(name, SavedExercises.getSavedExerciseList());
                 dbHandler = new WorkoutDBHandler(context, null, null, 1);
+                dbHandler.deleteWorkout(w.getName());
                 dbHandler.addWorkout(w);
                 SavedExercises.clearSavedList(context);
                 Toast.makeText(context, "Workout " + name + " saved", Toast.LENGTH_SHORT).show();
@@ -60,7 +62,11 @@ public class WorkoutViewer extends AppCompatActivity {
 
     //Delete a workout from the database
     public void deleteWorkout(View view) {
-
+        TextView t = (TextView) findViewById(R.id.workoutName);
+        String nameToDelete = t.getText().toString();
+        dbHandler = new WorkoutDBHandler(view.getContext(), null, null, 1);
+        dbHandler.deleteWorkout(nameToDelete);
+        clearWorkout(view);
     }
 
     //Removes all exercise from the workout and clears the exercies from the activity
@@ -68,8 +74,12 @@ public class WorkoutViewer extends AppCompatActivity {
         SavedExercises.clearSavedList(this);
         Button save = (Button) findViewById(R.id.saveWorkoutButton);
         Button clear = (Button) findViewById(R.id.clearButton);
+        Button delete = (Button) findViewById(R.id.deleteButton);
+        TextView name = (TextView) findViewById(R.id.workoutName);
+        name.setVisibility(View.GONE);
         save.setVisibility(View.GONE);
         clear.setVisibility(View.GONE);
+        delete.setVisibility(View.GONE);
         LinearLayout l = (LinearLayout) findViewById(R.id.workoutExerciseList);
         l.removeAllViews();
     }
@@ -91,8 +101,7 @@ public class WorkoutViewer extends AppCompatActivity {
                 String name = item.getTitle().toString();
                 for (Workout w : workouts) {
                     if (w.getName().equals(name)) {
-                        Log.v("olesy",Integer.toString(w.getExerciseNames().size()));
-                        addExerciseButtons(w.getExerciseNames());
+                        addExerciseButtons(w.getExerciseNames(),w.getName());
                     }
                 }
                 return true;
@@ -102,17 +111,35 @@ public class WorkoutViewer extends AppCompatActivity {
         menu.show();
     }
 
-    public void addExerciseButtons(ArrayList<String> exerciseList){
+    public void addExerciseButtons(ArrayList<String> exerciseList,String name){
+        Button save = (Button) findViewById(R.id.saveWorkoutButton);
+        Button clear = (Button) findViewById(R.id.clearButton);
+        Button delete = (Button) findViewById(R.id.deleteButton);
+        save.setVisibility(View.VISIBLE);
+        clear.setVisibility(View.VISIBLE);
+        delete.setVisibility(View.VISIBLE);
+
         LinearLayout l = (LinearLayout) findViewById(R.id.workoutExerciseList);
         l.removeAllViews();
         exerciseList.remove("");
-
+        TextView workoutName = (TextView) findViewById(R.id.workoutName);
+        if(name.length()>0) {
+            workoutName.setText(name);
+            workoutName.setVisibility(View.VISIBLE);
+        }else{
+            workoutName.setVisibility(View.GONE);
+            delete = (Button) findViewById(R.id.deleteButton);
+            delete.setVisibility(View.GONE);
+        }
         //Dont show the save and clear buttons if there are no exercises to save or clear
         if(exerciseList.size()==0){
-            Button save = (Button) findViewById(R.id.saveWorkoutButton);
-            Button clear = (Button) findViewById(R.id.clearButton);
             save.setVisibility(View.GONE);
             clear.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
+            dbHandler = new WorkoutDBHandler(this, null, null, 1);
+            if(dbHandler.numWorkouts()==0){
+                Toast.makeText(this,"Looks like you don't have any saved workouts yet, search for exercises to create workouts",Toast.LENGTH_LONG).show();
+            }
         }
 
         for (final String exerciseName:exerciseList) {

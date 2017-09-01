@@ -22,6 +22,9 @@ public class SortingGroup implements Serializable{
     //Ex: can select both dumbbell and barbell exercises but not incline and decline exercises at same time
     public boolean isMultiChoice = false;
 
+    //used to keep track of which ones to highlight in green to show the user they were added based on their selections
+    public boolean isOriginal = false;
+
     public SortingGroup(){
         this("");
     }

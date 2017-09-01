@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO Demo Video
+    //TODO Youtube Video silence
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
     public static ArrayList<String> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
@@ -40,9 +42,13 @@ public class MainActivity extends AppCompatActivity {
             addMainMenuOptions();
             remainingDb.resetDatabase();
             SavedExercises.resetExerciseList(this);
+            Button reset = (Button) findViewById(R.id.reset);
+            reset.setVisibility(View.GONE);
             firstTimeCreated = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
+            Button reset = (Button) findViewById(R.id.reset);
+            reset.setVisibility(View.VISIBLE);
             Bundle extras = getIntent().getExtras();
             ArrayList<SortingCategory> chosenScList = (ArrayList<SortingCategory>) extras.getSerializable("chosen_sorting_category");
 
@@ -113,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Sorts through the remaining exercises and eliminates the ones that no longer fit
     private void dbSearch(ExerciseDb db, String dbSortBy, String dbSortCategory) {
-        db.removeRows(dbSortBy,dbSortCategory);
+        db.removeRows(dbSortBy, dbSortCategory);
     }
 
     @Override
@@ -143,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
         currentOptions.add(new Unilateral());
         currentOptions.add(new Stability());
         currentOptions.add(new Sport());
+        for(SortingGroup s:currentOptions){
+            s.isOriginal = true;
+        }
     }
 
     public void viewExercises(View view) {
@@ -202,7 +211,11 @@ public class MainActivity extends AppCompatActivity {
             final TypedValue value = new TypedValue();
             context.getTheme ().resolveAttribute(R.attr.colorAccent, value, true);
             GradientDrawable gd = new GradientDrawable();
-            gd.setColor(Color.WHITE); // Changes this drawbale to use a single color instead of a gradient
+            if(s.isOriginal) {
+                gd.setColor(Color.WHITE); // Changes this drawbale to use a single color instead of a gradient
+            }else{
+                gd.setColor(Color.rgb(230, 255, 230));//Light green signifies it has been added because of the users choices
+            }
             gd.setStroke(1, value.data);
             newButton.setBackground(gd);
 
