@@ -1,6 +1,6 @@
 # SwiftSet
 
-**Android fitness app that allows users a quickly find the perfrect exercise for any situation from over 350+ exercises in our database**
+**Android fitness app that allows users a quickly find the perfrect exercise for any situation from over 500+ exercises in our database**
 
 [**Download On Google Play Store**](https://play.google.com/store/apps/details?id=com.michaeloles.swiftset)
 
