@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +33,7 @@ public class WorkoutViewer extends AppCompatActivity {
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
         ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
-        addExerciseButtons(exerciseList,"");
+        addExerciseButtons(exerciseList,"",this);
     }
 
     //Called when the user saves a workout
@@ -85,7 +88,7 @@ public class WorkoutViewer extends AppCompatActivity {
     }
 
     //Allows the user to view list of workouts they've already saved
-    public void viewSavedWorkouts(View view){
+    public void viewSavedWorkouts(final View view){
         PopupMenu menu = new PopupMenu(this, view);
         dbHandler = new WorkoutDBHandler(view.getContext(), null, null, 1);
         final ArrayList<Workout> workouts = dbHandler.getWorkouts();
@@ -101,7 +104,7 @@ public class WorkoutViewer extends AppCompatActivity {
                 String name = item.getTitle().toString();
                 for (Workout w : workouts) {
                     if (w.getName().equals(name)) {
-                        addExerciseButtons(w.getExerciseNames(),w.getName());
+                        addExerciseButtons(w.getExerciseNames(),w.getName(),view.getContext());
                     }
                 }
                 return true;
@@ -111,7 +114,7 @@ public class WorkoutViewer extends AppCompatActivity {
         menu.show();
     }
 
-    public void addExerciseButtons(ArrayList<String> exerciseList,String name){
+    public void addExerciseButtons(ArrayList<String> exerciseList,String name,Context context){
         Button save = (Button) findViewById(R.id.saveWorkoutButton);
         Button clear = (Button) findViewById(R.id.clearButton);
         Button delete = (Button) findViewById(R.id.deleteButton);
@@ -145,7 +148,11 @@ public class WorkoutViewer extends AppCompatActivity {
         for (final String exerciseName:exerciseList) {
             Button newButton = new Button(this);
             newButton.setText(exerciseName);
-
+            newButton.setPadding(0, 0, 0, 0);
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(Color.rgb(224, 240, 255)); // Changes this drawbale to use a single color instead of a gradient
+            gd.setStroke(1, Color.WHITE);
+            newButton.setBackground(gd);
             //sends the selected exercise to the exerise viewer on click
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override

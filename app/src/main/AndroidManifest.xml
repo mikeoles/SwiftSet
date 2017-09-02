@@ -29,7 +29,8 @@
             android:label="@string/title_activity_exercise_selector"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ExerciseViewer" />
-        <activity android:name=".WorkoutViewer"></activity>
+        <activity android:name=".WorkoutViewer" />
+        <activity android:name=".DemoVideo"></activity>
     </application>
 
 </manifest>

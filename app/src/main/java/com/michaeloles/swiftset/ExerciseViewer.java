@@ -1,5 +1,7 @@
 package com.michaeloles.swiftset;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,10 +10,10 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayer.Provider;
-import com.google.android.youtube.player.YouTubePlayerView;
+        import com.google.android.youtube.player.YouTubeInitializationResult;
+        import com.google.android.youtube.player.YouTubePlayer;
+        import com.google.android.youtube.player.YouTubePlayer.Provider;
+        import com.google.android.youtube.player.YouTubePlayerView;
 
 public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
@@ -21,6 +23,8 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     private static int startTimeMillis = 0;
     private static String selectedExercise = "";
     private static String selectedUrl = "";
+    private static AudioManager mAudioManager;
+    private static boolean musicWasPlaying;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
             player.cueVideo(youtubeCode, startTimeMillis);
+            player.play();
         }
     }
 
