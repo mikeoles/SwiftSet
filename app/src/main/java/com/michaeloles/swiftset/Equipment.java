@@ -41,8 +41,14 @@ public class Equipment extends SortingGroup implements Serializable {
         this.addOption(weightedBelt);
         SortingCategory gluteham = new SortingCategory("Glute Ham Machine","Equipment","Glute Ham");
         this.addOption(gluteham);
-        SortingCategory hangingBand = new SortingCategory("Haning Band","Equipment","Hanging Band");
+        SortingCategory hangingBand = new SortingCategory("Hanging Band","Equipment","Hanging Band");
         this.addOption(hangingBand);
+        SortingCategory foamRoller = new SortingCategory("Foam Roller","Equipment","Foam Roller");
+        this.addOption(foamRoller);
+        SortingCategory directBand = new SortingCategory("Direct Band","Equipment","Direct Band");
+        this.addOption(directBand);
+        SortingCategory trx = new SortingCategory("TRX","Equipment","TRX");
+        this.addOption(trx);
         SortingCategory other = new SortingCategory("Other","Equipment","Other");
         this.addOption(other);
     }

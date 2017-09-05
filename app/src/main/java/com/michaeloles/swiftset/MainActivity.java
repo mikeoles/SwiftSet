@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO Demo Video
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
     public static ArrayList<String> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
@@ -234,12 +233,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void playVideo(View view){
-        Toast.makeText(this,"Video",Toast.LENGTH_SHORT);
-    }
-
     //Getters and Setters
     public static ExerciseDb getRemainingDb() {
         return remainingDb;
+    }
+
+    public static void setFirstTimeCreated(boolean firstTimeCreated) {
+        MainActivity.firstTimeCreated = firstTimeCreated;
     }
 }
