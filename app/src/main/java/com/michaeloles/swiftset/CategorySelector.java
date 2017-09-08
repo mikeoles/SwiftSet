@@ -1,13 +1,8 @@
 package com.michaeloles.swiftset;
 
-import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,10 +14,10 @@ import java.util.ArrayList;
 
 public class CategorySelector extends AppCompatActivity {
 
-    ArrayList<String> selectedStrings = new ArrayList<String>();
+    ArrayList<String> selectedStrings = new ArrayList<>();
     LinearLayout l;
     ArrayList<SortingCategory> listOfCategories;
-    ArrayList<SortingCategory> userSelectedCategories = new ArrayList<SortingCategory>();
+    ArrayList<SortingCategory> userSelectedCategories = new ArrayList<>();
     ArrayList<SortingCategory> categories;
 
     @Override
@@ -30,7 +25,7 @@ public class CategorySelector extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_selector);
 
-        addButtons(this);
+        addButtons();
     }
 
     //Gets the sorting group that has been chosen by the user in the main activity
@@ -42,16 +37,13 @@ public class CategorySelector extends AppCompatActivity {
     }
 
     //Adds buttons for each category to the screen
-    //TODO refactor large method
-    private void addButtons(Context context){
+    private void addButtons(){
         SortingGroup selectedGroup = getGroup();
-
         removeCantFollows(selectedGroup);
 
         //Categories from this group are used as options for the user
         categories = selectedGroup.getCategories();
         l = (LinearLayout) findViewById(R.id.categoryList);
-        listOfCategories=new ArrayList<>();//helps get the selected category onclick
 
         //If there is only one possible option that can be chosen, select it automatically for the user
         if(categories.size()==1){
@@ -62,48 +54,58 @@ public class CategorySelector extends AppCompatActivity {
         }
 
         if(selectedGroup.isMultiChoice){
-            for (int i = 0; i < categories.size(); i++) {
-
-                //Create checkboxes for each category
-                final CheckBox newCheckbox = new CheckBox(this);
-                newCheckbox.setText(categories.get(i).getName());
-                newCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            selectedStrings.add(newCheckbox.getText().toString());
-                        }else{
-                            selectedStrings.remove(newCheckbox.getText().toString());
-                        }
-                    }
-                });
-                l.addView(newCheckbox);
-            }
-
-            createSelectButton();
-
+            addButtonsMultiChoice();
         }else{
-            //Loops through each category from the group and creates a button for them
-            for (int i = 0; i < categories.size(); i++) {
-                listOfCategories.add(categories.get(i));
-                Button newButton = new Button(this);
-                newButton.setText(categories.get(i).getName());
-                newButton.setId(i);
+            addButtonsSingleChoice();
+        }
+    }
 
-                //sends the selected category back to the main class when selected
-                newButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), MainActivity.class);
-                        //v.getId() contains the ID of the button the user selected
-                        //using that ID get the category the user selected from listOfCategories
-                        userSelectedCategories.add(listOfCategories.get(v.getId()));
-                        intent.putExtra("chosen_sorting_category",userSelectedCategories);
-                        startActivity(intent);
+    //Adds buttons to the screen for each sorting category when multiple cateogires may be selected
+    private void addButtonsMultiChoice() {
+        for (int i = 0; i < categories.size(); i++) {
+            //Create checkboxes for each category
+            final CheckBox newCheckbox = new CheckBox(this);
+            newCheckbox.setText(categories.get(i).getName());
+            newCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        selectedStrings.add(newCheckbox.getText().toString());
+                    }else{
+                        selectedStrings.remove(newCheckbox.getText().toString());
                     }
-                });
-                l.addView(newButton);
-            }
+                }
+            });
+            l.addView(newCheckbox);
+        }
+        createSelectButton();
+    }
+
+    //Adds buttons to the screen for each sorting category when only one category may be selected
+    private void addButtonsSingleChoice(){
+        listOfCategories = new ArrayList<>();//helps get the selected category onclick
+
+        //Loops through each category from the group and creates a button for them
+        for (int i = 0; i < categories.size(); i++) {
+            listOfCategories.add(categories.get(i));
+            Button newButton = new Button(this);
+            newButton.setText(categories.get(i).getName());
+            newButton.setId(i);
+
+            //sends the selected category back to the main class when selected
+            newButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), MainActivity.class);
+                    //v.getId() contains the ID of the button the user selected
+                    //using that ID get the category the user selected from listOfCategories
+                    userSelectedCategories.add(listOfCategories.get(v.getId()));
+                    intent.putExtra("chosen_sorting_category", userSelectedCategories);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                }
+            });
+            l.addView(newButton);
         }
     }
 
@@ -111,7 +113,7 @@ public class CategorySelector extends AppCompatActivity {
     private void createSelectButton() {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.catRelativeLayout);
         Button button = new Button(this); // your button;
-        button.setText("Select");
+        button.setText(R.string.select_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +122,7 @@ public class CategorySelector extends AppCompatActivity {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("chosen_sorting_category", createCategoriesArray(selectedStrings));
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
                 }
             }
         });
@@ -149,5 +152,11 @@ public class CategorySelector extends AppCompatActivity {
         for(Class cf:cantFollowChosen){
             MainActivity.removeSortingGroup(cf);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 }

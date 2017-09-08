@@ -18,4 +18,5 @@
     <string name="field_grip">Grip</string>
     <string name="field_url">Url</string>
     <string name="demo_video">Demo Video</string>
+    <string name="select_button">Select</string>
 </resources>

@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
             String dbSortCategory = "";
             String dbSortBy = "";
+            assert chosenScList != null;
             for(int i=0;i<chosenScList.size();i++) {
                 SortingCategory chosenSc = chosenScList.get(i);
                 chosenOptions.add(chosenSc.getName());
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             dbSearch(remainingDb, dbSortBy, dbSortCategory);
         }
         setViewAllText();
-        updateSortingPath(this);
+        updateSortingPath();
         addButtons(this);
     }
 
@@ -87,10 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Resets all of the progress from the user in selecting an exercise and returns to the main activity
     public void reset(View view){
-        firstTimeCreated = true;
-        //Refresh Activity with as first time created to reset the database
-        finish();
-        startActivity(getIntent());
+        onBackPressed();
     }
 
     //Sets the text for the view all button with the number of exercises remaining in the pool displayed
@@ -101,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Updates the displayed sorting path with the new category exercises are being sorted by
-    private void updateSortingPath(Context context) {
+    private void updateSortingPath() {
 
         //Add new buttons for each of the sorting groups available to the user
         LinearLayout sortingPath = (LinearLayout) findViewById(R.id.sortingPath);
@@ -163,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
     public void viewWorkouts(View view) {
         Intent intent = new Intent(this, WorkoutViewer.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
     @Override
@@ -227,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(v.getContext(),CategorySelector.class);
                     intent.putExtra("chosen_sorting_group",names.get(v.getId()));//Sends the chosen sorting group to the CategorySelector class when clicked
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
             });
             l.addView(newButton);
@@ -236,9 +235,5 @@ public class MainActivity extends AppCompatActivity {
     //Getters and Setters
     public static ExerciseDb getRemainingDb() {
         return remainingDb;
-    }
-
-    public static void setFirstTimeCreated(boolean firstTimeCreated) {
-        MainActivity.firstTimeCreated = firstTimeCreated;
     }
 }

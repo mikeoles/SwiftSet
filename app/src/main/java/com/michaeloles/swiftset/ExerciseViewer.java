@@ -33,10 +33,10 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         String selectedUrl = remaining.getUrlByExerciseName(selectedExercise);
 
         //seperate the youtube video code and time from the url
-        if(selectedExercise.toLowerCase().contains("youtu.be")){//different depending on youtube.com and youtu.be urls
-            youtubeCode = selectedUrl.substring(selectedUrl.indexOf("/") + 1);
+        if(selectedUrl.toLowerCase().contains("youtu.be")){//different depending on youtube.com and youtu.be urls
+            youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("/") + 1);
         }else{
-            youtubeCode = selectedUrl.substring(selectedUrl.indexOf("=") + 1);
+            youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf("=") + 1);
         }
 
         if(youtubeCode.contains("&")){
@@ -59,6 +59,10 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
             }
         }
 
+        if(youtubeCode.contains("?")){
+            youtubeCode = youtubeCode.substring(0,youtubeCode.indexOf("?"));
+        }
+
         TextView t = (TextView) findViewById(R.id.exerciseTitle);
         t.setText(selectedExercise);
         if(selectedExercise.length()>0){
@@ -70,6 +74,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
+            Log.v("olesy",youtubeCode + " " + Integer.toString(startTimeMillis));
             player.cueVideo(youtubeCode, startTimeMillis);
             player.play();
         }
@@ -101,4 +106,11 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         int numExercises = SavedExercises.addExercise(selectedExercise,this);
         Toast.makeText(this,"Saved! (" + numExercises + " exercises in current workout)",Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+    }
+
 }

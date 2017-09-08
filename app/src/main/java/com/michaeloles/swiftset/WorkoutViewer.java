@@ -9,7 +9,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +24,6 @@ public class WorkoutViewer extends AppCompatActivity {
 
     private WorkoutDBHandler dbHandler;
     private String name = "";
-    final private int menuOrder = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +31,7 @@ public class WorkoutViewer extends AppCompatActivity {
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
         ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
-        addExerciseButtons(exerciseList,"",this);
+        addExerciseButtons(exerciseList,"");
     }
 
     //Called when the user saves a workout
@@ -104,7 +102,7 @@ public class WorkoutViewer extends AppCompatActivity {
                 String name = item.getTitle().toString();
                 for (Workout w : workouts) {
                     if (w.getName().equals(name)) {
-                        addExerciseButtons(w.getExerciseNames(),w.getName(),view.getContext());
+                        addExerciseButtons(w.getExerciseNames(), w.getName());
                     }
                 }
                 return true;
@@ -114,7 +112,7 @@ public class WorkoutViewer extends AppCompatActivity {
         menu.show();
     }
 
-    public void addExerciseButtons(ArrayList<String> exerciseList,String name,Context context){
+    public void addExerciseButtons(ArrayList<String> exerciseList,String name){
         Button save = (Button) findViewById(R.id.saveWorkoutButton);
         Button clear = (Button) findViewById(R.id.clearButton);
         Button delete = (Button) findViewById(R.id.deleteButton);
@@ -160,9 +158,16 @@ public class WorkoutViewer extends AppCompatActivity {
                     Intent intent = new Intent(v.getContext(), ExerciseViewer.class);
                     intent.putExtra("selected_exercise",exerciseName);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
             });
             l.addView(newButton);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 }
