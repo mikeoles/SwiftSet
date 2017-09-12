@@ -1,6 +1,8 @@
 package com.michaeloles.swiftset;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -71,7 +73,7 @@ public class CategorySelector extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         selectedStrings.add(newCheckbox.getText().toString());
-                    }else{
+                    } else {
                         selectedStrings.remove(newCheckbox.getText().toString());
                     }
                 }
@@ -84,6 +86,7 @@ public class CategorySelector extends AppCompatActivity {
     //Adds buttons to the screen for each sorting category when only one category may be selected
     private void addButtonsSingleChoice(){
         listOfCategories = new ArrayList<>();//helps get the selected category onclick
+        int blueValue = 250;
 
         //Loops through each category from the group and creates a button for them
         for (int i = 0; i < categories.size(); i++) {
@@ -91,6 +94,12 @@ public class CategorySelector extends AppCompatActivity {
             Button newButton = new Button(this);
             newButton.setText(categories.get(i).getName());
             newButton.setId(i);
+
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(Color.WHITE);
+            if(blueValue>5) blueValue -= 5;
+            gd.setStroke(2,Color.rgb(200, 200,blueValue));
+            newButton.setBackground(gd);
 
             //sends the selected category back to the main class when selected
             newButton.setOnClickListener(new View.OnClickListener() {
