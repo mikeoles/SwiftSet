@@ -18,7 +18,6 @@ public class ExerciseSelector extends AppCompatActivity {
 
     SearchView searchView;
     ArrayAdapter adapter;
-    String[] searchResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +30,8 @@ public class ExerciseSelector extends AppCompatActivity {
         ExerciseDb remaining = MainActivity.getRemainingDb();
         ArrayList<String> colList = remaining.getColumnsList();
         final HashMap<String,String> urls = remaining.getUrls();
-        searchResults = colList.toArray(new String[colList.size()]);
-        initList(urls);
+        String[] searchResults = colList.toArray(new String[colList.size()]);
+        initList(searchResults);
         searchView= (SearchView)findViewById(R.id.exSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -48,7 +47,7 @@ public class ExerciseSelector extends AppCompatActivity {
         });
     }
 
-    private void initList(final HashMap<String,String> urls) {
+    private void initList(String[] searchResults) {
         //Creates a list with each exercise and stores the exercise name and url in the intent
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchResults);
         final ListView exListView = (ListView) findViewById(R.id.exerciseList);
@@ -58,10 +57,8 @@ public class ExerciseSelector extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 String selectedFromList = (String) (exListView.getItemAtPosition(position));
-                String selectedUrl = urls.get(selectedFromList);
                 Intent intent = new Intent(view.getContext(), ExerciseViewer.class);
                 intent.putExtra("selected_exercise", selectedFromList);
-                intent.putExtra("selected_url", selectedUrl);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }

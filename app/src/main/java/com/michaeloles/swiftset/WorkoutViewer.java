@@ -4,16 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +24,7 @@ public class WorkoutViewer extends AppCompatActivity {
 
     private WorkoutDBHandler dbHandler;
     private String name = "";
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class WorkoutViewer extends AppCompatActivity {
         save.setVisibility(View.GONE);
         clear.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
-        LinearLayout l = (LinearLayout) findViewById(R.id.workoutExerciseList);
+        ListView l = (ListView) findViewById(R.id.workoutExerciseList);
         l.removeAllViews();
     }
 
@@ -120,7 +121,7 @@ public class WorkoutViewer extends AppCompatActivity {
         clear.setVisibility(View.VISIBLE);
         delete.setVisibility(View.VISIBLE);
 
-        LinearLayout l = (LinearLayout) findViewById(R.id.workoutExerciseList);
+        ListView l = (ListView) findViewById(R.id.workoutExerciseList);
         l.removeAllViews();
         exerciseList.remove("");
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
@@ -143,6 +144,10 @@ public class WorkoutViewer extends AppCompatActivity {
             }
         }
 
+        initList(exerciseList.toArray(new String[exerciseList.size()]));
+
+        //Old way of showing exercises, remove after UI updated
+        /*
         for (final String exerciseName:exerciseList) {
             Button newButton = new Button(this);
             newButton.setText(exerciseName);
@@ -163,11 +168,30 @@ public class WorkoutViewer extends AppCompatActivity {
             });
             l.addView(newButton);
         }
+        */
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    private void initList(String[] searchResults) {
+        //Creates a list with each exercise and stores the exercise name and url in the intent
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchResults);
+        final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);
+        exListView.setAdapter(adapter);
+        exListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String selectedFromList = (String) (exListView.getItemAtPosition(position));
+                Intent intent = new Intent(view.getContext(), ExerciseViewer.class);
+                intent.putExtra("selected_exercise", selectedFromList);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+            }
+        });
     }
 }

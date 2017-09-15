@@ -43,14 +43,14 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_gravity="center_horizontal" />
 
-            <LinearLayout
+            <ListView
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/workoutExerciseList"
                 android:layout_marginTop="15dp">
 
-            </LinearLayout>
+            </ListView>
 
             <LinearLayout
                 android:orientation="horizontal"
