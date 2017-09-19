@@ -8,11 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -82,8 +86,10 @@ public class WorkoutViewer extends AppCompatActivity {
         save.setVisibility(View.GONE);
         clear.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
-        ListView l = (ListView) findViewById(R.id.workoutExerciseList);
-        l.removeAllViews();
+
+        //remove items from the workout list
+        final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);
+        exListView.setAdapter(null);
     }
 
     //Allows the user to view list of workouts they've already saved
@@ -120,10 +126,12 @@ public class WorkoutViewer extends AppCompatActivity {
         save.setVisibility(View.VISIBLE);
         clear.setVisibility(View.VISIBLE);
         delete.setVisibility(View.VISIBLE);
-
+        //remove items from the workout list
         ListView l = (ListView) findViewById(R.id.workoutExerciseList);
-        l.removeAllViews();
+        l.setAdapter(null);
+
         exerciseList.remove("");
+
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
         if(name.length()>0) {
             workoutName.setText(name);
@@ -133,6 +141,7 @@ public class WorkoutViewer extends AppCompatActivity {
             delete = (Button) findViewById(R.id.deleteButton);
             delete.setVisibility(View.GONE);
         }
+
         //Dont show the save and clear buttons if there are no exercises to save or clear
         if(exerciseList.size()==0){
             save.setVisibility(View.GONE);
@@ -145,30 +154,7 @@ public class WorkoutViewer extends AppCompatActivity {
         }
 
         initList(exerciseList.toArray(new String[exerciseList.size()]));
-
-        //Old way of showing exercises, remove after UI updated
-        /*
-        for (final String exerciseName:exerciseList) {
-            Button newButton = new Button(this);
-            newButton.setText(exerciseName);
-            newButton.setPadding(0, 0, 0, 0);
-            GradientDrawable gd = new GradientDrawable();
-            gd.setColor(Color.rgb(224, 240, 255)); // Changes this drawbale to use a single color instead of a gradient
-            gd.setStroke(1, Color.WHITE);
-            newButton.setBackground(gd);
-            //sends the selected exercise to the exerise viewer on click
-            newButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ExerciseViewer.class);
-                    intent.putExtra("selected_exercise",exerciseName);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                }
-            });
-            l.addView(newButton);
-        }
-        */
+        setListViewHeightBasedOnChildren(l);
     }
 
     @Override
@@ -177,9 +163,10 @@ public class WorkoutViewer extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
-    private void initList(String[] searchResults) {
+    private void initList(String[] exerciseNames) {
+        Log.v("olesy",Integer.toString(exerciseNames.length));
         //Creates a list with each exercise and stores the exercise name and url in the intent
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchResults);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseNames);
         final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);
         exListView.setAdapter(adapter);
         exListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -193,5 +180,29 @@ public class WorkoutViewer extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
+    }
+
+    /**** Method for Setting the Height of the ListView dynamically.
+     **** Hack to fix the issue of not showing all the items of the ListView
+     **** when placed inside a ScrollView  ****/
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 }
