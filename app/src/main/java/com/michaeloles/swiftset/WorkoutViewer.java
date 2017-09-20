@@ -29,6 +29,7 @@ public class WorkoutViewer extends AppCompatActivity {
     private WorkoutDBHandler dbHandler;
     private String name = "";
     ArrayAdapter adapter;
+    ArrayList exerciseNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class WorkoutViewer extends AppCompatActivity {
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
         ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
-        addExerciseButtons(exerciseList,"");
+        addExerciseButtons(exerciseList, "");
     }
 
     //Called when the user saves a workout
@@ -153,7 +154,7 @@ public class WorkoutViewer extends AppCompatActivity {
             }
         }
 
-        initList(exerciseList.toArray(new String[exerciseList.size()]));
+        initList(exerciseList);
         setListViewHeightBasedOnChildren(l);
     }
 
@@ -163,8 +164,9 @@ public class WorkoutViewer extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
-    private void initList(String[] exerciseNames) {
-        Log.v("olesy",Integer.toString(exerciseNames.length));
+    private void initList(ArrayList en) {
+        exerciseNames = en;
+        Log.v("olesy",Integer.toString(exerciseNames.size()));
         //Creates a list with each exercise and stores the exercise name and url in the intent
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseNames);
         final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);
@@ -178,6 +180,22 @@ public class WorkoutViewer extends AppCompatActivity {
                 intent.putExtra("selected_exercise", selectedFromList);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+            }
+        });
+        //Allows user to delete an item on long click
+        exListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int indexClicked, long arg3) {
+
+                //remove from screen
+                exerciseNames.remove(indexClicked);//where arg2 is position of item you click
+                adapter.notifyDataSetChanged();
+
+                SavedExercises.removeExercise(indexClicked,WorkoutViewer.this);//
+
+                return false;
             }
         });
     }

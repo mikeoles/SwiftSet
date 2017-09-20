@@ -12,8 +12,8 @@ import java.util.Arrays;
 public class SavedExercises {
     private static ArrayList<String> savedExerciseList = new ArrayList<>();
 
+
     //Adds an exercise to the list
-    //Returns false if the exercise was already in the list
     public static int addExercise(String selectedExercise,Context context) {
         savedExerciseList.add(selectedExercise);
         SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);
@@ -21,6 +21,16 @@ public class SavedExercises {
         editor.putString("unsaved_exercises", android.text.TextUtils.join(",", savedExerciseList));
         editor.commit();
         return savedExerciseList.size();
+    }
+
+    //Removes an exercise from certain position from the list
+    public static ArrayList removeExercise(int position,Context context) {
+        savedExerciseList.remove(position);
+        SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("unsaved_exercises", android.text.TextUtils.join(",", savedExerciseList));
+        editor.commit();
+        return savedExerciseList;
     }
 
     public static void clearSavedList(Context context) {
