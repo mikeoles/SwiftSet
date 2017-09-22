@@ -24,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private static ExerciseDb remainingDb; // Updated to hold the remaining exercises
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
+    private static boolean backToHome = true;//Checks what we should do when the back button is pressed
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +46,11 @@ public class MainActivity extends AppCompatActivity {
             SavedExercises.resetExerciseList(this);
             Button reset = (Button) findViewById(R.id.reset);
             reset.setVisibility(View.GONE);
+            backToHome = true;
             firstTimeCreated = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
+            backToHome = false;
             Button reset = (Button) findViewById(R.id.reset);
             reset.setVisibility(View.VISIBLE);
             Bundle extras = getIntent().getExtras();
@@ -79,15 +85,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        firstTimeCreated = true;
-        //Refresh Activity with as first time created to reset the database
-        finish();
-        startActivity(getIntent());
+        //There is nothing to reset, return user to the homescreen
+        if(backToHome) {
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
+        }else{
+            //Just reset the data first instead of going back to the homescreen
+            reset(this.findViewById(android.R.id.content));
+        }
     }
 
     //Resets all of the progress from the user in selecting an exercise and returns to the main activity
     public void reset(View view){
-        onBackPressed();
+        firstTimeCreated = true;
+        //Refresh Activity with as first time created to reset the database
+        finish();
+        startActivity(getIntent());
     }
 
     //Sets the text for the view all button with the number of exercises remaining in the pool displayed

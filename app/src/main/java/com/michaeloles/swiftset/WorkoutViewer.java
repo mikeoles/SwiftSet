@@ -8,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,8 +26,8 @@ public class WorkoutViewer extends AppCompatActivity {
 
     private WorkoutDBHandler dbHandler;
     private String name = "";
-    ArrayAdapter adapter;
-    ArrayList exerciseNames;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> exerciseNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +35,7 @@ public class WorkoutViewer extends AppCompatActivity {
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
         ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
+
         addExerciseButtons(exerciseList, "");
     }
 
@@ -56,10 +55,11 @@ public class WorkoutViewer extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
                 Workout w = new Workout(name, SavedExercises.getSavedExerciseList());
-                dbHandler = new WorkoutDBHandler(context, null, null, 1);
-                dbHandler.deleteWorkout(w.getName());
-                dbHandler.addWorkout(w);
-                SavedExercises.clearSavedList(context);
+                if (w.numExercises() != 0) {
+                    dbHandler = new WorkoutDBHandler(context, null, null, 1);
+                    dbHandler.deleteWorkout(w.getName());
+                    dbHandler.addWorkout(w);
+                }
                 Toast.makeText(context, "Workout " + name + " saved", Toast.LENGTH_SHORT).show();
             }
         });
@@ -121,12 +121,7 @@ public class WorkoutViewer extends AppCompatActivity {
     }
 
     public void addExerciseButtons(ArrayList<String> exerciseList,String name){
-        Button save = (Button) findViewById(R.id.saveWorkoutButton);
-        Button clear = (Button) findViewById(R.id.clearButton);
-        Button delete = (Button) findViewById(R.id.deleteButton);
-        save.setVisibility(View.VISIBLE);
-        clear.setVisibility(View.VISIBLE);
-        delete.setVisibility(View.VISIBLE);
+        showEditButtons(true);
         //remove items from the workout list
         ListView l = (ListView) findViewById(R.id.workoutExerciseList);
         l.setAdapter(null);
@@ -138,16 +133,15 @@ public class WorkoutViewer extends AppCompatActivity {
             workoutName.setText(name);
             workoutName.setVisibility(View.VISIBLE);
         }else{
+            //Only able to delete a workout if its already been saved
             workoutName.setVisibility(View.GONE);
-            delete = (Button) findViewById(R.id.deleteButton);
+            Button delete = (Button) findViewById(R.id.deleteButton);
             delete.setVisibility(View.GONE);
         }
 
         //Dont show the save and clear buttons if there are no exercises to save or clear
         if(exerciseList.size()==0){
-            save.setVisibility(View.GONE);
-            clear.setVisibility(View.GONE);
-            delete.setVisibility(View.GONE);
+            showEditButtons(false);
             dbHandler = new WorkoutDBHandler(this, null, null, 1);
             if(dbHandler.numWorkouts()==0){
                 Toast.makeText(this,"Looks like you don't have any saved workouts yet, search for exercises to create workouts",Toast.LENGTH_LONG).show();
@@ -164,7 +158,24 @@ public class WorkoutViewer extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
-    private void initList(ArrayList en) {
+    //Either hides or shows the edit buttons to the user
+    //No edit buttons are shownif there's no exercises to save or clear from a workout
+    public void showEditButtons(boolean b) {
+        Button save = (Button) findViewById(R.id.saveWorkoutButton);
+        Button clear = (Button) findViewById(R.id.clearButton);
+        Button delete = (Button) findViewById(R.id.deleteButton);
+        if(b){
+            save.setVisibility(View.VISIBLE);
+            clear.setVisibility(View.VISIBLE);
+            delete.setVisibility(View.VISIBLE);
+        }else{
+            save.setVisibility(View.GONE);
+            clear.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
+        }
+    }
+
+    private void initList(ArrayList<String> en) {
         exerciseNames = en;
         Log.v("olesy",Integer.toString(exerciseNames.size()));
         //Creates a list with each exercise and stores the exercise name and url in the intent
@@ -187,17 +198,30 @@ public class WorkoutViewer extends AppCompatActivity {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int indexClicked, long arg3) {
-
-                //remove from screen
-                exerciseNames.remove(indexClicked);//where arg2 is position of item you click
-                adapter.notifyDataSetChanged();
-
-                SavedExercises.removeExercise(indexClicked,WorkoutViewer.this);//
-
-                return false;
+                                           final int indexClicked, long arg3) {
+                final Context context = view.getContext();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(R.string.app_name);
+                builder.setMessage("Delete Exercise?");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        deleteExercise(indexClicked);
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+                return true;
             }
         });
+    }
+
+    //Removes an exercise from the workout (From both the screen and the savedExercises arrayList)
+    private void deleteExercise(int indexClicked) {
+        //remove from screen
+        exerciseNames.remove(indexClicked);//where arg2 is position of item you click
+        adapter.notifyDataSetChanged();
+        showEditButtons(!exerciseNames.isEmpty());
     }
 
     /**** Method for Setting the Height of the ListView dynamically.

@@ -1,7 +1,10 @@
 package com.michaeloles.swiftset;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.content.Intent;
@@ -20,11 +23,14 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     private static String youtubeCode = "";
     private static int startTimeMillis = 0;
     private static String selectedExercise = "";
+    private static boolean wasMusicPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_viewer);
+
+        wasMusicPlaying = pauseMusic();
 
         //Get Url From Calling Activity
         Bundle extras = getIntent().getExtras();
@@ -70,6 +76,19 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
             youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
         }
     }
+    //If music is playing in the background it pauses it so the youtube video can play
+    //Returns if there was music playing so we know to resume it after leaving the view
+    private boolean pauseMusic() {
+        AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+
+        if (mAudioManager.isMusicActive()) {
+            Intent i = new Intent("com.android.music.musicservicecommand");
+            i.putExtra("command", "togglepause");
+            ExerciseViewer.this.sendBroadcast(i);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
@@ -111,6 +130,21 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+        resumeMusic();
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        resumeMusic();
+    }
+
+    //Resumes the outside music player after the video ends
+    private void resumeMusic() {
+        if(wasMusicPlaying){
+            Intent i = new Intent("com.android.music.musicservicecommand");
+            i.putExtra("command", "play");
+            ExerciseViewer.this.sendBroadcast(i);
+        }
+    }
 }
