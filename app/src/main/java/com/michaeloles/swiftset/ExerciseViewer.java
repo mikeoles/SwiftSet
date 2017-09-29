@@ -4,9 +4,10 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+
+
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -72,7 +73,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
             if (!timecode.contains("m") && !timecode.contains("s")) {//timecode is just listed as an interger of seconds
                 try {
-                    startTimeMillis += startTimeMillis += ((Number) NumberFormat.getInstance().parse(timecode)).intValue() * 1000;
+                    startTimeMillis += startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
                 } catch (ParseException e) {
                     badUrl = true;
                 }
@@ -86,7 +87,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
             if (timecode.contains("s")) {
                 try {
-                    startTimeMillis += startTimeMillis += ((Number) NumberFormat.getInstance().parse(timecode)).intValue() * 1000;
+                    startTimeMillis += startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
                 } catch (ParseException e) {
                     badUrl = true;
                 }

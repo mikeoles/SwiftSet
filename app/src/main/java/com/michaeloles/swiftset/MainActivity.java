@@ -14,6 +14,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.michaeloles.swiftset.SortingGroups.Equipment;
+import com.michaeloles.swiftset.SortingGroups.Joints;
+import com.michaeloles.swiftset.SortingGroups.MuscleGroup;
+import com.michaeloles.swiftset.SortingGroups.PushPullLegs;
+import com.michaeloles.swiftset.SortingGroups.Sport;
+import com.michaeloles.swiftset.SortingGroups.Stability;
+import com.michaeloles.swiftset.SortingGroups.Tempo;
+import com.michaeloles.swiftset.SortingGroups.Unilateral;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +155,13 @@ public class MainActivity extends AppCompatActivity {
             this.startActivity(intent);
             return true;
         }
+
+        if (id == R.id.settings) {
+            Intent intent = new Intent(this,SettingsActivity.class);
+            this.startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
