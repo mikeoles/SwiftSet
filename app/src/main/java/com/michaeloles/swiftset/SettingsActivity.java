@@ -4,6 +4,7 @@ package com.michaeloles.swiftset;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -20,7 +21,9 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -138,9 +141,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (!super.onMenuItemSelected(featureId, item)) {
-                NavUtils.navigateUpFromSameTask(this);
-            }
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("reset_main",true);
+            startActivity(intent);
             return true;
         }
         return super.onMenuItemSelected(featureId, item);

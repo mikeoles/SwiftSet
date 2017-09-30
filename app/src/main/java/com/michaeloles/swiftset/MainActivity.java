@@ -2,11 +2,15 @@ package com.michaeloles.swiftset;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
@@ -22,7 +26,6 @@ import com.michaeloles.swiftset.SortingGroups.Sport;
 import com.michaeloles.swiftset.SortingGroups.Stability;
 import com.michaeloles.swiftset.SortingGroups.Tempo;
 import com.michaeloles.swiftset.SortingGroups.Unilateral;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        prefs.registerOnSharedPreferenceChangeListener(spChanged);
+
+        if(getIntent().hasExtra("reset_main")) {
+            Bundle extras = getIntent().getExtras();
+            Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
+            firstTimeCreated = needsReset;
+        }
 
         if(firstTimeCreated) {
             removedOptions.clear();
@@ -53,15 +64,20 @@ public class MainActivity extends AppCompatActivity {
             Button reset = (Button) findViewById(R.id.reset);
             reset.setVisibility(View.GONE);
             backToHome = true;
+            personalize(getAdvanced());
             firstTimeCreated = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
             backToHome = false;
             Button reset = (Button) findViewById(R.id.reset);
-            reset.setVisibility(View.VISIBLE);
+            if(!getAdvanced() || chosenOptions.size()==3){
+                reset.setVisibility(View.GONE);
+            }else{
+                reset.setVisibility(View.VISIBLE);
+            }
+
             Bundle extras = getIntent().getExtras();
             ArrayList<SortingCategory> chosenScList = (ArrayList<SortingCategory>) extras.getSerializable("chosen_sorting_category");
-
             String dbSortCategory = "";
             String dbSortBy = "";
             assert chosenScList != null;
@@ -76,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                         currentOptions.add(sg);
                     }
                 }
-
                 if(i==0) {
                    dbSortCategory = chosenSc.getDbColumnName();
                 }
@@ -87,6 +102,28 @@ public class MainActivity extends AppCompatActivity {
         setViewAllText();
         updateSortingPath();
         addButtons(this);
+    }
+
+    //returns if a user has allowed advanced exercises in the settings menu
+    private Boolean getAdvanced() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPreferences.getBoolean("advanced_switch", false);
+    }
+
+    /** Is called to personalize the available results based on the users preferences
+    ** @param isAdvanced removes exercises with difficult 4/5 and 5/5 from search results if not advanced
+    **/
+    private void personalize(Boolean isAdvanced) {
+        Intent intent = new Intent(this, MainActivity.class);
+        ArrayList<SortingCategory> scList = new ArrayList<>();
+
+        if(!isAdvanced) {
+            scList.add(new SortingCategory("Beginner Difficulty", "Difficulty", "1"));
+            scList.add(new SortingCategory("Novice Difficulty", "Difficulty", "2"));
+            scList.add(new SortingCategory("Intermediate Difficulty", "Difficulty", "2"));
+            intent.putExtra("chosen_sorting_category", scList);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -120,17 +157,19 @@ public class MainActivity extends AppCompatActivity {
 
     //Updates the displayed sorting path with the new category exercises are being sorted by
     private void updateSortingPath() {
-
         //Add new buttons for each of the sorting groups available to the user
         LinearLayout sortingPath = (LinearLayout) findViewById(R.id.sortingPath);
 
         for(int i=0; i<chosenOptions.size(); i++){
-            Button b = new Button(this);
             String name = chosenOptions.get(i);
-            b.setTextSize(9);
-            b.setHeight(10);
-            b.setText(name);
-            sortingPath.addView(b);
+            //Don't printout difficulty levels because they're already preselected by the user and it might get annoying
+            if(!name.toLowerCase().contains("difficulty")){
+                Button b = new Button(this);
+                b.setTextSize(9);
+                b.setHeight(10);
+                b.setText(name);
+                sortingPath.addView(b);
+            }
         }
     }
 
@@ -159,6 +198,16 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.settings) {
             Intent intent = new Intent(this,SettingsActivity.class);
             this.startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.play_store_rating) {
+            final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            }
             return true;
         }
 
@@ -259,6 +308,15 @@ public class MainActivity extends AppCompatActivity {
             l.addView(newButton);
         }
     }
+
+    //Called when preferences are changed
+    SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
+    SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        }
+    };
 
     //Getters and Setters
     public static ExerciseDb getRemainingDb() {

@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    public static final String DATABASE_NAME = "main_exercises_5.db";
+    public static final String DATABASE_NAME = "main_exercises_6.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
