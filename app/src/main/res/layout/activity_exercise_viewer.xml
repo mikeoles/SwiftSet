@@ -18,6 +18,16 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorPrimaryDark" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Video"
+        android:id="@+id/view_exercise_video"
+        android:onClick="showVideo"
+        android:layout_below="@+id/exerciseTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
+
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_view"
         android:layout_width="match_parent"
@@ -28,12 +38,12 @@
         android:layout_marginTop="50dp" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Exercise To Workout"
-        android:id="@+id/button"
-        android:onClick="saveExercise"
-        android:layout_below="@+id/youtube_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Save Exercise To Workout"
+    android:id="@+id/button"
+    android:onClick="saveExercise"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="100dp" />
 </RelativeLayout>

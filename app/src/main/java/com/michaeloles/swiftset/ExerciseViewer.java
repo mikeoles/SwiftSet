@@ -1,13 +1,10 @@
 package com.michaeloles.swiftset;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-
-
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -24,12 +21,8 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
     private static final int RECOVERY_REQUEST = 1;
     private YouTubePlayerView youTubeView;
-    private static String videoCode = "";
-    private static String youtubeCode = "";
-    private static int startTimeMillis = 0;
+    private YoutubeData ytData;
     private static String selectedExercise = "";
-    private static boolean wasMusicPlaying = false;
-    private static boolean badUrl = false;
     private static final String fullUrl = "youtube.com/watch?v=";
     private static final String shortUrl = "youtu.be/";
 
@@ -38,8 +31,8 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_viewer);
 
-        wasMusicPlaying = pauseMusic();
-        startTimeMillis = 0;
+        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
+        youTubeView.setVisibility(View.GONE);
 
         //Get Url From Calling Activity
         Bundle extras = getIntent().getExtras();
@@ -47,35 +40,46 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         ExerciseDb remaining = MainActivity.getRemainingDb();
         String selectedUrl = remaining.getUrlByExerciseName(selectedExercise);
 
-        //seperate the youtube video code and time from the url
-        if(selectedUrl.toLowerCase().contains(fullUrl)){//different depending on youtube.com and youtu.be urls
+        ytData = parseYoutubeUrl(selectedUrl);
+
+        TextView t = (TextView) findViewById(R.id.exerciseTitle);
+        t.setText(selectedExercise);
+    }
+
+    //Finds the start time and video code of a youtube video and returns it as a YoutubeData class
+    private YoutubeData parseYoutubeUrl(String selectedUrl) {
+        //separate the youtube video code and time from the url
+        String youtubeCode = "", videoCode;
+        int startTimeMillis = 0;
+
+        if (selectedUrl.toLowerCase().contains(fullUrl)) {//different depending on youtube.com and youtu.be urls
             youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf(fullUrl) + fullUrl.length());
-        }else if(selectedUrl.toLowerCase().contains(shortUrl)){
+        } else if (selectedUrl.toLowerCase().contains(shortUrl)) {
             youtubeCode = selectedUrl.substring(selectedUrl.lastIndexOf(shortUrl) + shortUrl.length());
-        }else{
-            badUrl = true;
+        } else {
+            //TODO handle badUrl
         }
 
         //Find the video code from the url
         //Ex: Url = https://www.youtube.com/watch?v=D5d_rkxPfuE&t=1m4s videoCode = D5d_rkxPfuE
         int endOfVideoCode = findFirstSeperator(youtubeCode);
-        videoCode = youtubeCode.substring(0,endOfVideoCode);
+        videoCode = youtubeCode.substring(0, endOfVideoCode);
 
         //If a specific time is designated in the video set the start time in milliseconds
-        if(youtubeCode.contains("t=") && endOfVideoCode<youtubeCode.length()) {
+        if (youtubeCode.contains("t=") && endOfVideoCode < youtubeCode.length()) {
             //removes the video code from the youtubeCode
             youtubeCode = youtubeCode.substring(endOfVideoCode + 1, youtubeCode.length());
             //Timecode is everything after t=
-            String timecode = youtubeCode.substring(youtubeCode.indexOf("t=")+2,youtubeCode.length());
+            String timecode = youtubeCode.substring(youtubeCode.indexOf("t=") + 2, youtubeCode.length());
             //and everything before the first seperator
-            timecode = timecode.substring(0,findFirstSeperator(timecode));
+            timecode = timecode.substring(0, findFirstSeperator(timecode));
             //Ex: t=1m5s&index=2&list=WL&index=3 -> 1m5s
 
             if (!timecode.contains("m") && !timecode.contains("s")) {//timecode is just listed as an interger of seconds
                 try {
                     startTimeMillis += startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
                 } catch (ParseException e) {
-                    badUrl = true;
+                    //TODO Bad URl found here too
                 }
             }
 
@@ -89,17 +93,12 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
                 try {
                     startTimeMillis += startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
                 } catch (ParseException e) {
-                    badUrl = true;
+                    //TODO badURL found here too
                 }
             }
         }
 
-        TextView t = (TextView) findViewById(R.id.exerciseTitle);
-        t.setText(selectedExercise);
-        if(selectedExercise.length()>0){
-            youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
-            youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
-        }
+        return new YoutubeData(videoCode,startTimeMillis);
     }
 
     //Finds the index of the first location of a seperator character in the URL
@@ -119,25 +118,10 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         return endOfVideoCode;
     }
 
-    //If music is playing in the background it pauses it so the youtube video can play
-    //Returns if there was music playing so we know to resume it after leaving the view
-    private boolean pauseMusic() {
-        AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-
-        if (mAudioManager.isMusicActive()) {
-            Intent i = new Intent("com.android.music.musicservicecommand");
-            i.putExtra("command", "togglepause");
-            ExerciseViewer.this.sendBroadcast(i);
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
-            Log.v("olesy",videoCode + " " + Integer.toString(startTimeMillis));
-            player.cueVideo(videoCode, startTimeMillis);
+            player.cueVideo(ytData.videoCode, ytData.startTimeMillis);
             player.play();
         }
     }
@@ -164,30 +148,35 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         return youTubeView;
     }
 
-    public void saveExercise(View view){
-        int numExercises = SavedExercises.addExercise(selectedExercise,this);
-        Toast.makeText(this,"Saved! (" + numExercises + " exercises in current workout)",Toast.LENGTH_SHORT).show();
+    //Saves current exercise to current workout and displays the number of exercises now in the workout
+    public void saveExercise(View view) {
+        int numExercises = SavedExercises.addExercise(selectedExercise, this);
+        Toast.makeText(this, "Saved! (" + numExercises + " exercises in current workout)", Toast.LENGTH_SHORT).show();
+    }
+
+    //When the user clicks on the button to show the video, this hides that button and loads the video
+    //Prevents wasting data by loading unwanted videos, stops music from being interrupted
+    public void showVideo(View view) {
+        Button showVideoButton = (Button) findViewById(R.id.view_exercise_video);
+        showVideoButton.setVisibility(View.GONE);
+        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
+        youTubeView.setVisibility(View.VISIBLE);
+        youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-        resumeMusic();
     }
+}
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        resumeMusic();
-    }
+class YoutubeData{
+    public int startTimeMillis = 0;
+    public String videoCode = "";
 
-    //Resumes the outside music player after the video ends
-    private void resumeMusic() {
-        if(wasMusicPlaying){
-            Intent i = new Intent("com.android.music.musicservicecommand");
-            i.putExtra("command", "play");
-            ExerciseViewer.this.sendBroadcast(i);
-        }
+    YoutubeData(String vc, int st){
+        this.videoCode = vc;
+        this.startTimeMillis = st;
     }
 }
