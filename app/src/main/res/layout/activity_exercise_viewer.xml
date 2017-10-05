@@ -21,11 +21,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Video"
+        android:text="Watch Video"
         android:id="@+id/view_exercise_video"
         android:onClick="showVideo"
         android:layout_below="@+id/exerciseTitle"
         android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:elevation="2dp"
+        android:drawableTop="@drawable/ic_youtube"
+        android:background="@color/colorPrimary"
         android:layout_marginTop="50dp" />
 
     <com.google.android.youtube.player.YouTubePlayerView
@@ -41,9 +49,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Save Exercise To Workout"
+    android:textColor="@android:color/white"
+    android:background="@color/colorPrimary"
     android:id="@+id/button"
     android:onClick="saveExercise"
-    android:layout_alignParentBottom="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:elevation="2dp"
+    android:drawableLeft="@drawable/ic_save_exercise_to_list"
     android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"
     android:layout_marginBottom="100dp" />
 </RelativeLayout>

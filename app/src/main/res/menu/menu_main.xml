@@ -3,18 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.michaeloles.swiftset.MainActivity">
     <item
-        android:id="@+id/demo_video"
-        android:orderInCategory="100"
-        android:title="@string/demo_video"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/settings"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:title="@string/settings"
+        android:icon="@drawable/ic_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/demo_video"
+        android:orderInCategory="200"
+        android:title="@string/demo_video"
+        android:icon="@drawable/ic_video"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/play_store_rating"
         android:orderInCategory="300"
         android:title="@string/play_store_rating"
+        android:icon="@drawable/ic_rate"
         app:showAsAction="never" />
 </menu>

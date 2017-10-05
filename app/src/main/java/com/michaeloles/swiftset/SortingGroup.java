@@ -25,6 +25,9 @@ public class SortingGroup implements Serializable{
     //used to keep track of which ones to highlight in green to show the user they were added based on their selections
     public boolean isOriginal = false;
 
+    //Holds the id of the drawable icon for this group
+    public int groupIcon = R.drawable.ic_movement;
+
     public SortingGroup(){
         this("");
     }
@@ -53,4 +56,6 @@ public class SortingGroup implements Serializable{
     public ArrayList<SortingCategory> getCategories() {return categories;}
 
     public ArrayList<Class> getCantFollow() {return cantFollow;}
+
+    public int getGroupIcon() {return groupIcon;}
 }

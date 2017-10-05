@@ -1,8 +1,10 @@
 package com.michaeloles.swiftset;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CategorySelector extends AppCompatActivity {
 
@@ -67,7 +72,11 @@ public class CategorySelector extends AppCompatActivity {
         for (int i = 0; i < categories.size(); i++) {
             //Create checkboxes for each category
             final CheckBox newCheckbox = new CheckBox(this);
-            newCheckbox.setText(categories.get(i).getName());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            Set<String> defaultSet = new HashSet<>();
+            ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
+            String name = categories.get(i).getName();
+            newCheckbox.setText(name);
             newCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -78,7 +87,10 @@ public class CategorySelector extends AppCompatActivity {
                     }
                 }
             });
-            l.addView(newCheckbox);
+            if(!hiddenEquipment.contains(name)){
+                l.addView(newCheckbox);
+            }
+
         }
         createSelectButton();
     }

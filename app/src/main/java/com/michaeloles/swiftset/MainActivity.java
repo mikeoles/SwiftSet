@@ -8,10 +8,12 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +29,8 @@ import com.michaeloles.swiftset.SortingGroups.Stability;
 import com.michaeloles.swiftset.SortingGroups.Tempo;
 import com.michaeloles.swiftset.SortingGroups.Unilateral;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             Button reset = (Button) findViewById(R.id.reset);
             reset.setVisibility(View.GONE);
             backToHome = true;
-            personalize(getAdvanced());
+            personalize(getAdvanced(),getHiddenEquipment());
             firstTimeCreated = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
@@ -104,6 +108,14 @@ public class MainActivity extends AppCompatActivity {
         addButtons(this);
     }
 
+    //Returns an arraylist of the equipment the user has selected to hide in the settings menu
+    private ArrayList<String> getHiddenEquipment() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Set<String> defaultSet = new HashSet<>();
+        ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
+        return hiddenEquipment;
+    }
+
     //returns if a user has allowed advanced exercises in the settings menu
     private Boolean getAdvanced() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -112,8 +124,9 @@ public class MainActivity extends AppCompatActivity {
 
     /** Is called to personalize the available results based on the users preferences
     ** @param isAdvanced removes exercises with difficult 4/5 and 5/5 from search results if not advanced
+    ** @param hiddenEquipment removes equipment the user has selected in settings to they don't want
     **/
-    private void personalize(Boolean isAdvanced) {
+    private void personalize(Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
         Intent intent = new Intent(this, MainActivity.class);
         ArrayList<SortingCategory> scList = new ArrayList<>();
 
@@ -124,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("chosen_sorting_category", scList);
             startActivity(intent);
         }
+        remainingDb.EquipRemoveRows(hiddenEquipment);
     }
 
     @Override
@@ -168,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 b.setTextSize(9);
                 b.setHeight(10);
                 b.setText(name);
+                b.setTextColor(Color.BLUE);
                 sortingPath.addView(b);
             }
         }
@@ -283,7 +298,8 @@ public class MainActivity extends AppCompatActivity {
             SortingGroup s = currentOptions.get(i);
             newButton.setText(s.getName());
             newButton.setId(i);
-            newButton.setPadding(0,0,0,0);
+            newButton.setPadding(5,0,0,0);
+            newButton.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             final TypedValue value = new TypedValue();
             context.getTheme ().resolveAttribute(R.attr.colorAccent, value, true);
             GradientDrawable gd = new GradientDrawable();
@@ -293,7 +309,10 @@ public class MainActivity extends AppCompatActivity {
                 gd.setColor(Color.rgb(230, 255, 230));//Light green signifies it has been added because of the users choices
             }
             gd.setStroke(1, value.data);
+            newButton.setCompoundDrawablesWithIntrinsicBounds(s.getGroupIcon(), 0, 0, 0);
+            newButton.setCompoundDrawablePadding(5);
             newButton.setBackground(gd);
+            newButton.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
 
             names.add(s);
             newButton.setOnClickListener(new View.OnClickListener() {

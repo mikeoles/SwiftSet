@@ -1,5 +1,6 @@
 package com.michaeloles.swiftset.SortingGroups;
 
+import com.michaeloles.swiftset.R;
 import com.michaeloles.swiftset.SortingCategory;
 import com.michaeloles.swiftset.SortingGroup;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
 
 public class MuscleGroup extends SortingGroup implements Serializable {
     public MuscleGroup(){
+        this.groupIcon = R.drawable.ic_muscle;
         this.setName("Muscle Group");
         this.addCantFollow(PushPullLegs.class);
         SortingCategory chest = new SortingCategory("Chest","Primary","Chest");

@@ -1,5 +1,6 @@
 package com.michaeloles.swiftset.SortingGroups;
 
+import com.michaeloles.swiftset.R;
 import com.michaeloles.swiftset.SortingCategory;
 import com.michaeloles.swiftset.SortingGroup;
 
@@ -13,6 +14,7 @@ public class PushPullLegs extends SortingGroup implements Serializable{
     private static ArrayList<String> legsMuscles = new ArrayList<>();
 
     public PushPullLegs(){
+        this.groupIcon = R.drawable.ic_pushpulllegs;
         initStandardValues();
         this.setName("Push,Pull,Legs");
         this.addCantFollow(MuscleGroup.class);

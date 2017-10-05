@@ -37,12 +37,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/sortingPath"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="10dp"
-                    android:minHeight="5dp"
-                    android:minWidth="10dp"
-                    android:divider="@color/colorAccent"
-                    android:dividerPadding="1dp">
+                    android:divider="@color/colorPrimaryDark"
+                    android:dividerPadding="5dp">
 
                 </LinearLayout>
             </HorizontalScrollView>

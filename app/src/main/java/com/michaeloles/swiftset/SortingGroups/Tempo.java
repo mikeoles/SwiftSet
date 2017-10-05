@@ -1,5 +1,6 @@
 package com.michaeloles.swiftset.SortingGroups;
 
+import com.michaeloles.swiftset.R;
 import com.michaeloles.swiftset.SortingCategory;
 import com.michaeloles.swiftset.SortingGroup;
 
@@ -7,6 +8,7 @@ import java.io.Serializable;
 
 public class Tempo extends SortingGroup implements Serializable {
     public Tempo(){
+        this.groupIcon = R.drawable.ic_tempo;
         this.setName("Tempo");
         this.addOption(new SortingCategory("Normal", "Tempo", "Normal"));
         this.addOption( new SortingCategory("Explosive","Tempo","Explosive"));

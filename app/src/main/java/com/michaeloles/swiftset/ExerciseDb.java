@@ -9,12 +9,13 @@ import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    public static final String DATABASE_NAME = "main_exercises_6.db";
+    public static final String DATABASE_NAME = "main_exercises_7.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_NAME_COL = "Name";
@@ -49,6 +50,22 @@ public class ExerciseDb extends SQLiteAssetHelper {
         db.close();
         c.close();
         return columns;
+    }
+
+    //Removes a row if it contains any of the equipment the user has hidden
+    public void EquipRemoveRows(ArrayList<String> toRemove) {
+        if(toRemove==null || toRemove.size()<1) return;
+        SQLiteDatabase db = getWritableDatabase();
+        String where = "([Equipment] LIKE '%" + toRemove.get(0) + "%'";
+        for (int i = 1; i < toRemove.size(); i++) {
+            where += " OR [EQUIPMENT] LIKE '%" + toRemove.get(i) + "%'";
+        }
+        where += ") OR [EQUIPMENT] is null";
+        ContentValues cv = new ContentValues();
+        cv.put("Eliminated", "1");
+        Log.v("olesy",where);
+        db.update(EXERCISE_TABLE, cv, where, null);
+        db.close();
     }
 
     //Removes all of the rows where the column dbSortCategory does not contain dbSortBy

@@ -1,5 +1,6 @@
 package com.michaeloles.swiftset.SortingGroups;
 
+import com.michaeloles.swiftset.R;
 import com.michaeloles.swiftset.SortingCategory;
 import com.michaeloles.swiftset.SortingGroup;
 
@@ -7,6 +8,7 @@ import java.io.Serializable;
 
 public class Sport extends SortingGroup implements Serializable {
     public Sport(){
+        this.groupIcon = R.drawable.ic_sport;
         this.setName("Sport");
         this.addOption(new SortingCategory("Powerlifting", "Sport", "Powerlifting"));
         this.addOption( new SortingCategory("Strongman","Sport","Strongman"));
