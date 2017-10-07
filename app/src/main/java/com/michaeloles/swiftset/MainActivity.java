@@ -20,9 +20,13 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.michaeloles.swiftset.SortingGroups.Difficulty;
 import com.michaeloles.swiftset.SortingGroups.Equipment;
 import com.michaeloles.swiftset.SortingGroups.Joints;
 import com.michaeloles.swiftset.SortingGroups.MuscleGroup;
+import com.michaeloles.swiftset.SortingGroups.Plyometrics;
 import com.michaeloles.swiftset.SortingGroups.PushPullLegs;
 import com.michaeloles.swiftset.SortingGroups.Sport;
 import com.michaeloles.swiftset.SortingGroups.Stability;
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
-
+        //Log.v("olesy","FirebaseInstanceId.getInstance().getToken()");
         if(getIntent().hasExtra("reset_main")) {
             Bundle extras = getIntent().getExtras();
             Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
@@ -130,13 +134,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         ArrayList<SortingCategory> scList = new ArrayList<>();
 
-        if(!isAdvanced) {
-            scList.add(new SortingCategory("Beginner Difficulty", "Difficulty", "1"));
-            scList.add(new SortingCategory("Novice Difficulty", "Difficulty", "2"));
-            scList.add(new SortingCategory("Intermediate Difficulty", "Difficulty", "2"));
-            intent.putExtra("chosen_sorting_category", scList);
-            startActivity(intent);
-        }
+        //Removes exercises with difficulties of 4/5 if the user doesn't want them
+        if(!isAdvanced) remainingDb.removeDifficultyAbove("3");
         remainingDb.EquipRemoveRows(hiddenEquipment);
     }
 
@@ -238,7 +237,9 @@ public class MainActivity extends AppCompatActivity {
         currentOptions.add(new Joints());
         currentOptions.add(new Unilateral());
         currentOptions.add(new Stability());
+        currentOptions.add(new Difficulty());
         currentOptions.add(new Sport());
+        currentOptions.add(new Plyometrics());
         for(SortingGroup s:currentOptions){
             s.isOriginal = true;
         }
@@ -333,7 +334,15 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+            if(key.equals("notifications_new_message")){
+                //on represents if the user has noticaitons turned on
+                boolean on = sharedPreferences.getBoolean("notifications_new_message", true);
+                if(!on) {//If notifications are not on add them to a list of people not to send noticiations to
+                    FirebaseMessaging.getInstance().subscribeToTopic("Unsubscribed");
+                }else{//If they re-enable notifications, remove them from the blocked list
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("Unsubscribed");
+                }
+            }
         }
     };
 

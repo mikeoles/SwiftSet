@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
@@ -22,6 +23,8 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.view.View;
+
+import com.michaeloles.swiftset.SortingGroups.Equipment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,7 +188,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
+            try {
+                addPreferencesFromResource(R.xml.pref_general);
+            }catch(Exception e){
+
+            }
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -194,6 +201,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             //bindPreferenceSummaryToValue(findPreference("example_text"));
             //bindPreferenceSummaryToValue(findPreference("hidden_equipment_list"));
+            final MultiSelectListPreference listPreference = (MultiSelectListPreference) findPreference("hidden_equipment");
+            setListPreferenceData(listPreference);
         }
 
         @Override
@@ -205,6 +214,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    //Adds values from the equipment class to the setings to allow the users to hide each piece of equipment
+    protected static void setListPreferenceData(MultiSelectListPreference lp) {
+        Equipment e = new Equipment();
+        ArrayList<SortingCategory> equipSortingCats = e.getCategories();
+        ArrayList<String> entryList = new ArrayList<>();
+        ArrayList<String> entryValuesList = new ArrayList<>();
+        for(SortingCategory sc:equipSortingCats){
+            entryList.add(sc.getName());
+            entryValuesList.add(sc.getSortBy());//When the users selects a type of equipment the sortByValue is used to remove it
+        }
+        CharSequence[] entries = entryList.toArray(new CharSequence[entryList.size()]);
+        CharSequence[] entryValues = entryValuesList.toArray(new CharSequence[entryValuesList.size()]);;
+        lp.setEntries(entries);
+        lp.setEntryValues(entryValues);
     }
 
     /**
@@ -223,7 +248,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
         }
 
         @Override

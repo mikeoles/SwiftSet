@@ -33,7 +33,7 @@
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
-    <string name="pref_title_hide_equipment">Hide Equipment You Dont Use</string>
+    <string name="pref_title_hide_equipment">Hide Equipment</string>
     <string-array name="pref_exercises_list_titles">
         <item>Barbell</item>
         <item>Dumbbell</item>

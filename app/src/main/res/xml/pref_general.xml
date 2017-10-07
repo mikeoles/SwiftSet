@@ -27,7 +27,5 @@
     <MultiSelectListPreference
         android:persistent="true"
         android:key="hidden_equipment"
-        android:entries="@array/pref_exercises_list_titles"
-        android:entryValues="@array/pref_exercises_list_titles"
         android:title="@string/pref_title_hide_equipment"/>
 </PreferenceScreen>
