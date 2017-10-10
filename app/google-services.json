@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "882243823582",
+    "firebase_url": "https://swiftset-173100.firebaseio.com",
+    "project_id": "swiftset-173100",
+    "storage_bucket": "swiftset-173100.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882243823582:android:0c0fe4774a4d5cb5",
+        "android_client_info": {
+          "package_name": "com.michaeloles.swiftset"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882243823582-o619mgi07ihd9ov3qjg42nh73nmdnj8b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.michaeloles.swiftset",
+            "certificate_hash": "b0de169fc6c55833a201cc2f4c481eba18d87516"
+          }
+        },
+        {
+          "client_id": "882243823582-vbmjlpgjjtvnc52qtoe5mkqnidmt8nbl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.michaeloles.swiftset",
+            "certificate_hash": "c9084553947d70ecb85c79ac93472f2b70e99847"
+          }
+        },
+        {
+          "client_id": "882243823582-sibba0n861flrdilfk6er447b061n3qg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkbIDNi93lTBPKVfmKDwD58CUmXX73yNI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882243823582-sibba0n861flrdilfk6er447b061n3qg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
