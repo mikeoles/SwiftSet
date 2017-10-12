@@ -11,6 +11,7 @@ public class MuscleGroup extends SortingGroup implements Serializable {
     public MuscleGroup(){
         this.groupIcon = R.drawable.ic_muscle;
         this.setName("Muscle Group");
+        this.addCantFollow(Plyometrics.class);
         this.addCantFollow(PushPullLegs.class);
         SortingCategory chest = new SortingCategory("Chest","Primary","Chest");
         chest.addNewOptions(new ChestMovementPatterns());

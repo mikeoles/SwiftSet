@@ -17,6 +17,7 @@ public class PushPullLegs extends SortingGroup implements Serializable{
         this.groupIcon = R.drawable.ic_pushpulllegs;
         initStandardValues();
         this.setName("Push,Pull,Legs");
+        this.addCantFollow(Plyometrics.class);
         this.addCantFollow(MuscleGroup.class);
         SortingCategory push = new SortingCategory("Push","Primary",formatString(pushMuscles));
         this.addOption(push);

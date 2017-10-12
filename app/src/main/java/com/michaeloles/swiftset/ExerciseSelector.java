@@ -28,6 +28,7 @@ public class ExerciseSelector extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ExerciseDb remaining = MainActivity.getRemainingDb();
+        if(remaining==null) startActivity(new Intent(this, MainActivity.class));
         ArrayList<String> colList = remaining.getColumnsList();
         final HashMap<String,String> urls = remaining.getUrls();
         String[] searchResults = colList.toArray(new String[colList.size()]);

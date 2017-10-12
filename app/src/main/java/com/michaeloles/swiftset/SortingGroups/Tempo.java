@@ -10,6 +10,7 @@ public class Tempo extends SortingGroup implements Serializable {
     public Tempo(){
         this.groupIcon = R.drawable.ic_tempo;
         this.setName("Tempo");
+        this.addCantFollow(Plyometrics.class);
         this.addOption(new SortingCategory("Normal", "Tempo", "Normal"));
         this.addOption( new SortingCategory("Explosive","Tempo","Explosive"));
         this.addOption( new SortingCategory("Isometric","Tempo","Isometric"));

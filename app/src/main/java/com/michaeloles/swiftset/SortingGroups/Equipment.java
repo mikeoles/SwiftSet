@@ -10,7 +10,7 @@ public class Equipment extends SortingGroup implements Serializable {
     public Equipment(){
         this.groupIcon = R.drawable.ic_equipment;
         this.isMultiChoice = true;
-
+        this.addCantFollow(Plyometrics.class);
         this.setName("Equipment");
         SortingCategory barbell = new SortingCategory("Barbell","Equipment","Barbell");
         this.addOption(barbell);
