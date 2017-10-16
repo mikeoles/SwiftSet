@@ -43,6 +43,15 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_gravity="center_horizontal" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearance"
+                android:id="@+id/workoutDate"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center_horizontal" />
+
             <ListView
                 android:orientation="vertical"
                 android:layout_width="match_parent"

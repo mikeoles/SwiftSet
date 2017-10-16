@@ -38,6 +38,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         Bundle extras = getIntent().getExtras();
         selectedExercise = extras.getString("selected_exercise");
         ExerciseDb remaining = MainActivity.getRemainingDb();
+        if(remaining==null) startActivity(new Intent(this, MainActivity.class));
         String selectedUrl = remaining.getUrlByExerciseName(selectedExercise);
 
         ytData = parseYoutubeUrl(selectedUrl);

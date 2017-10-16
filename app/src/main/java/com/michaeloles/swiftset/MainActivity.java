@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Set<String> defaultSet = new HashSet<>();
         ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
+        for(String s:hiddenEquipment) Log.v("olesy",s);
         return hiddenEquipment;
     }
 

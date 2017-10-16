@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class WorkoutViewer extends AppCompatActivity {
 
@@ -35,8 +37,9 @@ public class WorkoutViewer extends AppCompatActivity {
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
         ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
-
-        addExerciseButtons(exerciseList, "");
+        //tempWorkout represents a "workout" of the exersises the user has chosen but not yet saved to a workout
+        Workout tempWorkout = new Workout("",exerciseList);
+        addExerciseButtons(tempWorkout);
     }
 
     //Called when the user saves a workout
@@ -54,7 +57,7 @@ public class WorkoutViewer extends AppCompatActivity {
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
-                Workout w = new Workout(name, SavedExercises.getSavedExerciseList());
+                Workout w = new Workout(name, Calendar.getInstance().getTime(),SavedExercises.getSavedExerciseList());
                 if (w.numExercises() != 0) {
                     dbHandler = new WorkoutDBHandler(context, null, null, 1);
                     dbHandler.deleteWorkout(w.getName());
@@ -110,7 +113,7 @@ public class WorkoutViewer extends AppCompatActivity {
                 String name = item.getTitle().toString();
                 for (Workout w : workouts) {
                     if (w.getName().equals(name)) {
-                        addExerciseButtons(w.getExerciseNames(), w.getName());
+                        addExerciseButtons(w);
                     }
                 }
                 return true;
@@ -120,21 +123,29 @@ public class WorkoutViewer extends AppCompatActivity {
         menu.show();
     }
 
-    public void addExerciseButtons(ArrayList<String> exerciseList,String name){
+    public void addExerciseButtons(Workout w){
+        String name = w.getName();
+        Date date = w.getDate();
+
+        
+        ArrayList<String> exerciseList = w.getExerciseNames();
         showEditButtons(true);
         //remove items from the workout list
         ListView l = (ListView) findViewById(R.id.workoutExerciseList);
         l.setAdapter(null);
 
         exerciseList.remove("");
-
+        //TODO display workout date here
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
+        TextView workoutDate = (TextView) findViewById(R.id.workoutDate);
         if(name.length()>0) {
+            workoutDate.setText(date.toString());
             workoutName.setText(name);
             workoutName.setVisibility(View.VISIBLE);
         }else{
             //Only able to delete a workout if its already been saved
             workoutName.setVisibility(View.GONE);
+            workoutDate.setVisibility(View.GONE);
             Button delete = (Button) findViewById(R.id.deleteButton);
             delete.setVisibility(View.GONE);
         }

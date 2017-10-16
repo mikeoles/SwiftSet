@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by Oles on 8/30/2017.
@@ -19,6 +20,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "workouts.db";
     public static final String TABLE_WORKOUTS = "workouts";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_DATE = "date";
     public static final String COLUMN_WORKOUTNAME = "name";
     public static final String COLUMN_EXERCISENAMES = "exercises";
 
@@ -31,6 +33,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         String query = " CREATE TABLE " + TABLE_WORKOUTS + " ( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY," +
                 COLUMN_WORKOUTNAME + " TEXT," +
+                COLUMN_DATE + "INTEGER" +
                 COLUMN_EXERCISENAMES + " TEXT " +
                 ");";
         db.execSQL(query);
@@ -47,6 +50,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(COLUMN_WORKOUTNAME,workout.getName());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
+        values.put(COLUMN_DATE,workout.getDate().getTime());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_WORKOUTS, null, values);
         db.close();
@@ -71,8 +75,10 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
             if(c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME))!=null){
                 String workoutName = c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME));
                 String exerciseNames = c.getString(c.getColumnIndex(COLUMN_EXERCISENAMES));
+                Date workoutDate = new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)));
+
                 ArrayList<String> list = new ArrayList<String>(Arrays.asList(exerciseNames.split(",")));
-                workoutList.add(new Workout(workoutName, list));
+                workoutList.add(new Workout(workoutName, workoutDate, list));
             }
             c.moveToNext();
         }

@@ -68,6 +68,7 @@ public class ExerciseSelector extends AppCompatActivity {
 
     public void chooseRandom(View view){
         ExerciseDb remaining = MainActivity.getRemainingDb();
+        if(remaining==null) startActivity(new Intent(this, MainActivity.class));
         ArrayList<String> colList = remaining.getColumnsList();
         final HashMap<String,String> urls = remaining.getUrls();
 
