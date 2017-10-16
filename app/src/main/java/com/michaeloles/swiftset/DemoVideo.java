@@ -14,7 +14,7 @@ public class DemoVideo extends YouTubeBaseActivity implements YouTubePlayer.OnIn
 
     private static final int RECOVERY_REQUEST = 1;
     private YouTubePlayerView youTubeView;
-    private final String demoCode = "_kP70wDrcIA";
+    private final String demoCode = "_kP70wDrclA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
