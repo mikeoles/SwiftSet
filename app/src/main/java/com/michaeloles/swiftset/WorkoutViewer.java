@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Locale;
 
 public class WorkoutViewer extends AppCompatActivity {
 
@@ -57,7 +57,7 @@ public class WorkoutViewer extends AppCompatActivity {
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
-                Workout w = new Workout(name, Calendar.getInstance().getTime(),SavedExercises.getSavedExerciseList());
+                Workout w = new Workout(name, Calendar.getInstance(),SavedExercises.getSavedExerciseList());
                 if (w.numExercises() != 0) {
                     dbHandler = new WorkoutDBHandler(context, null, null, 1);
                     dbHandler.deleteWorkout(w.getName());
@@ -86,7 +86,9 @@ public class WorkoutViewer extends AppCompatActivity {
         Button clear = (Button) findViewById(R.id.clearButton);
         Button delete = (Button) findViewById(R.id.deleteButton);
         TextView name = (TextView) findViewById(R.id.workoutName);
+        TextView date = (TextView) findViewById(R.id.workoutDate);
         name.setVisibility(View.GONE);
+        date.setVisibility(View.GONE);
         save.setVisibility(View.GONE);
         clear.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
@@ -125,8 +127,7 @@ public class WorkoutViewer extends AppCompatActivity {
 
     public void addExerciseButtons(Workout w){
         String name = w.getName();
-        Date date = w.getDate();
-
+        Calendar date = w.getDate();
         
         ArrayList<String> exerciseList = w.getExerciseNames();
         showEditButtons(true);
@@ -135,11 +136,11 @@ public class WorkoutViewer extends AppCompatActivity {
         l.setAdapter(null);
 
         exerciseList.remove("");
-        //TODO display workout date here
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
         TextView workoutDate = (TextView) findViewById(R.id.workoutDate);
         if(name.length()>0) {
-            workoutDate.setText(date.toString());
+            workoutDate.setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + date.get(Calendar.DAY_OF_MONTH) + " " + date.get(Calendar.YEAR));
+            workoutDate.setVisibility(View.VISIBLE);
             workoutName.setText(name);
             workoutName.setVisibility(View.VISIBLE);
         }else{

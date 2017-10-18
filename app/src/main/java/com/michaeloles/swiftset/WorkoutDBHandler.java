@@ -7,22 +7,30 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Oles on 8/30/2017.
  */
 public class WorkoutDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "workouts.db";
     public static final String TABLE_WORKOUTS = "workouts";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_WORKOUTNAME = "name";
     public static final String COLUMN_EXERCISENAMES = "exercises";
+
+    private static final String DATABASE_ALTER_ADD_DATE = "ALTER TABLE "
+            + TABLE_WORKOUTS + " ADD COLUMN " + COLUMN_DATE
+            + " TEXT DEFAULT '" + Calendar.getInstance().getTime().toString()+"'";
 
     public WorkoutDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -33,7 +41,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         String query = " CREATE TABLE " + TABLE_WORKOUTS + " ( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY," +
                 COLUMN_WORKOUTNAME + " TEXT," +
-                COLUMN_DATE + "INTEGER" +
+                COLUMN_DATE + "TEXT" +
                 COLUMN_EXERCISENAMES + " TEXT " +
                 ");";
         db.execSQL(query);
@@ -41,8 +49,12 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP_TABLE_IF_EXISTS " + TABLE_WORKOUTS);
-        onCreate(db);
+        if(oldVersion<2) {//v1->v2 adds a date value to every workout
+            db.execSQL(DATABASE_ALTER_ADD_DATE);
+        }
+        if(oldVersion<2) {//v1->v2 adds a date value to every workout
+            db.execSQL(DATABASE_ALTER_ADD_DATE);
+        }
     }
 
     //Add a new workout to the database
@@ -50,7 +62,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(COLUMN_WORKOUTNAME,workout.getName());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
-        values.put(COLUMN_DATE,workout.getDate().getTime());
+        values.put(COLUMN_DATE,workout.getDate().toString());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_WORKOUTS, null, values);
         db.close();
@@ -75,8 +87,13 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
             if(c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME))!=null){
                 String workoutName = c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME));
                 String exerciseNames = c.getString(c.getColumnIndex(COLUMN_EXERCISENAMES));
-                Date workoutDate = new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)));
-
+                Calendar workoutDate = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                try {
+                    workoutDate.setTime(sdf.parse(c.getString(c.getColumnIndex(COLUMN_DATE))));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 ArrayList<String> list = new ArrayList<String>(Arrays.asList(exerciseNames.split(",")));
                 workoutList.add(new Workout(workoutName, workoutDate, list));
             }

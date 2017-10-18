@@ -9,14 +9,14 @@ import java.util.Date;
  */
 public class Workout {
     private String name;
-    private Date date;
+    private Calendar date;
     private ArrayList<String> exerciseNames = new ArrayList<>();
 
     public Workout(String name,ArrayList<String> exerciseNames){
-        this(name,Calendar.getInstance().getTime(),exerciseNames);
+        this(name,Calendar.getInstance(),exerciseNames);
     }
 
-    public Workout(String name,Date date,ArrayList<String> exerciseNames){
+    public Workout(String name,Calendar date,ArrayList<String> exerciseNames){
         this.name = name;
         this.exerciseNames = exerciseNames;
         this.date = date;
@@ -50,7 +50,7 @@ public class Workout {
         this.exerciseNames = exerciseNames;
     }
 
-    public Date getDate() {return date;}
+    public Calendar getDate() {return date;}
 
-    public void setDate(Date date) {this.date = date;}
+    public void setDate(Calendar date) {this.date = date;}
 }
