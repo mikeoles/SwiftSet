@@ -18,6 +18,7 @@ public class ExerciseSelector extends AppCompatActivity {
 
     SearchView searchView;
     ArrayAdapter adapter;
+    ExerciseDb remaining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,26 +27,28 @@ public class ExerciseSelector extends AppCompatActivity {
         setTitle("Choose An Exercise");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        remaining = MainActivity.getRemainingDb();
+        if(remaining==null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }else {
+            ArrayList<String> colList = remaining.getColumnsList();
+            final HashMap<String, String> urls = remaining.getUrls();
+            String[] searchResults = colList.toArray(new String[colList.size()]);
+            initList(searchResults);
+            searchView = (SearchView) findViewById(R.id.exSearch);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    adapter.getFilter().filter(query);
+                    return false;
+                }
 
-        ExerciseDb remaining = MainActivity.getRemainingDb();
-        if(remaining==null) startActivity(new Intent(this, MainActivity.class));
-        ArrayList<String> colList = remaining.getColumnsList();
-        final HashMap<String,String> urls = remaining.getUrls();
-        String[] searchResults = colList.toArray(new String[colList.size()]);
-        initList(searchResults);
-        searchView= (SearchView)findViewById(R.id.exSearch);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+        }
     }
 
     private void initList(String[] searchResults) {
@@ -68,7 +71,6 @@ public class ExerciseSelector extends AppCompatActivity {
 
     public void chooseRandom(View view){
         ExerciseDb remaining = MainActivity.getRemainingDb();
-        if(remaining==null) startActivity(new Intent(this, MainActivity.class));
         ArrayList<String> colList = remaining.getColumnsList();
         final HashMap<String,String> urls = remaining.getUrls();
 

@@ -80,10 +80,6 @@ public class ExerciseDb extends SQLiteAssetHelper {
 
     //Removes all of the rows where the column dbSortCategory does not contain dbSortBy
     public void removeRows(String dbSortBy, String dbSortCategory) {
-        if(dbSortCategory.equals("Difficulty")){
-            removeDifficultyAbove(dbSortBy.replace("/", ""));
-            return;
-        }
         SQLiteDatabase db = getWritableDatabase();
         String[] sortByList;
         if(dbSortBy.contains("/")) {

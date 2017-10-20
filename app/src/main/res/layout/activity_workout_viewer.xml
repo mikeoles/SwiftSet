@@ -20,19 +20,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Workouts"
-                android:id="@+id/viewWorkouts"
-                android:onClick="viewSavedWorkouts"
-                android:background="@color/colorPrimary"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textStyle="bold"
-                android:textColor="#ffffff"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center_horizontal" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="15dp">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recent Workouts"
+                    android:id="@+id/viewWorkouts"
+                    android:onClick="viewSavedWorkouts"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All Workouts"
+                    android:id="@+id/allWorkouts"
+                    android:onClick="viewSavedWorkouts"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -114,8 +136,6 @@
                     android:paddingRight="5dp"
                     android:paddingLeft="5dp" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>

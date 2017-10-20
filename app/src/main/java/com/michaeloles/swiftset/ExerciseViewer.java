@@ -38,13 +38,16 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         Bundle extras = getIntent().getExtras();
         selectedExercise = extras.getString("selected_exercise");
         ExerciseDb remaining = MainActivity.getRemainingDb();
-        if(remaining==null) startActivity(new Intent(this, MainActivity.class));
-        String selectedUrl = remaining.getUrlByExerciseName(selectedExercise);
+        if(remaining==null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }else {
+            String selectedUrl = remaining.getUrlByExerciseName(selectedExercise);
 
-        ytData = parseYoutubeUrl(selectedUrl);
+            ytData = parseYoutubeUrl(selectedUrl);
 
-        TextView t = (TextView) findViewById(R.id.exerciseTitle);
-        t.setText(selectedExercise);
+            TextView t = (TextView) findViewById(R.id.exerciseTitle);
+            t.setText(selectedExercise);
+        }
     }
 
     //Finds the start time and video code of a youtube video and returns it as a YoutubeData class
