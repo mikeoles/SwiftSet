@@ -68,17 +68,20 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         //Ex: Url = https://www.youtube.com/watch?v=D5d_rkxPfuE&t=1m4s videoCode = D5d_rkxPfuE
         int endOfVideoCode = findFirstSeperator(youtubeCode);
         videoCode = youtubeCode.substring(0, endOfVideoCode);
-
         //If a specific time is designated in the video set the start time in milliseconds
-        if (youtubeCode.contains("t=") && endOfVideoCode < youtubeCode.length()) {
+        if ( (youtubeCode.contains("&t=") || youtubeCode.contains("?t=")) && (endOfVideoCode < youtubeCode.length()) ) {
             //removes the video code from the youtubeCode
             youtubeCode = youtubeCode.substring(endOfVideoCode + 1, youtubeCode.length());
             //Timecode is everything after t=
-            String timecode = youtubeCode.substring(youtubeCode.indexOf("t=") + 2, youtubeCode.length());
+            String timecode = "";
+            if(youtubeCode.contains("&t=")){
+                timecode = youtubeCode.substring(youtubeCode.indexOf("&t=") + 3, youtubeCode.length());
+            }else{
+                timecode = youtubeCode.substring(youtubeCode.indexOf("?t=") + 3, youtubeCode.length());
+            }
             //and everything before the first seperator
             timecode = timecode.substring(0, findFirstSeperator(timecode));
             //Ex: t=1m5s&index=2&list=WL&index=3 -> 1m5s
-            Log.v("olesy",timecode);
             if (!timecode.contains("m") && !timecode.contains("s")) {//timecode is just listed as an interger of seconds
                 try {
                     startTimeMillis += startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
