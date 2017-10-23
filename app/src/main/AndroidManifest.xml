@@ -39,6 +39,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.michaeloles.swiftset.MainActivity" />
         </activity>
+        <activity android:name=".WorkoutCalendar"></activity>
     </application>
 
 </manifest>

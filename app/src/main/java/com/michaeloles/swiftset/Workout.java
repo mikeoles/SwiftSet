@@ -1,5 +1,6 @@
 package com.michaeloles.swiftset;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.Date;
 /**
  * Created by Oles on 8/30/2017.
  */
-public class Workout {
+public class Workout implements Serializable{
     private String name;
     private Calendar date;
     private ArrayList<String> exerciseNames = new ArrayList<>();

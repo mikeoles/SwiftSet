@@ -7,12 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 
 /**
@@ -111,5 +114,17 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         int count = cursor.getCount();
         cursor.close();
         return count;
+    }
+
+    //Gets all the workouts in the database and returns all of the dates that have workouts on them (Calendar)
+    public HashSet<CalendarDay> getDates(){
+        HashSet<CalendarDay> dates = new HashSet<>();
+        ArrayList<Workout> workouts = this.getWorkouts();
+        for(Workout w:workouts){
+            Calendar cal = w.getDate();
+            CalendarDay calDay = CalendarDay.from(cal);
+            dates.add(calDay);
+        }
+        return dates;
     }
 }

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class WorkoutViewer extends AppCompatActivity {
@@ -36,10 +37,16 @@ public class WorkoutViewer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
-        ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
-        //tempWorkout represents a "workout" of the exersises the user has chosen but not yet saved to a workout
-        Workout tempWorkout = new Workout("",exerciseList);
-        addExerciseButtons(tempWorkout);
+        if(getIntent().hasExtra("calendar_selection")) {
+            Bundle extras = getIntent().getExtras();
+            Workout calendarSelection = (Workout) extras.getSerializable("calendar_selection");
+            addExerciseButtons(calendarSelection);
+        }else {
+            ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
+            //tempWorkout represents a "workout" of the exersises the user has chosen but not yet saved to a workout
+            Workout tempWorkout = new Workout("", exerciseList);
+            addExerciseButtons(tempWorkout);
+        }
     }
 
     //Called when the user saves a workout
@@ -98,14 +105,28 @@ public class WorkoutViewer extends AppCompatActivity {
         exListView.setAdapter(null);
     }
 
+    public void viewCalendar(final View view){
+        Intent intent = new Intent(this,WorkoutCalendar.class);
+        this.startActivity(intent);
+    }
+
     //Allows the user to view list of workouts they've already saved
     public void viewSavedWorkouts(final View view){
         PopupMenu menu = new PopupMenu(this, view);
         dbHandler = new WorkoutDBHandler(view.getContext(), null, null, 1);
         final ArrayList<Workout> workouts = dbHandler.getWorkouts();
 
+        Collections.sort(workouts, new Comparator<Workout>() {
+            public int compare(Workout o1, Workout o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
+        int i=0;
         for(Workout w:workouts) {
+            if(i>4) break;
             menu.getMenu().add(w.getName());
+            i++;
         }
 
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -140,6 +161,7 @@ public class WorkoutViewer extends AppCompatActivity {
         TextView workoutDate = (TextView) findViewById(R.id.workoutDate);
         if(name.length()>0) {
             workoutDate.setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + date.get(Calendar.DAY_OF_MONTH) + " " + date.get(Calendar.YEAR));
+            workoutDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_calendar,0,0,0);
             workoutDate.setVisibility(View.VISIBLE);
             workoutName.setText(name);
             workoutName.setVisibility(View.VISIBLE);
@@ -189,7 +211,6 @@ public class WorkoutViewer extends AppCompatActivity {
 
     private void initList(ArrayList<String> en) {
         exerciseNames = en;
-        Log.v("olesy",Integer.toString(exerciseNames.size()));
         //Creates a list with each exercise and stores the exercise name and url in the intent
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseNames);
         final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);

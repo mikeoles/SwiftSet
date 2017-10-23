@@ -38,6 +38,7 @@
                     android:paddingRight="5dp"
                     android:textStyle="bold"
                     android:textColor="#ffffff"
+                    android:layout_margin="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_gravity="center_horizontal" />
 
@@ -46,10 +47,11 @@
                     android:layout_height="wrap_content"
                     android:text="All Workouts"
                     android:id="@+id/allWorkouts"
-                    android:onClick="viewSavedWorkouts"
+                    android:onClick="viewCalendar"
                     android:background="@color/colorPrimary"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
+                    android:layout_margin="10dp"
                     android:textStyle="bold"
                     android:textColor="#ffffff"
                     android:layout_marginTop="15dp"
@@ -61,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/workoutName"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_gravity="center_horizontal" />
 
@@ -80,7 +82,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/workoutExerciseList"
                 android:layout_marginTop="15dp">
-
             </ListView>
 
             <LinearLayout

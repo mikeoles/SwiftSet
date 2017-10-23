@@ -78,7 +78,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
             //and everything before the first seperator
             timecode = timecode.substring(0, findFirstSeperator(timecode));
             //Ex: t=1m5s&index=2&list=WL&index=3 -> 1m5s
-
+            Log.v("olesy",timecode);
             if (!timecode.contains("m") && !timecode.contains("s")) {//timecode is just listed as an interger of seconds
                 try {
                     startTimeMillis += startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
