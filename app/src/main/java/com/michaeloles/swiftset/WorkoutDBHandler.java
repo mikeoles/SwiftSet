@@ -23,7 +23,7 @@ import java.util.Locale;
  */
 public class WorkoutDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "workouts.db";
     public static final String TABLE_WORKOUTS = "workouts";
     public static final String COLUMN_ID = "_id";
@@ -55,9 +55,6 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         if(oldVersion<2) {//v1->v2 adds a date value to every workout
             db.execSQL(DATABASE_ALTER_ADD_DATE);
         }
-        if(oldVersion<2) {//v1->v2 adds a date value to every workout
-            db.execSQL(DATABASE_ALTER_ADD_DATE);
-        }
     }
 
     //Add a new workout to the database
@@ -65,7 +62,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(COLUMN_WORKOUTNAME,workout.getName());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
-        values.put(COLUMN_DATE,workout.getDate().toString());
+        values.put(COLUMN_DATE,workout.getDate().getTime().toString());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_WORKOUTS, null, values);
         db.close();
@@ -90,8 +87,8 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
             if(c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME))!=null){
                 String workoutName = c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME));
                 String exerciseNames = c.getString(c.getColumnIndex(COLUMN_EXERCISENAMES));
-                Calendar workoutDate = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                Calendar workoutDate = Calendar.getInstance();
                 try {
                     workoutDate.setTime(sdf.parse(c.getString(c.getColumnIndex(COLUMN_DATE))));
                 } catch (ParseException e) {
@@ -103,6 +100,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
             c.moveToNext();
         }
         db.close();
+        c.close();
         return workoutList;
     }
 

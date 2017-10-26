@@ -149,7 +149,7 @@ public class WorkoutViewer extends AppCompatActivity {
     public void addExerciseButtons(Workout w){
         String name = w.getName();
         Calendar date = w.getDate();
-        
+        //TODO Fix Date
         ArrayList<String> exerciseList = w.getExerciseNames();
         showEditButtons(true);
         //remove items from the workout list
@@ -193,7 +193,7 @@ public class WorkoutViewer extends AppCompatActivity {
     }
 
     //Either hides or shows the edit buttons to the user
-    //No edit buttons are shownif there's no exercises to save or clear from a workout
+    //No edit buttons are shown if there's no exercises to save or clear from a workout
     public void showEditButtons(boolean b) {
         Button save = (Button) findViewById(R.id.saveWorkoutButton);
         Button clear = (Button) findViewById(R.id.clearButton);

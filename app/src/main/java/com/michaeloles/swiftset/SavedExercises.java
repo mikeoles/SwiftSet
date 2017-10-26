@@ -2,6 +2,7 @@ package com.michaeloles.swiftset;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,6 @@ import java.util.Arrays;
  */
 public class SavedExercises {
     private static ArrayList<String> savedExerciseList = new ArrayList<>();
-
 
     //Adds an exercise to the list
     public static int addExercise(String selectedExercise,Context context) {
@@ -24,13 +24,8 @@ public class SavedExercises {
     }
 
     //Removes an exercise from certain position from the list
-    public static ArrayList removeExercise(int position,Context context) {
-        savedExerciseList.remove(position);
-        SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putString("unsaved_exercises", android.text.TextUtils.join(",", savedExerciseList));
-        editor.commit();
-        return savedExerciseList;
+    public static ArrayList removeExercise(int position, Context context) {
+        return null;
     }
 
     public static void clearSavedList(Context context) {
@@ -51,5 +46,22 @@ public class SavedExercises {
     //Getters and Setters
     public static ArrayList<String> getSavedExerciseList() {
         return savedExerciseList;
+    }
+
+    //This is called if a template is being passed into a workout
+    //ChosenOptions contains all the sorting categories
+    //The critical info from each category is stored in a string:
+    //name/sortBy/dbColumnName-...(continues for each category)
+    public static int addExercise(ArrayList<SortingCategory> chosenOptions, Context context){
+        String s = "";
+        for(SortingCategory sc:chosenOptions){
+            s += sc.getName()+"/"+sc.getSortBy()+"/"+sc.getDbColumnName()+"-";
+        }
+        savedExerciseList.add(s);
+        SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("unsaved_exercises", android.text.TextUtils.join(",", savedExerciseList));
+        editor.commit();
+        return savedExerciseList.size();
     }
 }

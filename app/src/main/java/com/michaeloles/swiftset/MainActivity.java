@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
-    public static ArrayList<String> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
+    public static ArrayList<SortingCategory> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
     private static ExerciseDb remainingDb; // Updated to hold the remaining exercises
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             assert chosenScList != null;
             for(int i=0;i<chosenScList.size();i++) {
                 SortingCategory chosenSc = chosenScList.get(i);
-                chosenOptions.add(chosenSc.getName());
+                chosenOptions.add(chosenSc);
 
                 //New groups that can be added because of the chose sorting category (Ex: Fly Movement Pattern can be added after Chest is chosen)
                 ArrayList<SortingGroup> newOptions = chosenSc.getNewOptions();
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout sortingPath = (LinearLayout) findViewById(R.id.sortingPath);
 
         for(int i=0; i<chosenOptions.size(); i++){
-            String name = chosenOptions.get(i);
+            String name = chosenOptions.get(i).getName();
             //Don't printout difficulty levels because they're already preselected by the user and it might get annoying
             if(!name.toLowerCase().contains("difficulty")){
                 Button b = new Button(this);
@@ -183,6 +184,13 @@ public class MainActivity extends AppCompatActivity {
                 b.setHeight(10);
                 b.setText(name);
                 b.setTextColor(Color.BLUE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int numExercises = SavedExercises.addExercise(chosenOptions,v.getContext());
+                        Toast.makeText(v.getContext(), "Saved! (" + numExercises + " exercises in current workout)", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 sortingPath.addView(b);
             }
         }
@@ -191,6 +199,14 @@ public class MainActivity extends AppCompatActivity {
     //Sorts through the remaining exercises and eliminates the ones that no longer fit
     private void dbSearch(ExerciseDb db, String dbSortBy, String dbSortCategory) {
         db.removeRows(dbSortBy, dbSortCategory);
+    }
+
+    private void addTemplateToWorkout() {
+        String s = "";
+        for(int i=0;i<chosenOptions.size();i++){
+            s += chosenOptions.get(i).getName() + " ";
+        }
+        Toast.makeText(this,s,Toast.LENGTH_LONG);
     }
 
     @Override
