@@ -1,17 +1,22 @@
 package com.michaeloles.swiftset;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -31,6 +36,10 @@ public class WorkoutViewer extends AppCompatActivity {
     private String name = "";
     ArrayAdapter<String> adapter;
     ArrayList<String> exerciseNames;
+    private DatePickerDialog.OnDateSetListener mDateSetListner;
+    private TextView workoutDate;
+    private Calendar newDate;
+    private Workout calendarSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +48,7 @@ public class WorkoutViewer extends AppCompatActivity {
         setTitle("Workouts");
         if(getIntent().hasExtra("calendar_selection")) {
             Bundle extras = getIntent().getExtras();
-            Workout calendarSelection = (Workout) extras.getSerializable("calendar_selection");
+            calendarSelection = (Workout) extras.getSerializable("calendar_selection");
             addExerciseButtons(calendarSelection);
         }else {
             ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
@@ -60,17 +69,24 @@ public class WorkoutViewer extends AppCompatActivity {
 
         final EditText input = new EditText(this);
         alert.setView(input);
-
+        TextView workoutName = (TextView) findViewById(R.id.workoutName);
+        final boolean firstSave = workoutName.getText().length() == 0;
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
-                Workout w = new Workout(name, Calendar.getInstance(),SavedExercises.getSavedExerciseList());
+                Workout w;
+                if(!firstSave && newDate!=null){
+                    w = calendarSelection;
+                    w.setDate(newDate);
+                }else{
+                    w = new Workout(name,Calendar.getInstance(),SavedExercises.getSavedExerciseList());
+                }
                 if (w.numExercises() != 0) {
                     dbHandler = new WorkoutDBHandler(context, null, null, 1);
                     dbHandler.deleteWorkout(w.getName());
                     dbHandler.addWorkout(w);
                 }
-                Toast.makeText(context, "Workout " + name + " saved", Toast.LENGTH_SHORT).show();
+                dbHandler.numWorkouts();
             }
         });
 
@@ -114,6 +130,7 @@ public class WorkoutViewer extends AppCompatActivity {
     public void viewSavedWorkouts(final View view){
         PopupMenu menu = new PopupMenu(this, view);
         dbHandler = new WorkoutDBHandler(view.getContext(), null, null, 1);
+        Log.v("Olesy","HERE"+dbHandler.numWorkouts());
         final ArrayList<Workout> workouts = dbHandler.getWorkouts();
 
         Collections.sort(workouts, new Comparator<Workout>() {
@@ -149,7 +166,6 @@ public class WorkoutViewer extends AppCompatActivity {
     public void addExerciseButtons(Workout w){
         String name = w.getName();
         Calendar date = w.getDate();
-        //TODO Fix Date
         ArrayList<String> exerciseList = w.getExerciseNames();
         showEditButtons(true);
         //remove items from the workout list
@@ -158,11 +174,36 @@ public class WorkoutViewer extends AppCompatActivity {
 
         exerciseList.remove("");
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
-        TextView workoutDate = (TextView) findViewById(R.id.workoutDate);
+        workoutDate = (TextView) findViewById(R.id.workoutDate);
         if(name.length()>0) {
             workoutDate.setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + date.get(Calendar.DAY_OF_MONTH) + " " + date.get(Calendar.YEAR));
             workoutDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_calendar,0,0,0);
             workoutDate.setVisibility(View.VISIBLE);
+            workoutDate.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Calendar cal = Calendar.getInstance();
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog dialog = new DatePickerDialog(
+                            getApplicationContext(),
+                            android.R.style.Theme_Material_Light,
+                            mDateSetListner,
+                            year,month,day);
+                    dialog.getWindow().setBackgroundDrawable((new ColorDrawable(Color.TRANSPARENT)));
+                    dialog.show();
+                }
+            });
+            mDateSetListner = new DatePickerDialog.OnDateSetListener(){
+
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    newDate = Calendar.getInstance();
+                    newDate.set(year,month,dayOfMonth);
+                    workoutDate.setText(newDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + newDate.get(Calendar.DAY_OF_MONTH) + " " + newDate.get(Calendar.YEAR));
+                }
+            };
             workoutName.setText(name);
             workoutName.setVisibility(View.VISIBLE);
         }else{

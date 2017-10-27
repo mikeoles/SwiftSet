@@ -110,7 +110,6 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = cursor.getCount();
-        cursor.close();
         return count;
     }
 
