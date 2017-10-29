@@ -44,7 +44,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         String query = " CREATE TABLE " + TABLE_WORKOUTS + " ( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY," +
                 COLUMN_WORKOUTNAME + " TEXT," +
-                COLUMN_DATE + "TEXT" +
+                COLUMN_DATE + " TEXT," +
                 COLUMN_EXERCISENAMES + " TEXT " +
                 ");";
         db.execSQL(query);

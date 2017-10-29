@@ -54,4 +54,9 @@ public class Workout implements Serializable{
     public Calendar getDate() {return date;}
 
     public void setDate(Calendar date) {this.date = date;}
+
+    //Removes an exercise by the index
+    public void removeExercise(int index) {
+        exerciseNames.remove(index);
+    }
 }

@@ -2,6 +2,7 @@ package com.michaeloles.swiftset;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -11,7 +12,12 @@ import java.util.Arrays;
  * Created by Oles on 8/29/2017.
  */
 public class SavedExercises {
+
     private static ArrayList<String> savedExerciseList = new ArrayList<>();
+
+    public static void setSavedExerciseList(ArrayList<String> savedExerciseList) {
+        SavedExercises.savedExerciseList = savedExerciseList;
+    }
 
     //Adds an exercise to the list
     public static int addExercise(String selectedExercise,Context context) {
@@ -21,11 +27,6 @@ public class SavedExercises {
         editor.putString("unsaved_exercises", android.text.TextUtils.join(",", savedExerciseList));
         editor.commit();
         return savedExerciseList.size();
-    }
-
-    //Removes an exercise from certain position from the list
-    public static ArrayList removeExercise(int position, Context context) {
-        return null;
     }
 
     public static void clearSavedList(Context context) {
@@ -55,7 +56,7 @@ public class SavedExercises {
     public static int addExercise(ArrayList<SortingCategory> chosenOptions, Context context){
         String s = "";
         for(SortingCategory sc:chosenOptions){
-            s += sc.getName()+"/"+sc.getSortBy()+"/"+sc.getDbColumnName()+"-";
+            s += sc.getName()+"&"+sc.getSortBy()+"&"+sc.getDbColumnName()+"-";
         }
         savedExerciseList.add(s);
         SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);

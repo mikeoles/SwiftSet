@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
             firstTimeCreated = needsReset;
         }
-
+        for(String s:SavedExercises.getSavedExerciseList()) Log.v("olesy","3:"+s);
         if(firstTimeCreated) {
             removedOptions.clear();
             currentOptions.clear();
@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Set<String> defaultSet = new HashSet<>();
         ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
-        for(String s:hiddenEquipment) Log.v("olesy",s);
         return hiddenEquipment;
     }
 
@@ -133,9 +132,6 @@ public class MainActivity extends AppCompatActivity {
     ** @param hiddenEquipment removes equipment the user has selected in settings to they don't want
     **/
     private void personalize(Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
-        Intent intent = new Intent(this, MainActivity.class);
-        ArrayList<SortingCategory> scList = new ArrayList<>();
-
         //Removes exercises with difficulties of 4/5 if the user doesn't want them
         if(!isAdvanced) remainingDb.removeDifficultyAbove("3");
         remainingDb.EquipRemoveRows(hiddenEquipment);
