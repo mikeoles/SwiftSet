@@ -23,17 +23,22 @@ import java.util.Locale;
  */
 public class WorkoutDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "workouts.db";
     public static final String TABLE_WORKOUTS = "workouts";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_WORKOUTNAME = "name";
     public static final String COLUMN_EXERCISENAMES = "exercises";
+    public static final String COLUMN_TEMPLATE = "template";
 
     private static final String DATABASE_ALTER_ADD_DATE = "ALTER TABLE "
             + TABLE_WORKOUTS + " ADD COLUMN " + COLUMN_DATE
             + " TEXT DEFAULT '" + Calendar.getInstance().getTime().toString()+"'";
+
+    private static final String DATABASE_ALTER_ADD_TEMPLATE = "ALTER TABLE "
+            + TABLE_WORKOUTS + " ADD COLUMN " + COLUMN_TEMPLATE
+            + " INTEGER DEFAULT '1'";
 
     public WorkoutDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -45,7 +50,8 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
                 COLUMN_ID + " INTEGER PRIMARY KEY," +
                 COLUMN_WORKOUTNAME + " TEXT," +
                 COLUMN_DATE + " TEXT," +
-                COLUMN_EXERCISENAMES + " TEXT " +
+                COLUMN_EXERCISENAMES + " TEXT," +
+                COLUMN_TEMPLATE + " INTEGER" +
                 ");";
         db.execSQL(query);
     }
@@ -55,6 +61,9 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         if(oldVersion<2) {//v1->v2 adds a date value to every workout
             db.execSQL(DATABASE_ALTER_ADD_DATE);
         }
+        if(oldVersion<4){//Add isTemplate to every workout
+            db.execSQL(DATABASE_ALTER_ADD_TEMPLATE);//No previous workouts will be templates
+        }
     }
 
     //Add a new workout to the database
@@ -63,6 +72,11 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         values.put(COLUMN_WORKOUTNAME,workout.getName());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
         values.put(COLUMN_DATE,workout.getDate().getTime().toString());
+        if(workout.isTemplate()){
+            values.put(COLUMN_TEMPLATE,1);
+        }else{
+            values.put(COLUMN_TEMPLATE,0);
+        }
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_WORKOUTS, null, values);
         db.close();
@@ -87,6 +101,7 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
             if(c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME))!=null){
                 String workoutName = c.getString(c.getColumnIndex(COLUMN_WORKOUTNAME));
                 String exerciseNames = c.getString(c.getColumnIndex(COLUMN_EXERCISENAMES));
+                Integer isTemplate = c.getInt(c.getColumnIndex(COLUMN_TEMPLATE));
                 SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
                 Calendar workoutDate = Calendar.getInstance();
                 try {
@@ -95,7 +110,9 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 ArrayList<String> list = new ArrayList<String>(Arrays.asList(exerciseNames.split(",")));
-                workoutList.add(new Workout(workoutName, workoutDate, list));
+                Workout w = new Workout(workoutName, workoutDate, list);
+                w.setTemplate(isTemplate==1);
+                workoutList.add(w);
             }
             c.moveToNext();
         }

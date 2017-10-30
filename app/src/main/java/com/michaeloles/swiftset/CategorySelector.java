@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -74,8 +75,9 @@ public class CategorySelector extends AppCompatActivity {
             final CheckBox newCheckbox = new CheckBox(this);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             Set<String> defaultSet = new HashSet<>();
-            ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
+            HashSet<String> hiddenEquipment = new HashSet<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
             String name = categories.get(i).getName();
+            String sortBy = categories.get(i).getSortBy();
             newCheckbox.setText(name);
             newCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -87,7 +89,7 @@ public class CategorySelector extends AppCompatActivity {
                     }
                 }
             });
-            if(!hiddenEquipment.contains(name)){
+            if(!hiddenEquipment.contains(sortBy)){
                 l.addView(newCheckbox);
             }
 

@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
     public static ArrayList<SortingCategory> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
-    private static ExerciseDb remainingDb; // Updated to hold the remaining exercises
+    public static ExerciseDb remainingDb; // Updated to hold the remaining exercises
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
@@ -124,15 +124,15 @@ public class MainActivity extends AppCompatActivity {
     //returns if a user has allowed advanced exercises in the settings menu
     private Boolean getAdvanced() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedPreferences.getBoolean("advanced_switch", false);
+        return sharedPreferences.getBoolean("advanced_switch", true);
     }
 
     /** Is called to personalize the available results based on the users preferences
     ** @param isAdvanced removes exercises with difficult 4/5 and 5/5 from search results if not advanced
     ** @param hiddenEquipment removes equipment the user has selected in settings to they don't want
     **/
-    private void personalize(Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
-        //Removes exercises with difficulties of 4/5 if the user doesn't want them
+    public static void personalize(Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
+        //Removes exercises with difficulties of 4 if the user doesn't want them
         if(!isAdvanced) remainingDb.removeDifficultyAbove("3");
         remainingDb.EquipRemoveRows(hiddenEquipment);
     }
@@ -197,14 +197,6 @@ public class MainActivity extends AppCompatActivity {
         db.removeRows(dbSortBy, dbSortCategory);
     }
 
-    private void addTemplateToWorkout() {
-        String s = "";
-        for(int i=0;i<chosenOptions.size();i++){
-            s += chosenOptions.get(i).getName() + " ";
-        }
-        Toast.makeText(this,s,Toast.LENGTH_LONG);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -264,6 +256,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void viewWorkouts(View view) {
+        remainingDb.resetDatabase();
+        personalize(getAdvanced(),getHiddenEquipment());
         Intent intent = new Intent(this, WorkoutViewer.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
@@ -274,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         remainingDb.close();
     }
-
 
     //returns a sortingGroup based on its name
     public static boolean removeSortingGroup(SortingGroup sg){

@@ -45,9 +45,24 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="All Workouts"
+                    android:text="All"
                     android:id="@+id/allWorkouts"
                     android:onClick="viewCalendar"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_margin="10dp"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Templates"
+                    android:id="@+id/templates"
+                    android:onClick="viewSavedTemplates"
                     android:background="@color/colorPrimary"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"

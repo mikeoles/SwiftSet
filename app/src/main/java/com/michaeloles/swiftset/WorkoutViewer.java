@@ -5,7 +5,9 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,8 +31,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
 public class WorkoutViewer extends AppCompatActivity {
 
@@ -50,6 +54,9 @@ public class WorkoutViewer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
+        MainActivity.remainingDb.resetDatabase();
+        MainActivity.personalize(getAdvanced(),getHiddenEquipment());
+        //If the user has selected a saved workout
         if(getIntent().hasExtra("calendar_selection")) {
             Bundle extras = getIntent().getExtras();
             loadedWorkout = (Workout) extras.getSerializable("calendar_selection");
@@ -58,9 +65,10 @@ public class WorkoutViewer extends AppCompatActivity {
                 SavedExercises.setSavedExerciseList(loadedWorkout.getExerciseNames());
             }
             addExerciseButtons(loadedWorkout);
-        }else {
+        }else {//Loads a new unnamed workout from the saved exercises
             ArrayList<String> exerciseList = SavedExercises.getSavedExerciseList();
             ArrayList<String> exerciseListCopy = new ArrayList<>();
+            //Make a copy so the SavedExercises class is not affected by changes
             for(String s:exerciseList){
                 exerciseListCopy.add(s);
             }
@@ -82,26 +90,44 @@ public class WorkoutViewer extends AppCompatActivity {
         final EditText input = new EditText(this);
         alert.setView(input);
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
-        input.setText(workoutName.getText());
+
+        //If there is no workout name, the workout has never been saved before
         final boolean firstSave = workoutName.getText().length() == 0;
+
+        //Set a suggested name to save the workout as depending on if it already has one
+        if(firstSave){
+            String hint = Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+                    + " " + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + " "
+                    + Calendar.getInstance().get(Calendar.YEAR);
+            input.setText(hint + " Workout");
+        }else{
+            input.setText(workoutName.getText());
+        }
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
                 Workout w;
                 if(!firstSave){
+                    //Save the loaded workout with updated date if necessary
                     w = loadedWorkout;
                     if(newDate!=null) {
                         w.setDate(newDate);
                     }
+                    w.setName(name);
                 }else{
+                    //Create a new workout to save
                     w = new Workout(name,Calendar.getInstance(),SavedExercises.getSavedExerciseList());
                 }
-                if (w.numExercises() != 0) {
+                w.setTemplate(isTemplate.contains(true));//If there's any template exercises in the workout its a template workout
+
+                if(name.length()<1){
+                    Toast.makeText(getApplicationContext(),"Please Enter A Name",Toast.LENGTH_SHORT).show();
+                }else if(w.numExercises() != 0) {
                     dbHandler = new WorkoutDBHandler(context, null, null, 1);
                     dbHandler.deleteWorkout(w.getName());
                     dbHandler.addWorkout(w);
                 }
-                dbHandler.numWorkouts();
+
             }
         });
 
@@ -153,11 +179,14 @@ public class WorkoutViewer extends AppCompatActivity {
             }
         });
 
+        //Shows the 5 most recent workouts that are not templates
         int i=0;
         for(Workout w:workouts) {
             if(i>4) break;
-            menu.getMenu().add(w.getName());
-            i++;
+            if(!w.isTemplate()) {
+                menu.getMenu().add(w.getName());
+                i++;
+            }
         }
 
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -166,7 +195,44 @@ public class WorkoutViewer extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 String name = item.getTitle().toString();
                 for (Workout w : workouts) {
-                    if (w.getName().equals(name)) {
+                    if (w.getName().equals(name) && !w.isTemplate()) {
+                        loadedWorkout = w;
+                        SavedExercises.setSavedExerciseList(loadedWorkout.getExerciseNames());
+                        addExerciseButtons(w);
+                    }
+                }
+                return true;
+            }
+        });
+
+        menu.show();
+    }
+
+    //Allows the user to view list of workouts they've already saved
+    public void viewSavedTemplates(final View view){
+        PopupMenu menu = new PopupMenu(this, view);
+        dbHandler = new WorkoutDBHandler(view.getContext(), null, null, 1);
+        final ArrayList<Workout> workouts = dbHandler.getWorkouts();
+
+        Collections.sort(workouts, new Comparator<Workout>() {
+            public int compare(Workout o1, Workout o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
+        for(Workout w:workouts) {
+            if(w.isTemplate()) {
+                menu.getMenu().add(w.getName());
+            }
+        }
+
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                String name = item.getTitle().toString();
+                for (Workout w : workouts) {
+                    if (w.getName().equals(name) && w.isTemplate()) {
                         loadedWorkout = w;
                         SavedExercises.setSavedExerciseList(loadedWorkout.getExerciseNames());
                         addExerciseButtons(w);
@@ -193,9 +259,11 @@ public class WorkoutViewer extends AppCompatActivity {
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
         workoutDate = (TextView) findViewById(R.id.workoutDate);
         if(name.length()>0) {
+            //Date is always set either as what the user saved it or its set to the current day if not
             workoutDate.setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + date.get(Calendar.DAY_OF_MONTH) + " " + date.get(Calendar.YEAR));
             workoutDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_calendar,0,0,0);
             workoutDate.setVisibility(View.VISIBLE);
+            //If the date is clicked it opens a date picker dialog to allow the user to change it
             workoutDate.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
@@ -211,9 +279,11 @@ public class WorkoutViewer extends AppCompatActivity {
                     dialog.show();
                 }
             });
+            //If the user chooses a new date from the picker, save that date to the workout
             mDateSetListner = new DatePickerDialog.OnDateSetListener(){
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    //New date is used to display the date and is also saved if the user saves the workout
                     newDate = Calendar.getInstance();
                     newDate.set(year,month,dayOfMonth);
                     workoutDate.setText(newDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + newDate.get(Calendar.DAY_OF_MONTH) + " " + newDate.get(Calendar.YEAR));
@@ -226,7 +296,7 @@ public class WorkoutViewer extends AppCompatActivity {
             workoutName.setVisibility(View.GONE);
             workoutDate.setVisibility(View.GONE);
             Button delete = (Button) findViewById(R.id.deleteButton);
-            delete.setVisibility(View.GONE);
+            //delete.setVisibility(View.GONE);
         }
 
         //Dont show the save and clear buttons if there are no exercises to save or clear
@@ -247,6 +317,7 @@ public class WorkoutViewer extends AppCompatActivity {
         //Avoids going back to the calendar when a user presses back, it seems better to just go to the main actvity
         if(getIntent().hasExtra("calendar_selection")) {
             Intent intent = new Intent(WorkoutViewer.this,MainActivity.class);
+            intent.putExtra("reset_main",true);
             startActivity(intent);
         }else{
             super.onBackPressed();
@@ -286,7 +357,7 @@ public class WorkoutViewer extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                String selectedFromList = "";
+                String selectedFromList;
                 if(!isTemplate.get(position)) {
                     //If the list item is not  a template just open the exercise
                     selectedFromList = (String) (exListView.getItemAtPosition(position));
@@ -295,7 +366,8 @@ public class WorkoutViewer extends AppCompatActivity {
                     selectedFromList = WorkoutViewer.openRandomExFromTemplate(position,getApplicationContext());
                 }
                 if(selectedFromList==null){
-                    Toast.makeText(view.getContext(),"No Matching Exercises Found",Toast.LENGTH_LONG);
+                    Toast.makeText(view.getContext(),"No Matching Exercises Found",Toast.LENGTH_LONG).show();
+
                 }else {
                     //Open the exercise in exerciseViewer
                     Intent intent = new Intent(view.getContext(), ExerciseViewer.class);
@@ -328,46 +400,47 @@ public class WorkoutViewer extends AppCompatActivity {
         });
     }
 
-    //Open Exercise From Template
+    //Open Exercise From Template given the position in the exercise list it's in
     private static String openRandomExFromTemplate(int position,Context context) {
         ArrayList<SortingCategory> toSortBy = templatesByIndex.get(position);
+        //Sort by each sorting category in to sort by
         ExerciseDb db = new ExerciseDb(context);
         for(SortingCategory sc:toSortBy){
             db.removeRows(sc.getDbColumnName(),sc.getSortBy());
         }
+
         ArrayList<String> colList = db.getColumnsList();
-        if(colList.size()==0){
+        if(colList.size()==0){//If there are no columns available return 0
             return null;
         }
-        final HashMap<String,String> urls = db.getUrls();
 
         Random r = new Random();
         int rand = r.nextInt(colList.size());
-
         return colList.get(rand);
     }
 
     //Creates a map of the index of each element in the listview that's a template to a list of the sortingCategories in that template
     //Also creates a list of booleans so you can figure out if an element selected in an exercise or a template
     private void createMaps(ArrayList<String> en) {
-        isTemplate = new ArrayList<>();
+        isTemplate = new ArrayList<>();//Keeps track of which exercises in the workout are templates
         templatesByIndex = new HashMap<>();
         for(int i=0;i<en.size();i++){
             String name = en.get(i);
-            if(name.contains("&")){
+            if(name.contains("&")){//& denotes that something is a template
                 isTemplate.add(true);
-                ArrayList<SortingCategory> sortingBy = new ArrayList<>();
+                ArrayList<SortingCategory> sortingBy = new ArrayList<>();//Contains each sorting category in the specific template
                 String[] categoriesList = name.split("-");
-                String newTemplateString = "";
+                String newTemplateString = "";//String with all the sorting categories in this template
                 for(int j=0;j<categoriesList.length;j++){
                     String[] categoryParams = categoriesList[j].split("&");
                     newTemplateString += " " + categoryParams[0] + " /";
                     SortingCategory s = new SortingCategory(categoryParams[0],categoryParams[1],categoryParams[2]);
                     sortingBy.add(s);
                 }
+                //The sorting categories for a template can be found by what index that is in the exercise list
                 templatesByIndex.put(i,sortingBy);
                 newTemplateString = newTemplateString.substring(0,newTemplateString.length()-1);
-                newTemplateString = newTemplateString.toUpperCase();
+                newTemplateString = newTemplateString.toUpperCase();//Uppercase so user knows it's not an exercise
                 en.set(i,newTemplateString);
             }else{
                 isTemplate.add(false);
@@ -416,5 +489,19 @@ public class WorkoutViewer extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    //returns if a user has allowed advanced exercises in the settings menu
+    private Boolean getAdvanced() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPreferences.getBoolean("advanced_switch", true);
+    }
+
+    //Returns an arraylist of the equipment the user has selected to hide in the settings menu
+    private ArrayList<String> getHiddenEquipment() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Set<String> defaultSet = new HashSet<>();
+        ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
+        return hiddenEquipment;
     }
 }

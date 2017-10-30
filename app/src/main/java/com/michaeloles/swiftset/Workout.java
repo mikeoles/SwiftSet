@@ -9,6 +9,7 @@ import java.util.Date;
  * Created by Oles on 8/30/2017.
  */
 public class Workout implements Serializable{
+    private boolean isTemplate = false;
     private String name;
     private Calendar date;
     private ArrayList<String> exerciseNames = new ArrayList<>();
@@ -54,6 +55,14 @@ public class Workout implements Serializable{
     public Calendar getDate() {return date;}
 
     public void setDate(Calendar date) {this.date = date;}
+
+    public boolean isTemplate() {
+        return isTemplate;
+    }
+
+    public void setTemplate(boolean template) {
+        isTemplate = template;
+    }
 
     //Removes an exercise by the index
     public void removeExercise(int index) {
