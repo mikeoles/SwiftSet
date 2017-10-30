@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     ** @param isAdvanced removes exercises with difficult 4/5 and 5/5 from search results if not advanced
     ** @param hiddenEquipment removes equipment the user has selected in settings to they don't want
     **/
-    public static void personalize(Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
+    private static void personalize(Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
         //Removes exercises with difficulties of 4 if the user doesn't want them
         if(!isAdvanced) remainingDb.removeDifficultyAbove("3");
         remainingDb.EquipRemoveRows(hiddenEquipment);

@@ -30,7 +30,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recent Workouts"
+                    android:text="Recent"
                     android:id="@+id/viewWorkouts"
                     android:onClick="viewSavedWorkouts"
                     android:background="@color/colorPrimary"

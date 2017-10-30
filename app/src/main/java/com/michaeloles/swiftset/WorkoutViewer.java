@@ -54,14 +54,11 @@ public class WorkoutViewer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_viewer);
         setTitle("Workouts");
-        MainActivity.remainingDb.resetDatabase();
-        MainActivity.personalize(getAdvanced(),getHiddenEquipment());
         //If the user has selected a saved workout
         if(getIntent().hasExtra("calendar_selection")) {
             Bundle extras = getIntent().getExtras();
             loadedWorkout = (Workout) extras.getSerializable("calendar_selection");
             if (loadedWorkout != null) {
-
                 SavedExercises.setSavedExerciseList(loadedWorkout.getExerciseNames());
             }
             addExerciseButtons(loadedWorkout);
@@ -109,11 +106,12 @@ public class WorkoutViewer extends AppCompatActivity {
                 Workout w;
                 if(!firstSave){
                     //Save the loaded workout with updated date if necessary
-                    w = loadedWorkout;
+
                     if(newDate!=null) {
-                        w.setDate(newDate);
+                        w = new Workout(name,newDate,SavedExercises.getSavedExerciseList());
+                    }else{
+                        w = new Workout(name,loadedWorkout.getDate(),SavedExercises.getSavedExerciseList());
                     }
-                    w.setName(name);
                 }else{
                     //Create a new workout to save
                     w = new Workout(name,Calendar.getInstance(),SavedExercises.getSavedExerciseList());
@@ -363,7 +361,7 @@ public class WorkoutViewer extends AppCompatActivity {
                     selectedFromList = (String) (exListView.getItemAtPosition(position));
                 }else{
                     //If it is a template find a random exercise matching those search results
-                    selectedFromList = WorkoutViewer.openRandomExFromTemplate(position,getApplicationContext());
+                    selectedFromList = openRandomExFromTemplate(position,getApplicationContext());
                 }
                 if(selectedFromList==null){
                     Toast.makeText(view.getContext(),"No Matching Exercises Found",Toast.LENGTH_LONG).show();
@@ -401,10 +399,12 @@ public class WorkoutViewer extends AppCompatActivity {
     }
 
     //Open Exercise From Template given the position in the exercise list it's in
-    private static String openRandomExFromTemplate(int position,Context context) {
+    private String openRandomExFromTemplate(int position,Context context) {
         ArrayList<SortingCategory> toSortBy = templatesByIndex.get(position);
         //Sort by each sorting category in to sort by
         ExerciseDb db = new ExerciseDb(context);
+        db.resetDatabase();
+        this.personalize(db,getAdvanced(),getHiddenEquipment());
         for(SortingCategory sc:toSortBy){
             db.removeRows(sc.getDbColumnName(),sc.getSortBy());
         }
@@ -503,5 +503,11 @@ public class WorkoutViewer extends AppCompatActivity {
         Set<String> defaultSet = new HashSet<>();
         ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
         return hiddenEquipment;
+    }
+
+    private void personalize(ExerciseDb db, Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
+        //Removes exercises with difficulties of 4 if the user doesn't want them
+        if(!isAdvanced) db.removeDifficultyAbove("3");
+        db.EquipRemoveRows(hiddenEquipment);
     }
 }
