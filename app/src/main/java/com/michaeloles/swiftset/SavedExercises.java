@@ -29,6 +29,14 @@ public class SavedExercises {
         return savedExerciseList.size();
     }
 
+    public static void removeExercise(Context context,int i) {
+        savedExerciseList.remove(i);
+        SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("unsaved_exercises","");
+        editor.commit();
+    }
+
     public static void clearSavedList(Context context) {
         savedExerciseList.clear();
         SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);

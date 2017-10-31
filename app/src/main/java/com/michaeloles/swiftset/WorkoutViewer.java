@@ -37,7 +37,6 @@ import java.util.Random;
 import java.util.Set;
 
 public class WorkoutViewer extends AppCompatActivity {
-
     private WorkoutDBHandler dbHandler;
     private String name = "";
     ArrayAdapter<String> adapter;
@@ -58,8 +57,14 @@ public class WorkoutViewer extends AppCompatActivity {
         if(getIntent().hasExtra("calendar_selection")) {
             Bundle extras = getIntent().getExtras();
             loadedWorkout = (Workout) extras.getSerializable("calendar_selection");
+            for(String s:loadedWorkout.getExerciseNames()) Log.v("olesyd","onLoad: "+s);
             if (loadedWorkout != null) {
-                SavedExercises.setSavedExerciseList(loadedWorkout.getExerciseNames());
+                ArrayList<String> exerciseListCopy = new ArrayList<>();
+                for(String s:loadedWorkout.getExerciseNames()){
+                    exerciseListCopy.add(s);
+
+                }
+                SavedExercises.setSavedExerciseList(exerciseListCopy);
             }
             addExerciseButtons(loadedWorkout);
         }else {//Loads a new unnamed workout from the saved exercises
@@ -105,13 +110,12 @@ public class WorkoutViewer extends AppCompatActivity {
                 name = input.getText().toString();
                 Workout w;
                 if(!firstSave){
-                    //Save the loaded workout with updated date if necessary
-
-                    if(newDate!=null) {
-                        w = new Workout(name,newDate,SavedExercises.getSavedExerciseList());
-                    }else{
-                        w = new Workout(name,loadedWorkout.getDate(),SavedExercises.getSavedExerciseList());
-                    }
+                        //Save the loaded workout with updated date if necessary
+                        if(newDate!=null) {
+                            w = new Workout(name,newDate,SavedExercises.getSavedExerciseList());
+                        }else{
+                            w = new Workout(name,loadedWorkout.getDate(),SavedExercises.getSavedExerciseList());
+                        }
                 }else{
                     //Create a new workout to save
                     w = new Workout(name,Calendar.getInstance(),SavedExercises.getSavedExerciseList());
@@ -194,9 +198,9 @@ public class WorkoutViewer extends AppCompatActivity {
                 String name = item.getTitle().toString();
                 for (Workout w : workouts) {
                     if (w.getName().equals(name) && !w.isTemplate()) {
-                        loadedWorkout = w;
-                        SavedExercises.setSavedExerciseList(loadedWorkout.getExerciseNames());
-                        addExerciseButtons(w);
+                        Intent intent = new Intent(getApplicationContext(),WorkoutViewer.class);
+                        intent.putExtra("calendar_selection",w);//Sends the chosen sorting group to the CategorySelector class when clicked
+                        startActivity(intent);
                     }
                 }
                 return true;
@@ -231,9 +235,9 @@ public class WorkoutViewer extends AppCompatActivity {
                 String name = item.getTitle().toString();
                 for (Workout w : workouts) {
                     if (w.getName().equals(name) && w.isTemplate()) {
-                        loadedWorkout = w;
-                        SavedExercises.setSavedExerciseList(loadedWorkout.getExerciseNames());
-                        addExerciseButtons(w);
+                        Intent intent = new Intent(getApplicationContext(),WorkoutViewer.class);
+                        intent.putExtra("calendar_selection",w);//Sends the chosen sorting group to the CategorySelector class when clicked
+                        startActivity(intent);
                     }
                 }
                 return true;
@@ -245,6 +249,7 @@ public class WorkoutViewer extends AppCompatActivity {
 
     //Adds the exercise buttons to the screen
     public void addExerciseButtons(Workout w){
+        for(String s:w.getExerciseNames()) Log.v("olesyd","addButtons: "+s);
         String name = w.getName();
         Calendar date = w.getDate();
         ArrayList<String> exerciseList = w.getExerciseNames();
@@ -294,7 +299,7 @@ public class WorkoutViewer extends AppCompatActivity {
             workoutName.setVisibility(View.GONE);
             workoutDate.setVisibility(View.GONE);
             Button delete = (Button) findViewById(R.id.deleteButton);
-            //delete.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
         }
 
         //Dont show the save and clear buttons if there are no exercises to save or clear
@@ -452,10 +457,8 @@ public class WorkoutViewer extends AppCompatActivity {
     private void deleteExercise(int indexClicked) {
         //remove from screen
         exerciseNames.remove(indexClicked);//where arg2 is position of item you click
-        if(loadedWorkout!=null) {
-            loadedWorkout.removeExercise(indexClicked);//Removes this exercise from the workout Object
-        }
 
+        SavedExercises.removeExercise(this,indexClicked);
         //Remove from the map to sorting categories if necessary
         if(isTemplate.get(indexClicked)){
             templatesByIndex.remove(indexClicked);
@@ -470,7 +473,7 @@ public class WorkoutViewer extends AppCompatActivity {
     /**** Method for Setting the Height of the ListView dynamically.
      **** Hack to fix the issue of not showing all the items of the ListView
      **** when placed inside a ScrollView  ****/
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
+    private static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
             return;
