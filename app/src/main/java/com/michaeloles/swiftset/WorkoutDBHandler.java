@@ -135,9 +135,11 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         HashSet<CalendarDay> dates = new HashSet<>();
         ArrayList<Workout> workouts = this.getWorkouts();
         for(Workout w:workouts){
-            Calendar cal = w.getDate();
-            CalendarDay calDay = CalendarDay.from(cal);
-            dates.add(calDay);
+            if(!w.isTemplate()) {//Only workouts that are not templates display dates
+                Calendar cal = w.getDate();
+                CalendarDay calDay = CalendarDay.from(cal);
+                dates.add(calDay);
+            }
         }
         return dates;
     }

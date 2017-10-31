@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,7 +55,6 @@ public class WorkoutViewer extends AppCompatActivity {
         if(getIntent().hasExtra("calendar_selection")) {
             Bundle extras = getIntent().getExtras();
             loadedWorkout = (Workout) extras.getSerializable("calendar_selection");
-            for(String s:loadedWorkout.getExerciseNames()) Log.v("olesyd","onLoad: "+s);
             if (loadedWorkout != null) {
                 ArrayList<String> exerciseListCopy = new ArrayList<>();
                 for(String s:loadedWorkout.getExerciseNames()){
@@ -265,7 +262,11 @@ public class WorkoutViewer extends AppCompatActivity {
             //Date is always set either as what the user saved it or its set to the current day if not
             workoutDate.setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + date.get(Calendar.DAY_OF_MONTH) + " " + date.get(Calendar.YEAR));
             workoutDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_calendar,0,0,0);
-            workoutDate.setVisibility(View.VISIBLE);
+            if(!w.isTemplate()) {
+                workoutDate.setVisibility(View.VISIBLE);
+            }else{
+                workoutDate.setVisibility(View.GONE);
+            }
             //If the date is clicked it opens a date picker dialog to allow the user to change it
             workoutDate.setOnClickListener(new View.OnClickListener(){
                 @Override

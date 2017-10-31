@@ -50,7 +50,7 @@ public class WorkoutCalendar extends AppCompatActivity {
 
                 for(Workout w:workouts) {
                     CalendarDay workoutDate = CalendarDay.from(w.getDate());
-                    if(workoutDate.equals(date)){
+                    if(workoutDate.equals(date)&&!w.isTemplate()){
                         workoutsMatchingDate.add(w);
                     }
                 }
@@ -112,6 +112,7 @@ class CurrentDayDecorator implements DayViewDecorator {
         this.context = context;
     }
 
+    //Finds which days of the calendar should have a dot on them
     @Override
     public boolean shouldDecorate(CalendarDay day) {
         WorkoutDBHandler dbHandler = new WorkoutDBHandler(context, null, null, 1);

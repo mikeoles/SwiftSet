@@ -11,6 +11,10 @@ public class SortingCategory implements Serializable{
     //The name of the column in the database that this category will sort by
     public String dbColumnName;
 
+    //Icon for the sorting category, need to call hasIcon() to see if one is set for a category
+    private int icon = 0;
+    private boolean hasIcon = false;
+
     //The value that you will select from dbColumnName when shrinking the exercise field
     public String sortBy;
 
@@ -44,5 +48,18 @@ public class SortingCategory implements Serializable{
 
     public String getDbColumnName() {
         return dbColumnName;
+    }
+
+    public boolean hasIcon(){
+        return hasIcon;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.hasIcon = true;
+        this.icon = icon;
     }
 }

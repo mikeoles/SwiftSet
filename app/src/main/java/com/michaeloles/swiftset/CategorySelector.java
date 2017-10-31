@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -135,7 +136,7 @@ public class CategorySelector extends AppCompatActivity {
     //Adds a select button to the layout to return which checkboxes have been selected
     private void createSelectButton() {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.catRelativeLayout);
-        Button button = new Button(this); // your button;
+        Button button = new Button(this);
         button.setText(R.string.select_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +150,10 @@ public class CategorySelector extends AppCompatActivity {
                 }
             }
         });
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        button.setBackgroundColor(Color.WHITE);
+        button.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         lp.addRule(RelativeLayout.CENTER_IN_PARENT);
         layout.addView(button, lp);
