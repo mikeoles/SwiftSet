@@ -105,50 +105,50 @@
                 android:layout_marginTop="15dp">
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Save"
                     android:id="@+id/saveWorkoutButton"
                     android:onClick="saveWorkout"
                     android:layout_below="@+id/scrollView"
                     android:layout_centerHorizontal="true"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_margin="10dp"
+                    android:background="@drawable/rounded_button"
                     android:textColor="@color/colorAccent"
                     android:paddingTop="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:paddingBottom="0dp"
-                    android:minHeight="30dp"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="5dp" />
+                    android:minHeight="30dp" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Clear"
                     android:id="@+id/clearButton"
                     android:onClick="clearWorkout"
                     android:layout_below="@+id/scrollView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_centerHorizontal="true"
                     android:layout_alignLeft="@+id/saveWorkoutButton"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_margin="10dp"
+                    android:background="@drawable/rounded_button"
                     android:textColor="@color/colorAccent"
-                    android:minHeight="30dp"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="5dp" />
+                    android:minHeight="30dp" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Delete"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:id="@+id/deleteButton"
                     android:onClick="deleteWorkout"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_margin="10dp"
+                    android:background="@drawable/rounded_button"
                     android:textColor="@color/colorAccent"
-                    android:minHeight="30dp"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="5dp" />
+                    android:minHeight="30dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
