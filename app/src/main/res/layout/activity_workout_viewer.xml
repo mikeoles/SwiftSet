@@ -150,6 +150,19 @@
                     android:textColor="@color/colorAccent"
                     android:minHeight="30dp" />
             </LinearLayout>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Make Workout"
+                android:id="@+id/makeWorkout"
+                android:layout_gravity="center_horizontal"
+                android:onClick="makeWorkout"
+                android:background="@color/colorPrimaryDark"
+                android:layout_marginTop="10dp"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

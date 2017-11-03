@@ -38,9 +38,10 @@ public class WorkoutViewer extends AppCompatActivity {
     private WorkoutDBHandler dbHandler;
     private String name = "";
     ArrayAdapter<String> adapter;
-    ArrayList<String> exerciseNames;
+    ArrayList<String> exerciseNames;//These names are shown on the screen by the array adapter listView
     private DatePickerDialog.OnDateSetListener mDateSetListner;
     private TextView workoutDate;
+    private Button makeWorkout;
     private Calendar newDate;
     private Workout loadedWorkout;
     private static ArrayList<Boolean> isTemplate = new ArrayList<>();
@@ -246,7 +247,6 @@ public class WorkoutViewer extends AppCompatActivity {
 
     //Adds the exercise buttons to the screen
     public void addExerciseButtons(Workout w){
-        for(String s:w.getExerciseNames()) Log.v("olesyd","addButtons: "+s);
         String name = w.getName();
         Calendar date = w.getDate();
         ArrayList<String> exerciseList = w.getExerciseNames();
@@ -258,13 +258,17 @@ public class WorkoutViewer extends AppCompatActivity {
         exerciseList.remove("");
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
         workoutDate = (TextView) findViewById(R.id.workoutDate);
+        makeWorkout = (Button) findViewById(R.id.makeWorkout);
+        makeWorkout.setVisibility(View.GONE);
         if(name.length()>0) {
             //Date is always set either as what the user saved it or its set to the current day if not
             workoutDate.setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + date.get(Calendar.DAY_OF_MONTH) + " " + date.get(Calendar.YEAR));
             workoutDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_calendar,0,0,0);
+            //Dates are only needed for workouts and you can only make a worout from a template
             if(!w.isTemplate()) {
                 workoutDate.setVisibility(View.VISIBLE);
             }else{
+                makeWorkout.setVisibility(View.VISIBLE);
                 workoutDate.setVisibility(View.GONE);
             }
             //If the date is clicked it opens a date picker dialog to allow the user to change it
@@ -456,10 +460,12 @@ public class WorkoutViewer extends AppCompatActivity {
 
     //Removes an exercise from the workout (From both the screen and the savedExercises arrayList)
     private void deleteExercise(int indexClicked) {
-        //remove from screen
+        //Remove from screen
         exerciseNames.remove(indexClicked);//where arg2 is position of item you click
 
+        //Remove from the current list of exercises
         SavedExercises.removeExercise(this,indexClicked);
+
         //Remove from the map to sorting categories if necessary
         if(isTemplate.get(indexClicked)){
             templatesByIndex.remove(indexClicked);
@@ -513,5 +519,25 @@ public class WorkoutViewer extends AppCompatActivity {
         //Removes exercises with difficulties of 4 if the user doesn't want them
         if(!isAdvanced) db.removeDifficultyAbove("3");
         db.EquipRemoveRows(hiddenEquipment);
+    }
+
+    //Generates a random workout based on the template currently selected
+    public void makeWorkout(View view){
+        //Get exercises from savedWorkouts
+        ArrayList<String> savedExercises = SavedExercises.getSavedExerciseList();
+
+        //Go through savedExercises and whenever there is a template, remplace it with a random exercise matching that template
+        for(int i=0; i<savedExercises.size(); i++){
+            if(isTemplate.get(i)) {
+                String randomExercise = openRandomExFromTemplate(i, getApplicationContext());
+                savedExercises.set(i,randomExercise);
+            }
+        }
+
+        SavedExercises.setSavedExerciseList(savedExercises);
+
+        //Recall onCreate with templates removed
+        Intent intent = new Intent(this,WorkoutViewer.class);
+        this.startActivity(intent);
     }
 }
