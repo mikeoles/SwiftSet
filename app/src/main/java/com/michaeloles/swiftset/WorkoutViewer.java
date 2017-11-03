@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,10 +95,10 @@ public class WorkoutViewer extends AppCompatActivity {
 
         //Set a suggested name to save the workout as depending on if it already has one
         if(firstSave){
-            String hint = Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
-                    + " " + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + " "
-                    + Calendar.getInstance().get(Calendar.YEAR);
-            input.setText(hint + " Workout");
+            String hint = Calendar.getInstance().get(Calendar.MONTH)
+                    + "/" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) +
+                    " Workout";
+            input.setText(hint);
         }else{
             input.setText(workoutName.getText());
         }
@@ -151,11 +150,13 @@ public class WorkoutViewer extends AppCompatActivity {
         Button delete = (Button) findViewById(R.id.deleteButton);
         TextView name = (TextView) findViewById(R.id.workoutName);
         TextView date = (TextView) findViewById(R.id.workoutDate);
+        Button makeWorkout = (Button) findViewById(R.id.makeWorkout);
         name.setVisibility(View.GONE);
         date.setVisibility(View.GONE);
         save.setVisibility(View.GONE);
         clear.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
+        makeWorkout.setVisibility(View.GONE);
 
         //remove items from the workout list
         final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);
@@ -511,8 +512,7 @@ public class WorkoutViewer extends AppCompatActivity {
     private ArrayList<String> getHiddenEquipment() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Set<String> defaultSet = new HashSet<>();
-        ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
-        return hiddenEquipment;
+        return new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
     }
 
     private void personalize(ExerciseDb db, Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
