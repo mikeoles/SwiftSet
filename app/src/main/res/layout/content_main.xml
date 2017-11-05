@@ -43,41 +43,47 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
             <Button
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="View All Exercises"
+                android:layout_weight="1"
+                android:text="Exercises"
                 android:id="@+id/viewAll"
                 android:layout_gravity="center_horizontal"
                 android:onClick="viewExercises"
-                android:background="@color/colorPrimaryDark"
-                android:layout_marginTop="10dp"
+                android:background="@drawable/main_button"
                 android:textColor="#ffffff"
                 android:textStyle="bold" />
 
             <Button
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="View Workouts"
+                android:layout_weight="1"
+                android:text="Workouts"
                 android:id="@+id/viewWorkouts"
                 android:layout_gravity="center_horizontal"
                 android:onClick="viewWorkouts"
-                android:background="@color/colorPrimaryDark"
-                android:layout_marginTop="10dp"
+                android:background="@drawable/main_button"
                 android:textColor="#ffffff"
                 android:textStyle="bold" />
 
             <Button
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Reset"
                 android:id="@+id/reset"
-                android:background="@color/colorPrimaryDark"
-                android:layout_marginTop="10dp"
+                android:background="@drawable/main_button"
                 android:onClick="reset"
-                android:layout_marginBottom="10dp"
+                android:textStyle="bold"
                 android:textColor="#ffffff" />
-
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

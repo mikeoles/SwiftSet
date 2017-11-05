@@ -24,7 +24,6 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:gravity="center_horizontal">
 
                 <Button
@@ -118,6 +117,9 @@
                     android:paddingTop="0dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+
+
                     android:paddingBottom="0dp"
                     android:minHeight="30dp" />
 
@@ -131,6 +133,7 @@
                     android:layout_below="@+id/scrollView"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_centerHorizontal="true"
                     android:layout_alignLeft="@+id/saveWorkoutButton"
                     android:background="@drawable/rounded_button"
@@ -144,6 +147,7 @@
                     android:text="Delete"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
                     android:id="@+id/deleteButton"
                     android:onClick="deleteWorkout"
                     android:background="@drawable/rounded_button"

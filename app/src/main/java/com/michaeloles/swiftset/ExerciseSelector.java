@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -32,7 +33,7 @@ public class ExerciseSelector extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
         }else {
             ArrayList<String> colList = remaining.getColumnsList();
-            final HashMap<String, String> urls = remaining.getUrls();
+            Collections.sort(colList);
             String[] searchResults = colList.toArray(new String[colList.size()]);
             initList(searchResults);
             searchView = (SearchView) findViewById(R.id.exSearch);

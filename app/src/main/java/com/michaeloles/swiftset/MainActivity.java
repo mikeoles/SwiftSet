@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     //Sets the text for the view all button with the number of exercises remaining in the pool displayed
     private void setViewAllText() {
         Button viewAll = (Button) findViewById(R.id.viewAll);
-        String allExercises = "View All Exercises (" + remainingDb.numRows() + ")";
+        String allExercises = "Exercises (" + remainingDb.numRows() + ")";
         viewAll.setText(allExercises);
     }
 
