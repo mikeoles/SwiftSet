@@ -95,7 +95,7 @@ public class WorkoutViewer extends AppCompatActivity {
 
         //Set a suggested name to save the workout as depending on if it already has one
         if(firstSave){
-            String hint = Calendar.getInstance().get(Calendar.MONTH)
+            String hint = Calendar.getInstance().get(Calendar.MONTH)+1
                     + "/" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) +
                     " Workout";
             input.setText(hint);
