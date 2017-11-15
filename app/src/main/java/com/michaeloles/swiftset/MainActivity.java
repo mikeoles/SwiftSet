@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean firstTimeCreated = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
+    final String FIRST_USE_PREF = "FirstUsePref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        boolean firstTimeUser = isFirstTmeUser();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
         //Log.v("olesy","FirebaseInstanceId.getInstance().getToken()");
@@ -111,6 +113,21 @@ public class MainActivity extends AppCompatActivity {
         setViewAllText();
         updateSortingPath();
         addButtons(this);
+    }
+
+    //Checks if this is the first time the user has every opened the app by using shared preferences
+    //Can be used to show tutorials and set default workouts and templates
+    private boolean isFirstTmeUser() {
+
+        SharedPreferences settings = getSharedPreferences(FIRST_USE_PREF, 0);
+
+        if (settings.getBoolean("my_first_time", true)) {
+            //The app is being started for the first time
+            //record the fact that the app has been started at least once
+            settings.edit().putBoolean("my_first_time", false).commit();
+            return true;
+        }
+        return false;
     }
 
     //Returns an arraylist of the equipment the user has selected to hide in the settings menu
