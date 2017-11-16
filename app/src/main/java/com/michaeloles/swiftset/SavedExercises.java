@@ -60,7 +60,7 @@ public class SavedExercises {
     //This is called if a template is being passed into a workout
     //ChosenOptions contains all the sorting categories
     //The critical info from each category is stored in a string:
-    //name/sortBy/dbColumnName-...(continues for each category)
+    //name/sortBy/dbColumnName-name2/sortBy2/dbColumnName2...(continues for each category)
     public static int addExercise(ArrayList<SortingCategory> chosenOptions, Context context){
         String s = "";
         for(SortingCategory sc:chosenOptions){

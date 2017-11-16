@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static boolean firstTimeCreated = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
     final String FIRST_USE_PREF = "FirstUsePref";
+    public static boolean firstTimeAppOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        boolean firstTimeUser = isFirstTmeUser();
+        firstTimeAppOpened = isFirstTmeUser();
+        if(firstTimeAppOpened){
+            setTemplates();
+        }
+        //https://developer.android.com/training/tv/playback/onboarding.html
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
         //Log.v("olesy","FirebaseInstanceId.getInstance().getToken()");
@@ -113,6 +118,33 @@ public class MainActivity extends AppCompatActivity {
         setViewAllText();
         updateSortingPath();
         addButtons(this);
+    }
+
+    //TODO Sets some example workout templates for the ser
+    private void setTemplates() {
+        Toast.makeText(getApplicationContext(),"SetTemplates",Toast.LENGTH_LONG);
+        //Create a workout w for each template and call dbHandler.addWorkout(w);
+        Workout hotel = new Workout("Hotel Workout");
+        //hotel.setExerciseNames();
+        hotel.setTemplate(true);
+
+        Workout beginnerLower = new Workout("Beginner Lowerbody");
+        //hotel.setExerciseNames();
+        hotel.setTemplate(true);
+
+        Workout beginnerUpper = new Workout("Beginner Upperbody");
+        //hotel.setExerciseNames();
+        hotel.setTemplate(true);
+
+        Workout core = new Workout("Core Circuit");
+        //hotel.setExerciseNames();
+        hotel.setTemplate(true);
+
+        WorkoutDBHandler dbHandler = new WorkoutDBHandler(getApplicationContext(), null, null, 1);
+        dbHandler.addWorkout(hotel);
+        dbHandler.addWorkout(beginnerLower);
+        dbHandler.addWorkout(beginnerUpper);
+        dbHandler.addWorkout(core);
     }
 
     //Checks if this is the first time the user has every opened the app by using shared preferences
