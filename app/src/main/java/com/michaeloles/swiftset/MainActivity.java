@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         firstTimeAppOpened = isFirstTmeUser();
-        if(firstTimeAppOpened){
+        if(true){
             setTemplates();
         }
         //https://developer.android.com/training/tv/playback/onboarding.html
@@ -125,8 +125,19 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"SetTemplates",Toast.LENGTH_LONG);
         //Create a workout w for each template and call dbHandler.addWorkout(w);
         Workout hotel = new Workout("Hotel Workout");
-        //hotel.setExerciseNames();
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary-Bodyweight&Bodyweight&Equipment-");
+        exerciseNames.add("Chest&Chest&Primary-Pushups&Pushup&Movement-");
+        exerciseNames.add("Human Pullover");
+        exerciseNames.add("Bodyweight&Bodyweight&Equipment-Shoulders&Shoulders&Primary-");
+        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary-Bodyweight&Bodyweight&Equipment-Unilateral&1&Unilateral-");
+        exerciseNames.add("Doorway Bicep Curls");
+        exerciseNames.add("Core&Core&Primary-Bodyweight&Bodyweight&Equipment-Hip Flexion&Hip Flexion&Movement-");
+        exerciseNames.add("Core&Core&Primary-Bodyweight&Bodyweight&Equipment-Rotation&Rotation&Movement-");
+        exerciseNames.add("Core&Core&Primary-Bodyweight&Bodyweight&Equipment-Lateral Flexion&Lateral Flexion&Movement-");
         hotel.setTemplate(true);
+        hotel.setExerciseNames(exerciseNames);
+
 
         Workout beginnerLower = new Workout("Beginner Lowerbody");
         //hotel.setExerciseNames();
@@ -142,9 +153,9 @@ public class MainActivity extends AppCompatActivity {
 
         WorkoutDBHandler dbHandler = new WorkoutDBHandler(getApplicationContext(), null, null, 1);
         dbHandler.addWorkout(hotel);
-        dbHandler.addWorkout(beginnerLower);
-        dbHandler.addWorkout(beginnerUpper);
-        dbHandler.addWorkout(core);
+//        dbHandler.addWorkout(beginnerLower);
+//        dbHandler.addWorkout(beginnerUpper);
+//        dbHandler.addWorkout(core);
     }
 
     //Checks if this is the first time the user has every opened the app by using shared preferences

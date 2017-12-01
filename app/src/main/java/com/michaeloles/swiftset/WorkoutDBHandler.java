@@ -72,10 +72,11 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         values.put(COLUMN_WORKOUTNAME,workout.getName());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
         Log.v("olesy",workout.exerciseNamesToString());
-        values.put(COLUMN_DATE,workout.getDate().getTime().toString());
         if(workout.isTemplate()){
             values.put(COLUMN_TEMPLATE,1);
+            values.put(COLUMN_DATE,Calendar.getInstance().getTime().toString());
         }else{
+            values.put(COLUMN_DATE,workout.getDate().getTime().toString());
             values.put(COLUMN_TEMPLATE,0);
         }
         SQLiteDatabase db = getWritableDatabase();
