@@ -48,7 +48,11 @@ public class Workout implements Serializable{
         return exerciseNames;
     }
 
-    public void setExerciseNames(ArrayList<String> exerciseNames) {
+    public void setExerciseNames(ArrayList<String> en) {
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        for(String name:en){
+            exerciseNames.add(name);
+        }
         this.exerciseNames = exerciseNames;
     }
 

@@ -438,11 +438,10 @@ public class WorkoutViewer extends AppCompatActivity {
         templatesByIndex = new HashMap<>();
         for(int i=0;i<en.size();i++){
             String name = en.get(i);
-            Log.v("olesy",name);
             if(name.contains("&")){//& denotes that something is a template
                 isTemplate.add(true);
                 ArrayList<SortingCategory> sortingBy = new ArrayList<>();//Contains each sorting category in the specific template
-                String[] categoriesList = name.split("-");
+                String[] categoriesList = name.split("#");
                 String newTemplateString = "";//String with all the sorting categories in this template
                 for(int j=0;j<categoriesList.length;j++){
                     String[] categoryParams = categoriesList[j].split("&");

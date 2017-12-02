@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         firstTimeAppOpened = isFirstTmeUser();
-        if(true){
+        if(firstTimeAppOpened){
             setTemplates();
         }
         //https://developer.android.com/training/tv/playback/onboarding.html
@@ -120,42 +120,62 @@ public class MainActivity extends AppCompatActivity {
         addButtons(this);
     }
 
-    //TODO Sets some example workout templates for the ser
     private void setTemplates() {
         Toast.makeText(getApplicationContext(),"SetTemplates",Toast.LENGTH_LONG);
         //Create a workout w for each template and call dbHandler.addWorkout(w);
         Workout hotel = new Workout("Hotel Workout");
         ArrayList<String> exerciseNames = new ArrayList<>();
-        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary-Bodyweight&Bodyweight&Equipment-");
-        exerciseNames.add("Chest&Chest&Primary-Pushups&Pushup&Movement-");
+        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary#Bodyweight&Bodyweight&Equipment#");
+        exerciseNames.add("Chest&Chest&Primary#Pushups&Pushup&Movement#");
         exerciseNames.add("Human Pullover");
-        exerciseNames.add("Bodyweight&Bodyweight&Equipment-Shoulders&Shoulders&Primary-");
-        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary-Bodyweight&Bodyweight&Equipment-Unilateral&1&Unilateral-");
+        exerciseNames.add("Bodyweight&Bodyweight&Equipment#Shoulders&Shoulders&Primary#");
+        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary#Bodyweight&Bodyweight&Equipment#Unilateral&1&Unilateral#");
         exerciseNames.add("Doorway Bicep Curls");
-        exerciseNames.add("Core&Core&Primary-Bodyweight&Bodyweight&Equipment-Hip Flexion&Hip Flexion&Movement-");
-        exerciseNames.add("Core&Core&Primary-Bodyweight&Bodyweight&Equipment-Rotation&Rotation&Movement-");
-        exerciseNames.add("Core&Core&Primary-Bodyweight&Bodyweight&Equipment-Lateral Flexion&Lateral Flexion&Movement-");
+        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Hip Flexion&Hip Flexion&Movement#");
+        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Rotation&Rotation&Movement#");
+        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Lateral Flexion&Lateral Flexion&Movement#");
         hotel.setTemplate(true);
         hotel.setExerciseNames(exerciseNames);
-
+        exerciseNames.clear();
 
         Workout beginnerLower = new Workout("Beginner Lowerbody");
-        //hotel.setExerciseNames();
-        hotel.setTemplate(true);
+        exerciseNames.add("Goblet Squat");
+        exerciseNames.add("Calf Raises");
+        exerciseNames.add("Hamstrings&Hamstrings&Primary#Beginner&1&Difficulty#");
+        exerciseNames.add("Quads&Quads&Primary#Beginner&1&Difficulty#");
+        exerciseNames.add("Banded Good Mornings");
+        exerciseNames.add("Glutes&Glutes&Primary#Unilateral&1&Unilateral#Beginner&1&Difficulty#");
+        beginnerLower.setTemplate(true);
+        beginnerLower.setExerciseNames(exerciseNames);
+        exerciseNames.clear();
 
         Workout beginnerUpper = new Workout("Beginner Upperbody");
-        //hotel.setExerciseNames();
-        hotel.setTemplate(true);
+        exerciseNames.add("Bench Press");
+        exerciseNames.add("Band Assisted Chip Ups");
+        exerciseNames.add("Shoulders&Shoulders&Primary#Overhead Press&Overhead&Movement#Beginner&1&Difficulty#");
+        exerciseNames.add("Rear Delts&Rear Delts&Primary#Beginner&1&Difficulty#");
+        exerciseNames.add("Biceps&Biceps&Primary#Dumbbell&Dumbbell&Equipment#");
+        exerciseNames.add("Triceps&Triceps&Primary#Isolation&Isolation&Joint#Beginner&1&Difficulty#");
+        beginnerUpper.setTemplate(true);
+        beginnerUpper.setExerciseNames(exerciseNames);
+        exerciseNames.clear();
 
         Workout core = new Workout("Core Circuit");
-        //hotel.setExerciseNames();
-        hotel.setTemplate(true);
+        exerciseNames.add("DB Farmers Carry");
+        exerciseNames.add("Core&Core&Primary#Anti-Extension&Anti Extension&Movement#");
+        exerciseNames.add("Core&Core&Primary#Anti-Rotation&Anti Rotation&Movement#");
+        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Hip Flexion&Hip Flexion&Movement#");
+        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Rotation&Rotation&Movement#");
+        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Lateral Flexion&Lateral Flexion&Movement#");
+        core.setTemplate(true);
+        core.setExerciseNames(exerciseNames);
+        exerciseNames.clear();
 
         WorkoutDBHandler dbHandler = new WorkoutDBHandler(getApplicationContext(), null, null, 1);
         dbHandler.addWorkout(hotel);
-//        dbHandler.addWorkout(beginnerLower);
-//        dbHandler.addWorkout(beginnerUpper);
-//        dbHandler.addWorkout(core);
+        dbHandler.addWorkout(beginnerLower);
+        dbHandler.addWorkout(beginnerUpper);
+        dbHandler.addWorkout(core);
     }
 
     //Checks if this is the first time the user has every opened the app by using shared preferences

@@ -63,7 +63,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
         where += ") OR [EQUIPMENT] is null";
         ContentValues cv = new ContentValues();
         cv.put("Eliminated", "1");
-        Log.v("olesy",where);
+        //Log.v("olesy",where);
         db.update(EXERCISE_TABLE, cv, where, null);
         db.close();
     }
@@ -73,7 +73,6 @@ public class ExerciseDb extends SQLiteAssetHelper {
         String where = "([DIFFICULTY] > " + level + ") OR [DIFFICULTY] is null";
         ContentValues cv = new ContentValues();
         cv.put("Eliminated", "1");
-        Log.v("olesy",where);
         db.update(EXERCISE_TABLE, cv, where, null);
         db.close();
     }

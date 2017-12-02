@@ -64,7 +64,7 @@ public class SavedExercises {
     public static int addExercise(ArrayList<SortingCategory> chosenOptions, Context context){
         String s = "";
         for(SortingCategory sc:chosenOptions){
-            s += sc.getName()+"&"+sc.getSortBy()+"&"+sc.getDbColumnName()+"-";
+            s += sc.getName()+"&"+sc.getSortBy()+"&"+sc.getDbColumnName()+"#";
         }
         savedExerciseList.add(s);
         SharedPreferences sharedPrefs = context.getSharedPreferences("savedExercises", Context.MODE_PRIVATE);

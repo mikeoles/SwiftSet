@@ -71,7 +71,6 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(COLUMN_WORKOUTNAME,workout.getName());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
-        Log.v("olesy",workout.exerciseNamesToString());
         if(workout.isTemplate()){
             values.put(COLUMN_TEMPLATE,1);
             values.put(COLUMN_DATE,Calendar.getInstance().getTime().toString());
