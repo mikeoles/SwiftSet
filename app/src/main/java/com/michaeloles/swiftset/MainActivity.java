@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private static boolean firstTimeCreated = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
     final String FIRST_USE_PREF = "FirstUsePref";
-    public static boolean firstTimeAppOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +54,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        firstTimeAppOpened = isFirstTmeUser();
-        if(firstTimeAppOpened){
-            setTemplates();
-        }
-        //https://developer.android.com/training/tv/playback/onboarding.html
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
-        //Log.v("olesy","FirebaseInstanceId.getInstance().getToken()");
+
+        if(isFirstTmeUser()){
+            setTemplates();
+            showAppDemo();
+        }
+
+        //If intent has reset main boolean, remove the current progress on the main activity
         if(getIntent().hasExtra("reset_main")) {
             Bundle extras = getIntent().getExtras();
             Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
             firstTimeCreated = needsReset;
         }
-        for(String s:SavedExercises.getSavedExerciseList()) Log.v("olesy","3:"+s);
+
         if(firstTimeCreated) {
             removedOptions.clear();
             currentOptions.clear();
@@ -120,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
         addButtons(this);
     }
 
+    //Shows the user a demo of how the app works the first time they open it
+    private void showAppDemo() {
+    }
+
+    //Makes some preset templates for the user the first time the open the app
     private void setTemplates() {
         Toast.makeText(getApplicationContext(),"SetTemplates",Toast.LENGTH_LONG);
         //Create a workout w for each template and call dbHandler.addWorkout(w);
