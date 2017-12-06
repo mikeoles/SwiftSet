@@ -122,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Shows the user a demo of how the app works the first time they open it
     private void showAppDemo() {
+        //TODO
     }
+
 
     //Makes some preset templates for the user the first time the open the app
     private void setTemplates() {
