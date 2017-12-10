@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private static boolean firstTimeCreated = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
     final String FIRST_USE_PREF = "FirstUsePref";
+    ViewPager viewPager;
+    CustomSwipeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
-
+        showAppDemo();
         if(isFirstTmeUser()){
             setTemplates();
             showAppDemo();
@@ -122,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Shows the user a demo of how the app works the first time they open it
     private void showAppDemo() {
-        //TODO
+        Intent intent = new Intent(this, OnboardingActivity.class);
+        startActivity(intent);
     }
 
 
