@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
-        showAppDemo();
         if(isFirstTmeUser()){
             setTemplates();
             showAppDemo();
@@ -300,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.demo_video) {
-            Intent intent = new Intent(this,DemoVideo.class);
+            Intent intent = new Intent(this,OnboardingActivity.class);
             this.startActivity(intent);
             return true;
         }
