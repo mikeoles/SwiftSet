@@ -15,8 +15,16 @@ import android.widget.TextView;
 
 public class CustomSwipeAdapter extends PagerAdapter {
 
-    private int[] image_resources = {R.drawable.onboarding_1,R.drawable.onboarding_2,R.drawable.onboarding_3};
-    private String[] descriptions = {"One","Two","Three"};
+    private int[] image_resources = {R.drawable.onboarding_1,
+                                    R.drawable.onboarding_2,
+                                    R.drawable.onboarding_3,
+                                    R.drawable.onboarding_1,
+                                    R.drawable.onboarding_3};
+    private String[] descriptions = {"Find the perfect exercise",
+                                    "View tutorial videos and save exercises",
+                                    "Save exercise types to make workout templates",
+                                    "Save any workout or template",
+                                    "\"Build Workout\" turns templates into unique workouts"};
     private Context context;
     private LayoutInflater layoutInflater;
 
