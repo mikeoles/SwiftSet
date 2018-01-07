@@ -18,13 +18,13 @@ public class CustomSwipeAdapter extends PagerAdapter {
     private int[] image_resources = {R.drawable.onboarding_1,
                                     R.drawable.onboarding_2,
                                     R.drawable.onboarding_3,
-                                    R.drawable.onboarding_1,
-                                    R.drawable.onboarding_3};
-    private String[] descriptions = {"Find the perfect Exercise",
-                                    "View a video and save it to a Workout",
-                                    "Use Exercise Types to make Workout Templates",
-                                    "Save any Workout or Template",
-                                    "\"Build Workout\" makes a Unique Workout from a Template"};
+                                    R.drawable.onboarding_4,
+                                    R.drawable.onboarding_5};
+    private String[] descriptions = {"Find the perfect exercise",
+                                    "Save it to a workout",
+                                    "Choose exercise types to make workout templates",
+                                    "Templates build unique workouts every time",
+                                    "Save any workout or template for later"};
     private Context context;
     private LayoutInflater layoutInflater;
 
