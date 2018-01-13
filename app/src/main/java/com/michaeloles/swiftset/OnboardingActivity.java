@@ -29,11 +29,13 @@ public class OnboardingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPageSelected(int position)
-            {
+            public void onPageSelected(int position) {
                 if(position==viewPager.getAdapter().getCount()-1){
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     intent.putExtra("reset_main",true);
+                    if(getIntent().hasExtra("first_time_user")) {
+                        intent.putExtra("set_prefrences", true);
+                    }
                     startActivity(intent);
                 }
             }

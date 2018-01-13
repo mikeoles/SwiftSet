@@ -20,6 +20,7 @@ public class ExerciseSelector extends AppCompatActivity {
     SearchView searchView;
     ArrayAdapter adapter;
     ExerciseDb remaining;
+    int lastRandom = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,14 @@ public class ExerciseSelector extends AppCompatActivity {
         final HashMap<String,String> urls = remaining.getUrls();
 
         Random r = new Random();
-        int rand = r.nextInt(colList.size());
+        int rand;
+        //Avoids choosing the same exercise twice in a row
+        while(true) {
+            rand = r.nextInt(colList.size());
+            if(rand!=lastRandom || colList.size()<2) {
+                break;
+            }
+        }
 
         String selectedFromList = colList.get(rand);
         String selectedUrl = urls.get(selectedFromList);

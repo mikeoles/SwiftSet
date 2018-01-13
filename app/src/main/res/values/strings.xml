@@ -27,40 +27,13 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_advanced_exercises">Enable advanced exercises</string>
-    <string name="pref_description_advanced_exercises">Turn this off if you are a beginner to avoid being shown difficult exercises</string>
+    <string name="pref_title_advanced_exercises">Exercise Difficulty Level</string>
+    <string name="pref_description_advanced_exercises">Choose to hide exercises with higher levels of difficulty</string>
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_hide_equipment">Hide Equipment</string>
-    <string-array name="pref_exercises_list_titles">
-        <item>Barbell</item>
-        <item>Dumbbell</item>
-        <item>Machine</item>
-        <item>Bodyweight</item>
-        <item>Cable</item>
-        <item>Trap Bar</item>
-        <item>Smith</item>
-        <item>Landmine</item>
-        <item>Weighted Belt</item>
-        <item>Kettlebell</item>
-        <item>Medball</item>
-        <item>Stability Ball</item>
-        <item>Bosu</item>
-        <item>Chains</item>
-        <item>Banded</item>
-        <item>Sled</item>
-        <item>Weight Plate</item>
-        <item>Specialized Bars</item>
-        <item>Glute Ham </item>
-        <item>Hanging Band</item>
-        <item>Direct Band</item>
-        <item>Foam Roller</item>
-        <item>Battle Rope</item>
-        <item>TRX</item>
-        <item>Other</item>
-    </string-array>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

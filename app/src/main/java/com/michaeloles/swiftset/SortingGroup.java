@@ -55,6 +55,15 @@ public class SortingGroup implements Serializable{
 
     public ArrayList<SortingCategory> getCategories() {return categories;}
 
+    //Returns a list of strings of the categories names
+    public String[] getCategoryNames() {
+        String[] values = new String[categories.size()];
+        for(int i=0; i<values.length;i++){
+            values[i] = categories.get(i).getName();
+        }
+        return values;
+    }
+
     public ArrayList<Class> getCantFollow() {return cantFollow;}
 
     public int getGroupIcon() {return groupIcon;}

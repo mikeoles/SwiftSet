@@ -416,7 +416,7 @@ public class WorkoutViewer extends AppCompatActivity {
         //Sort by each sorting category in to sort by
         ExerciseDb db = new ExerciseDb(context);
         db.resetDatabase();
-        this.personalize(db,getAdvanced(),getHiddenEquipment());
+        this.personalize(db,getDifficulty(),getHiddenEquipment());
         for(SortingCategory sc:toSortBy){
             db.removeRows(sc.getDbColumnName(),sc.getSortBy());
         }
@@ -504,9 +504,9 @@ public class WorkoutViewer extends AppCompatActivity {
     }
 
     //returns if a user has allowed advanced exercises in the settings menu
-    private Boolean getAdvanced() {
+    private String getDifficulty() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedPreferences.getBoolean("advanced_switch", true);
+        return sharedPreferences.getString("base_difficulty_level", "3");
     }
 
     //Returns an arraylist of the equipment the user has selected to hide in the settings menu
@@ -516,9 +516,13 @@ public class WorkoutViewer extends AppCompatActivity {
         return new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
     }
 
-    private void personalize(ExerciseDb db, Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
+    /** Is called to personalize the available results based on the users preferences
+     ** @param difficultyLevel the difficulty level selected by the user 1-4, remove exercises more difficult than this
+     ** @param hiddenEquipment removes equipment the user has selected in settings to they don't want
+     **/
+    private void personalize(ExerciseDb db, String difficultyLevel,ArrayList<String> hiddenEquipment) {
         //Removes exercises with difficulties of 4 if the user doesn't want them
-        if(!isAdvanced) db.removeDifficultyAbove("3");
+        db.removeDifficultyAbove(difficultyLevel);
         db.EquipRemoveRows(hiddenEquipment);
     }
 

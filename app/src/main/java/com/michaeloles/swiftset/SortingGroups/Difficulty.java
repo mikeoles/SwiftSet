@@ -13,7 +13,8 @@ public class Difficulty extends SortingGroup implements Serializable {
         this.setName("Difficultly Level");
         this.addOption( new SortingCategory("Beginner", "Difficulty", "1"));
         this.addOption( new SortingCategory("Intermediate","Difficulty","2"));
-        this.addOption( new SortingCategory("Difficult","Difficulty","3"));
+        this.addOption( new SortingCategory("Experienced","Difficulty","3"));
         this.addOption( new SortingCategory("Advanced","Difficulty","4"));
     }
+
 }

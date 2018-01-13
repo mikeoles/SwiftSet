@@ -1,6 +1,8 @@
 package com.michaeloles.swiftset;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -59,9 +61,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
-        if(isFirstTmeUser()){
+        if(isFirstTimeUser()){
             setTemplates();
             showAppDemo();
+        }
+
+        if(getIntent().hasExtra("set_prefrences")){
+            setDifficultyLevel();
+            firstTimeCreated = true;
         }
 
         //If intent has reset main boolean, remove the current progress on the main activity
@@ -82,13 +89,13 @@ public class MainActivity extends AppCompatActivity {
             Button reset = (Button) findViewById(R.id.reset);
             reset.setVisibility(View.GONE);
             backToHome = true;
-            personalize(getAdvanced(),getHiddenEquipment());
+            personalize(getDifficulty(),getHiddenEquipment());
             firstTimeCreated = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
             backToHome = false;
             Button reset = (Button) findViewById(R.id.reset);
-            if(!getAdvanced() || chosenOptions.size()==3){
+            if(chosenOptions.size()==3){
                 reset.setVisibility(View.GONE);
             }else{
                 reset.setVisibility(View.VISIBLE);
@@ -125,7 +132,32 @@ public class MainActivity extends AppCompatActivity {
     //Shows the user a demo of how the app works the first time they open it
     private void showAppDemo() {
         Intent intent = new Intent(this, OnboardingActivity.class);
+        intent.putExtra("first_time_user",true);
         startActivity(intent);
+    }
+
+    private void setDifficultyLevel(){
+        //Show popup allowing user to choose difficulty levels
+        AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
+        //alt_bld.setIcon(R.drawable.icon);
+        alt_bld.setTitle("What's Your Experience Level");
+        Difficulty difficulty = new Difficulty();
+        final String[] levelNames = difficulty.getCategoryNames();
+        alt_bld.setSingleChoiceItems(levelNames, -1, new DialogInterface
+                .OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //Item is the level of difficulty selected to be removed
+                remainingDb.removeDifficultyAbove(Integer.toString(item+1));
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putInt("base_difficulty_level",item+1);
+                Toast.makeText(getApplicationContext(),
+                        "Difficulty Level: = "+levelNames[item], Toast.LENGTH_SHORT).show();
+                dialog.dismiss();// dismiss the alertbox after chose option
+
+            }
+        });
+        AlertDialog alert = alt_bld.create();
+        alert.show();
     }
 
 
@@ -190,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Checks if this is the first time the user has every opened the app by using shared preferences
     //Can be used to show tutorials and set default workouts and templates
-    private boolean isFirstTmeUser() {
+    private boolean isFirstTimeUser() {
 
         SharedPreferences settings = getSharedPreferences(FIRST_USE_PREF, 0);
 
@@ -212,18 +244,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //returns if a user has allowed advanced exercises in the settings menu
-    private Boolean getAdvanced() {
+    private String getDifficulty() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedPreferences.getBoolean("advanced_switch", true);
+        return sharedPreferences.getString("base_difficulty_level", "3");
     }
 
     /** Is called to personalize the available results based on the users preferences
-    ** @param isAdvanced removes exercises with difficult 4/5 and 5/5 from search results if not advanced
+    ** @param difficultyLevel the difficulty level selected by the user, remove exercises more difficult than this
     ** @param hiddenEquipment removes equipment the user has selected in settings to they don't want
     **/
-    private static void personalize(Boolean isAdvanced,ArrayList<String> hiddenEquipment) {
+    private static void personalize(String difficultyLevel,ArrayList<String> hiddenEquipment) {
         //Removes exercises with difficulties of 4 if the user doesn't want them
-        if(!isAdvanced) remainingDb.removeDifficultyAbove("3");
+        remainingDb.removeDifficultyAbove(difficultyLevel);
         remainingDb.EquipRemoveRows(hiddenEquipment);
     }
 
@@ -347,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewWorkouts(View view) {
         remainingDb.resetDatabase();
-        personalize(getAdvanced(),getHiddenEquipment());
+        personalize(getDifficulty(),getHiddenEquipment());
         Intent intent = new Intent(this, WorkoutViewer.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);

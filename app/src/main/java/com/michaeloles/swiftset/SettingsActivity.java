@@ -23,9 +23,11 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.view.View;
 
+import com.michaeloles.swiftset.SortingGroups.Difficulty;
 import com.michaeloles.swiftset.SortingGroups.Equipment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -200,8 +202,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             //bindPreferenceSummaryToValue(findPreference("example_text"));
             //bindPreferenceSummaryToValue(findPreference("hidden_equipment_list"));
-            final MultiSelectListPreference listPreference = (MultiSelectListPreference) findPreference("hidden_equipment");
-            setListPreferenceData(listPreference);
+            final MultiSelectListPreference hiddenEqiupPreference = (MultiSelectListPreference) findPreference("hidden_equipment");
+            setListPreferenceData(hiddenEqiupPreference);
+
+            final ListPreference difficultyPreference = (ListPreference) findPreference("base_difficulty_level");
+            setListPreferenceData(difficultyPreference);
         }
 
         @Override
@@ -225,6 +230,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             entryList.add(sc.getName());
             entryValuesList.add(sc.getSortBy());//When the users selects a type of equipment the sortByValue is used to remove it
         }
+        CharSequence[] entries = entryList.toArray(new CharSequence[entryList.size()]);
+        CharSequence[] entryValues = entryValuesList.toArray(new CharSequence[entryValuesList.size()]);;
+        lp.setEntries(entries);
+        lp.setEntryValues(entryValues);
+    }
+
+    protected static void setListPreferenceData(ListPreference lp) {
+        Difficulty difficulty = new Difficulty();
+        List<String> entryList = Arrays.asList(difficulty.getCategoryNames());
+        String[] values = {"1","2","3","4"};
+        List<String> entryValuesList = Arrays.asList(values);
         CharSequence[] entries = entryList.toArray(new CharSequence[entryList.size()]);
         CharSequence[] entryValues = entryValuesList.toArray(new CharSequence[entryValuesList.size()]);;
         lp.setEntries(entries);
