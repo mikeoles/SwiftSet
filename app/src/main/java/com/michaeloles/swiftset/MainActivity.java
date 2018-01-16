@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.michaeloles.swiftset.SortingGroups.Difficulty;
 import com.michaeloles.swiftset.SortingGroups.Equipment;
@@ -47,20 +46,33 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<SortingCategory> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
     public static ExerciseDb remainingDb; // Updated to hold the remaining exercises
     //On the first time opening the app create menu options, after that update based on user selections
-    private static boolean firstTimeCreated = true;
+    private static boolean refresh = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
     final String FIRST_USE_PREF = "FirstUsePref";
-    ViewPager viewPager;
-    CustomSwipeAdapter adapter;
+    public static String currentDifficultyLevel = "4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.create();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(!currentDifficultyLevel.equals(getDifficultyLevel())){
+            currentDifficultyLevel = getDifficultyLevel();
+            refresh = true;
+            this.create();
+        }
+    }
+
+    private void create(){
         if(isFirstTimeUser()){
             setTemplates();
             showAppDemo();
@@ -68,17 +80,17 @@ public class MainActivity extends AppCompatActivity {
 
         if(getIntent().hasExtra("set_prefrences")){
             setDifficultyLevel();
-            firstTimeCreated = true;
+            refresh = true;
         }
 
         //If intent has reset main boolean, remove the current progress on the main activity
         if(getIntent().hasExtra("reset_main")) {
             Bundle extras = getIntent().getExtras();
             Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
-            firstTimeCreated = needsReset;
+            refresh = needsReset;
         }
 
-        if(firstTimeCreated) {
+        if(refresh) {
             removedOptions.clear();
             currentOptions.clear();
             chosenOptions.clear();
@@ -89,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
             Button reset = (Button) findViewById(R.id.reset);
             reset.setVisibility(View.GONE);
             backToHome = true;
-            personalize(getDifficulty(),getHiddenEquipment());
-            firstTimeCreated = false;
+            personalize(getDifficultyLevel(),getHiddenEquipment());
+            refresh = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
             backToHome = false;
@@ -118,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if(i==0) {
-                   dbSortCategory = chosenSc.getDbColumnName();
+                    dbSortCategory = chosenSc.getDbColumnName();
                 }
                 dbSortBy += chosenSc.getSortBy() + "/";
             }
@@ -139,17 +151,19 @@ public class MainActivity extends AppCompatActivity {
     private void setDifficultyLevel(){
         //Show popup allowing user to choose difficulty levels
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
-        //alt_bld.setIcon(R.drawable.icon);
-        alt_bld.setTitle("What's Your Experience Level");
+        alt_bld.setIcon(R.mipmap.ic_launcher);
+        alt_bld.setTitle("What's Your Experience Level?");
         Difficulty difficulty = new Difficulty();
         final String[] levelNames = difficulty.getCategoryNames();
-        alt_bld.setSingleChoiceItems(levelNames, -1, new DialogInterface
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int currentlySelected = Integer.parseInt(sharedPreferences.getString("base_difficulty_level","1"));
+        alt_bld.setSingleChoiceItems(levelNames,currentlySelected-1 , new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 //Item is the level of difficulty selected to be removed
                 remainingDb.removeDifficultyAbove(Integer.toString(item+1));
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putInt("base_difficulty_level",item+1);
+                sharedPreferences.edit().putString("base_difficulty_level",Integer.toString(item+1));
                 Toast.makeText(getApplicationContext(),
                         "Difficulty Level: = "+levelNames[item], Toast.LENGTH_SHORT).show();
                 dialog.dismiss();// dismiss the alertbox after chose option
@@ -244,9 +258,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //returns if a user has allowed advanced exercises in the settings menu
-    private String getDifficulty() {
+    private String getDifficultyLevel() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedPreferences.getString("base_difficulty_level", "3");
+        return sharedPreferences.getString("base_difficulty_level", "4");
     }
 
     /** Is called to personalize the available results based on the users preferences
@@ -275,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Resets all of the progress from the user in selecting an exercise and returns to the main activity
     public void reset(View view){
-        firstTimeCreated = true;
+        refresh = true;
         //Refresh Activity with as first time created to reset the database
         finish();
         startActivity(getIntent());
@@ -379,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewWorkouts(View view) {
         remainingDb.resetDatabase();
-        personalize(getDifficulty(),getHiddenEquipment());
+        personalize(getDifficultyLevel(),getHiddenEquipment());
         Intent intent = new Intent(this, WorkoutViewer.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);

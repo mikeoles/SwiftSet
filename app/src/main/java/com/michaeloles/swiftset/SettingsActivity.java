@@ -4,6 +4,7 @@ package com.michaeloles.swiftset;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -14,6 +15,7 @@ import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -46,6 +48,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
+    private static Context context;
+
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -242,9 +246,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         String[] values = {"1","2","3","4"};
         List<String> entryValuesList = Arrays.asList(values);
         CharSequence[] entries = entryList.toArray(new CharSequence[entryList.size()]);
-        CharSequence[] entryValues = entryValuesList.toArray(new CharSequence[entryValuesList.size()]);;
+        CharSequence[] entryValues = entryValuesList.toArray(new CharSequence[entryValuesList.size()]);
         lp.setEntries(entries);
         lp.setEntryValues(entryValues);
+        lp.setValue(MainActivity.currentDifficultyLevel);
     }
 
     /**
