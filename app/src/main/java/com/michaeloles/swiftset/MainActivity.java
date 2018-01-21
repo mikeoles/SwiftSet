@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -49,17 +50,17 @@ public class MainActivity extends AppCompatActivity {
     private static boolean refresh = true;
     private static boolean backToHome = true;//Checks what we should do when the back button is pressed
     final String FIRST_USE_PREF = "FirstUsePref";
-    public static String currentDifficultyLevel = "4";
+    public static String currentDifficultyLevel = "3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.create();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(spChanged);
+        this.create();
     }
 
     @Override
@@ -78,16 +79,18 @@ public class MainActivity extends AppCompatActivity {
             showAppDemo();
         }
 
-        if(getIntent().hasExtra("set_prefrences")){
-            setDifficultyLevel();
-            refresh = true;
-        }
-
         //If intent has reset main boolean, remove the current progress on the main activity
         if(getIntent().hasExtra("reset_main")) {
             Bundle extras = getIntent().getExtras();
             Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
             refresh = needsReset;
+        }
+
+
+        if(getIntent().hasExtra("set_preferences")){
+            Intent intent = new Intent(this, SettingsActivity.class);
+            intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName());
+            intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS,true);
         }
 
         if(refresh) {
@@ -142,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Shows the user a demo of how the app works the first time they open it
-    private void showAppDemo() {
-        Intent intent = new Intent(this, OnboardingActivity.class);
+    private void showAppDemo() {        Intent intent = new Intent(this, OnboardingActivity.class);
         intent.putExtra("first_time_user",true);
-        startActivity(intent);
+        startActivity(intent)
+;
     }
 
     private void setDifficultyLevel(){
-        //Show popup allowing user to choose difficulty levels
+        //Show popup allowing user to choose difficulty level
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
         alt_bld.setIcon(R.mipmap.ic_launcher);
         alt_bld.setTitle("What's Your Experience Level?");
@@ -163,11 +166,11 @@ public class MainActivity extends AppCompatActivity {
                 //Item is the level of difficulty selected to be removed
                 remainingDb.removeDifficultyAbove(Integer.toString(item+1));
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString("base_difficulty_level",Integer.toString(item+1));
+                sharedPreferences.edit().putString("base_difficulty_level",Integer.toString(item+1)).commit();
                 Toast.makeText(getApplicationContext(),
-                        "Difficulty Level: = "+levelNames[item], Toast.LENGTH_SHORT).show();
+                        "Difficulty Level: "+levelNames[item], Toast.LENGTH_SHORT).show();
                 dialog.dismiss();// dismiss the alertbox after chose option
-
+                sharedPreferences.edit().remove("set_preferences").commit();
             }
         });
         AlertDialog alert = alt_bld.create();
@@ -260,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
     //returns if a user has allowed advanced exercises in the settings menu
     private String getDifficultyLevel() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedPreferences.getString("base_difficulty_level", "4");
+        return sharedPreferences.getString("base_difficulty_level", "3");
     }
 
     /** Is called to personalize the available results based on the users preferences
@@ -269,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
     **/
     private static void personalize(String difficultyLevel,ArrayList<String> hiddenEquipment) {
         //Removes exercises with difficulties of 4 if the user doesn't want them
+        Log.v("Olesy","Personalize");
         remainingDb.removeDifficultyAbove(difficultyLevel);
         remainingDb.EquipRemoveRows(hiddenEquipment);
     }
@@ -476,12 +480,12 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if(key.equals("notifications_new_message")){
+            if(key.equals("notifications_new_message")) {
                 //on represents if the user has noticaitons turned on
                 boolean on = sharedPreferences.getBoolean("notifications_new_message", true);
-                if(!on) {//If notifications are not on add them to a list of people not to send noticiations to
+                if (!on) {//If notifications are not on add them to a list of people not to send noticiations to
                     FirebaseMessaging.getInstance().subscribeToTopic("Unsubscribed");
-                }else{//If they re-enable notifications, remove them from the blocked list
+                } else {//If they re-enable notifications, remove them from the blocked list
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("Unsubscribed");
                 }
             }
