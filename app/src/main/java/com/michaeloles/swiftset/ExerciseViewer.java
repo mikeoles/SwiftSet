@@ -51,7 +51,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     }
 
     //Finds the start time and video code of a youtube video and returns it as a YoutubeData class
-    private YoutubeData parseYoutubeUrl(String selectedUrl) {
+    public static YoutubeData parseYoutubeUrl(String selectedUrl) {
         //separate the youtube video code and time from the url
         String youtubeCode = "", videoCode;
         int startTimeMillis = 0;
@@ -93,12 +93,14 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
             if (timecode.contains("m")) {//m in url d
                 String[] parts = timecode.split("m");
                 startTimeMillis = Integer.parseInt(parts[0]) * 60000;//Convert the url minutes time to milliseconds
-                timecode = parts[1];
+                if(parts.length>1) {
+                    timecode = parts[1];
+                }
             }
 
             if (timecode.contains("s")) {
                 try {
-                    startTimeMillis += startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
+                    startTimeMillis += NumberFormat.getInstance().parse(timecode).intValue() * 1000;
                 } catch (ParseException e) {
                     //TODO badURL found here too
                 }
@@ -110,7 +112,7 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
 
     //Finds the index of the first location of a seperator character in the URL
     //Returns the end of the string if none are found
-    private int findFirstSeperator(String s) {
+    private static int findFirstSeperator(String s) {
         int endOfVideoCode = s.length();
         if (s.contains("&")) {
             endOfVideoCode = Math.min(endOfVideoCode, s.indexOf("&"));
@@ -178,12 +180,3 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
     }
 }
 
-class YoutubeData{
-    public int startTimeMillis = 0;
-    public String videoCode = "";
-
-    YoutubeData(String vc, int st){
-        this.videoCode = vc;
-        this.startTimeMillis = st;
-    }
-}
