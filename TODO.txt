@@ -1,2 +1,10 @@
-Barbell Squats With Direct Band Loading
-Sumo DL
+--Barbell Squats With Direct Band Loading
+--Sumo DL
+--KB Swings
+-Add Search Shortcuts
+-Stop adding extra sorting groups
++Barbell Holds
++Side Planks
++Deadbugs
++Sled Powerwalks
++Reverse Crunch
