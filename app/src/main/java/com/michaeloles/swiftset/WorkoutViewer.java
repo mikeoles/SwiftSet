@@ -51,6 +51,16 @@ public class WorkoutViewer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_viewer);
+        this.create();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.create();
+    }
+
+    public void create(){
         setTitle("Workouts");
         //If the user has selected a saved workout
         if(getIntent().hasExtra("calendar_selection")) {

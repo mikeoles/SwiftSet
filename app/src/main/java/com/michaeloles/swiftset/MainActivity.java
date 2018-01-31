@@ -436,6 +436,7 @@ public class MainActivity extends AppCompatActivity {
     //Adds buttons for every sorting group to the main page
     public void addButtons(Context context){
         LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
+        l.removeAllViews();
 
         final ArrayList<SortingGroup> names=new ArrayList<>();//Helps the onClick function find what group was selected
 
