@@ -1,3 +1,10 @@
--After a catergory is selected by the user perform a query on the database
--Print out the results of that query in a list on the ExerciseSelector.java class
--Add category PPL to exercise database for push, pull, legs
+--Barbell Squats With Direct Band Loading
+--Sumo DL
+--KB Swings
+-Add Search Shortcuts
+-Stop adding extra sorting groups
++Barbell Holds
++Side Planks
++Deadbugs
++Sled Powerwalks
++Reverse Crunch
