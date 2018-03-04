@@ -1,2 +1,3 @@
 -Add Search Shortcuts
 -Don't display video on exercise page if it can't be found on youtube
+-Display newly added exercises
