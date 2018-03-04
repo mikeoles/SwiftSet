@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         //If intent has reset main boolean, remove the current progress on the main activity
         if(getIntent().hasExtra("reset_main")) {
+            Log.v("olesy","2");
             Bundle extras = getIntent().getExtras();
             Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
             refresh = needsReset;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(getIntent().hasExtra("set_preferences")){
+            Log.v("olesy","3");
             Intent intent = new Intent(this, SettingsActivity.class);
             intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName());
             intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS,true);
@@ -147,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
     //Shows the user a demo of how the app works the first time they open it
     private void showAppDemo() {        Intent intent = new Intent(this, OnboardingActivity.class);
         intent.putExtra("first_time_user",true);
-        startActivity(intent)
-;
+        startActivity(intent);
     }
 
     private void setDifficultyLevel(){
@@ -435,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Adds buttons for every sorting group to the main page
     public void addButtons(Context context){
-        LinearLayout l = (LinearLayout) findViewById(R.id.allOptions);
+        LinearLayout l = (LinearLayout) findViewById(R.id.sortingButtons);
         l.removeAllViews();
 
         final ArrayList<SortingGroup> names=new ArrayList<>();//Helps the onClick function find what group was selected

@@ -365,11 +365,11 @@ public class WorkoutViewer extends AppCompatActivity {
     //Creates the array adapter based on a list of strings which represent the exercises
     private void initList(ArrayList<String> en) {
         exerciseNames = en;
-        //Go Through the arraylist of strings and find which are templates and which are exercises
-        createMaps(exerciseNames);
 
+        //Go Through the arraylist of strings and find which are templates and which are exercises
+        ArrayList<String> displayNames = createMaps(exerciseNames);
         //Creates a list with each exercise and stores the exercise name and url in the intent
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseNames);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayNames);
         final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);
 
         exListView.setAdapter(adapter);
@@ -443,9 +443,10 @@ public class WorkoutViewer extends AppCompatActivity {
 
     //Creates a map of the index of each element in the listview that's a template to a list of the sortingCategories in that template
     //Also creates a list of booleans so you can figure out if an element selected in an exercise or a template
-    private void createMaps(ArrayList<String> en) {
+    private ArrayList<String> createMaps(ArrayList<String> en) {
         isTemplate = new ArrayList<>();//Keeps track of which exercises in the workout are templates
         templatesByIndex = new HashMap<>();
+        ArrayList<String> displayNames = new ArrayList<>();
         for(int i=0;i<en.size();i++){
             String name = en.get(i);
             if(name.contains("&")){//& denotes that something is a template
@@ -463,11 +464,13 @@ public class WorkoutViewer extends AppCompatActivity {
                 templatesByIndex.put(i,sortingBy);
                 newTemplateString = newTemplateString.substring(0,newTemplateString.length()-1);
                 newTemplateString = newTemplateString.toUpperCase();//Uppercase so user knows it's not an exercise
-                en.set(i,newTemplateString);
+                name = newTemplateString;
             }else{
                 isTemplate.add(false);
             }
+            displayNames.add(name);
         }
+        return displayNames;
     }
 
     //Removes an exercise from the workout (From both the screen and the savedExercises arrayList)
@@ -540,8 +543,7 @@ public class WorkoutViewer extends AppCompatActivity {
     public void makeWorkout(View view){
         //Get exercises from savedWorkouts
         ArrayList<String> savedExercises = SavedExercises.getSavedExerciseList();
-
-        //Go through savedExercises and whenever there is a template, remplace it with a random exercise matching that template
+        //Go through savedExercises and whenever there is a template, replace it with a random exercise matching that template
         for(int i=0; i<savedExercises.size(); i++){
             if(isTemplate.get(i)) {
                 String randomExercise = openRandomExFromTemplate(i, getApplicationContext());
