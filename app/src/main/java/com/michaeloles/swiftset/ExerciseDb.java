@@ -130,9 +130,10 @@ public class ExerciseDb extends SQLiteAssetHelper {
     public String getUrlByExerciseName(String name){
         String url = "";
         SQLiteDatabase db = getReadableDatabase();
-        String where = "[" + EXERCISE_NAME_COL + "] == '" + name +"'";
+        String where = "[" + EXERCISE_NAME_COL + "] == ?";
         String[] tableColumns = {EXERCISE_NAME_COL,URL_COL};
-        Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, null,
+        //Third arg allows strings with quotes to work and mitigates SQL injection
+        Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, new String[] { name },
                 null, null, null);
         int count = c.getCount();
         if(count==1) {

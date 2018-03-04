@@ -441,8 +441,12 @@ public class WorkoutViewer extends AppCompatActivity {
         return colList.get(rand);
     }
 
-    //Creates a map of the index of each element in the listview that's a template to a list of the sortingCategories in that template
-    //Also creates a list of booleans so you can figure out if an element selected in an exercise or a template
+    /**
+     * Creates a map of the index of each element in the listview that's a template to a list of the sortingCategories in that template
+     * Also creates a list of booleans so you can figure out if an element selected in an exercise or a template
+     * @param en list of all the exercises in the curreny workout
+     * @return the en parameter with the tempaltes converted to readable names to be displayed on buttons to the user
+    */
     private ArrayList<String> createMaps(ArrayList<String> en) {
         isTemplate = new ArrayList<>();//Keeps track of which exercises in the workout are templates
         templatesByIndex = new HashMap<>();
