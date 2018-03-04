@@ -1,6 +1,4 @@
---Barbell Squats With Direct Band Loading
 --Sumo DL
---KB Swings
 -Add Search Shortcuts
 +Barbell Holds
 +Side Planks
