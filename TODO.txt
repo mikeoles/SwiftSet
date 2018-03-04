@@ -1,7 +1,2 @@
---Sumo DL
 -Add Search Shortcuts
-+Barbell Holds
-+Side Planks
-+Deadbugs
-+Sled Powerwalks
-+Reverse Crunch
+-Don't display video on exercise page if it can't be found on youtube
