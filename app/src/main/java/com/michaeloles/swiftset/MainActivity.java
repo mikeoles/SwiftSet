@@ -1,8 +1,6 @@
 package com.michaeloles.swiftset;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,10 +10,8 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -44,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<SortingGroup> currentOptions = new ArrayList<>();//all the current ways the exercises can still be sorted
     public static ArrayList<SortingGroup> removedOptions = new ArrayList<>();//all the sorting groups that have already been used or cant be used
-    public static ArrayList<SortingCategory> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
+    private static ArrayList<SortingCategory> chosenOptions = new ArrayList<>();//all the sorting groups that have been selected by the user
     public static ExerciseDb remainingDb; // Updated to hold the remaining exercises
     //On the first time opening the app create menu options, after that update based on user selections
     private static boolean refresh = true;
@@ -81,20 +77,18 @@ public class MainActivity extends AppCompatActivity {
 
         //If intent has reset main boolean, remove the current progress on the main activity
         if(getIntent().hasExtra("reset_main")) {
-            Log.v("olesy","2");
             Bundle extras = getIntent().getExtras();
-            Boolean needsReset = (Boolean) extras.getSerializable("reset_main");
-            refresh = needsReset;
+            refresh = (Boolean) extras.getSerializable("reset_main");
         }
 
 
         if(getIntent().hasExtra("set_preferences")){
-            Log.v("olesy","3");
             Intent intent = new Intent(this, SettingsActivity.class);
             intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName());
             intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS,true);
         }
 
+        backToHome = refresh;
         if(refresh) {
             removedOptions.clear();
             currentOptions.clear();
@@ -105,23 +99,16 @@ public class MainActivity extends AppCompatActivity {
             SavedExercises.resetExerciseList(this);
             Button reset = (Button) findViewById(R.id.reset);
             reset.setVisibility(View.GONE);
-            backToHome = true;
             personalize(getDifficultyLevel(),getHiddenEquipment());
             refresh = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
-            backToHome = false;
             Button reset = (Button) findViewById(R.id.reset);
-            if(chosenOptions.size()==3){
-                reset.setVisibility(View.GONE);
-            }else{
-                reset.setVisibility(View.VISIBLE);
-            }
 
             Bundle extras = getIntent().getExtras();
             ArrayList<SortingCategory> chosenScList = (ArrayList<SortingCategory>) extras.getSerializable("chosen_sorting_category");
             String dbSortCategory = "";
-            String dbSortBy = "";
+            StringBuilder dbSortBy = new StringBuilder();
             assert chosenScList != null;
             for(int i=0;i<chosenScList.size();i++) {
                 SortingCategory chosenSc = chosenScList.get(i);
@@ -137,9 +124,12 @@ public class MainActivity extends AppCompatActivity {
                 if(i==0) {
                     dbSortCategory = chosenSc.getDbColumnName();
                 }
-                dbSortBy += chosenSc.getSortBy() + "/";
+                dbSortBy.append(chosenSc.getSortBy()).append("/");
             }
-            dbSearch(remainingDb, dbSortBy, dbSortCategory);
+            int visibility = chosenOptions.isEmpty() ? View.GONE : View.VISIBLE;
+            reset.setVisibility(visibility);
+
+            dbSearch(remainingDb, dbSortBy.toString(), dbSortCategory);
         }
         setViewAllText();
         updateSortingPath();
@@ -152,36 +142,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setDifficultyLevel(){
-        //Show popup allowing user to choose difficulty level
-        AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
-        alt_bld.setIcon(R.mipmap.ic_launcher);
-        alt_bld.setTitle("What's Your Experience Level?");
-        Difficulty difficulty = new Difficulty();
-        final String[] levelNames = difficulty.getCategoryNames();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        int currentlySelected = Integer.parseInt(sharedPreferences.getString("base_difficulty_level","1"));
-        alt_bld.setSingleChoiceItems(levelNames,currentlySelected-1 , new DialogInterface
-                .OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                //Item is the level of difficulty selected to be removed
-                remainingDb.removeDifficultyAbove(Integer.toString(item+1));
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString("base_difficulty_level",Integer.toString(item+1)).commit();
-                Toast.makeText(getApplicationContext(),
-                        "Difficulty Level: "+levelNames[item], Toast.LENGTH_SHORT).show();
-                dialog.dismiss();// dismiss the alertbox after chose option
-                sharedPreferences.edit().remove("set_preferences").commit();
-            }
-        });
-        AlertDialog alert = alt_bld.create();
-        alert.show();
-    }
-
-
     //Makes some preset templates for the user the first time the open the app
     private void setTemplates() {
-        Toast.makeText(getApplicationContext(),"SetTemplates",Toast.LENGTH_LONG);
         //Create a workout w for each template and call dbHandler.addWorkout(w);
         Workout hotel = new Workout("Hotel Workout");
         ArrayList<String> exerciseNames = new ArrayList<>();
@@ -247,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         if (settings.getBoolean("my_first_time", true)) {
             //The app is being started for the first time
             //record the fact that the app has been started at least once
-            settings.edit().putBoolean("my_first_time", false).commit();
+            settings.edit().putBoolean("my_first_time", false).apply();
             return true;
         }
         return false;
@@ -257,8 +219,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> getHiddenEquipment() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Set<String> defaultSet = new HashSet<>();
-        ArrayList<String> hiddenEquipment = new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
-        return hiddenEquipment;
+        return new ArrayList<>(sharedPreferences.getStringSet("hidden_equipment",defaultSet));
     }
 
     //returns if a user has allowed advanced exercises in the settings menu
@@ -272,8 +233,6 @@ public class MainActivity extends AppCompatActivity {
     ** @param hiddenEquipment removes equipment the user has selected in settings to they don't want
     **/
     private static void personalize(String difficultyLevel,ArrayList<String> hiddenEquipment) {
-        //Removes exercises with difficulties of 4 if the user doesn't want them
-        Log.v("Olesy","Personalize");
         remainingDb.removeDifficultyAbove(difficultyLevel);
         remainingDb.EquipRemoveRows(hiddenEquipment);
     }
@@ -311,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateSortingPath() {
         //Add new buttons for each of the sorting groups available to the user
         LinearLayout sortingPath = (LinearLayout) findViewById(R.id.sortingPath);
+        sortingPath.removeAllViews();
 
         for(int i=0; i<chosenOptions.size(); i++){
             String name = chosenOptions.get(i).getName();
@@ -433,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
 
     //Adds buttons for every sorting group to the main page
     public void addButtons(Context context){
