@@ -41,12 +41,12 @@ public class ExerciseViewer extends YouTubeBaseActivity implements YouTubePlayer
         if(remaining==null) {
             startActivity(new Intent(this, MainActivity.class));
         }else {
-            String selectedUrl = remaining.getUrlByExerciseName(selectedExercise);
+            String selectedUrl = remaining.getUrlFromExerciseId(Integer.parseInt(selectedExercise));
 
             ytData = parseYoutubeUrl(selectedUrl);
 
             TextView t = (TextView) findViewById(R.id.exerciseTitle);
-            t.setText(selectedExercise);
+            t.setText(ExerciseDb.getNameFromExerciseId(selectedExercise));
         }
     }
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -18,9 +19,11 @@ public class ExerciseDb extends SQLiteAssetHelper {
     public static final String DATABASE_NAME = "main_exercises_13.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
+    private static final String EXERCISE_ID_COL = "_id";
     private static final String EXERCISE_NAME_COL = "Name";
     private static final String URL_COL = "Url";
-    private static final HashMap<String,String> urls = new HashMap<>();
+    private static final HashMap<String,String> urls = new HashMap<>();//Map exercise ID to exercise URL
+    private static final HashMap<String,String> names = new HashMap<>();//Map exercise ID to exercise Name
 
     public ExerciseDb(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,7 +34,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
     public ArrayList<String> getColumnsList(){
         SQLiteDatabase db = getReadableDatabase();
         String where = "[Eliminated] == '0'";
-        String[] tableColumns = {EXERCISE_NAME_COL,URL_COL};
+        String[] tableColumns = {EXERCISE_ID_COL,URL_COL,EXERCISE_NAME_COL};
         Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, null,
                 null, null, null);
 
@@ -39,10 +42,12 @@ public class ExerciseDb extends SQLiteAssetHelper {
         c.moveToFirst();
         try {
             do {
-                String colName = c.getString(c.getColumnIndex(EXERCISE_NAME_COL));
-                columns.add(colName);
+                String colID = c.getString(c.getColumnIndex(EXERCISE_ID_COL));
+                columns.add(colID);
                 String url = c.getString(c.getColumnIndex(URL_COL));
-                urls.put(colName,url);
+                urls.put(colID,url);
+                String name = c.getString(c.getColumnIndex(EXERCISE_NAME_COL));
+                names.put(colID,name);
             } while (c.moveToNext());
         }catch (CursorIndexOutOfBoundsException ae){
             Log.e("Cursor Error", ae.toString());
@@ -148,8 +153,38 @@ public class ExerciseDb extends SQLiteAssetHelper {
         return url;
     }
 
+    public String getUrlFromExerciseId(int id){
+        String url = "";
+        String idString = Integer.toString(id);
+        SQLiteDatabase db = getReadableDatabase();
+        String where = "[" + EXERCISE_ID_COL + "] == ?";
+        String[] tableColumns = {URL_COL};
+        //Third arg allows strings with quotes to work and mitigates SQL injection
+        Cursor c = db.query(EXERCISE_TABLE, tableColumns, where, new String[] { idString },
+                null, null, null);
+        int count = c.getCount();
+        if(count==1) {
+            c.moveToFirst();
+            try {
+                url = c.getString(c.getColumnIndex(URL_COL));
+            } catch (CursorIndexOutOfBoundsException ae) {
+                Log.e("Cursor Error", ae.toString());
+            }
+        }else{
+            Log.e("Url Error","Cant find url for exercise with ID: " + id);
+        }
+        db.close();
+        c.close();
+        return url;
+    }
+
+    public static String getNameFromExerciseId(String id){
+        return names.get(id);
+    }
+
     //Getters and Setters
     public HashMap<String,String> getUrls() {
         return urls;
     }
+    public static HashMap<String,String> getNames() { return names; }
 }
