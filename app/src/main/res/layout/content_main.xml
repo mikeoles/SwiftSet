@@ -73,16 +73,6 @@
                 android:textColor="#ffffff"
                 android:textStyle="bold" />
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Reset"
-                android:id="@+id/reset"
-                android:background="@drawable/main_button"
-                android:onClick="reset"
-                android:textStyle="bold"
-                android:textColor="#ffffff" />
             </LinearLayout>
             <LinearLayout
                 android:orientation="vertical"

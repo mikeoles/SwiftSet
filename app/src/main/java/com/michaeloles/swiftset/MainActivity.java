@@ -97,14 +97,11 @@ public class MainActivity extends AppCompatActivity {
             addMainMenuOptions();
             remainingDb.resetDatabase();
             SavedExercises.resetExerciseList(this);
-            Button reset = (Button) findViewById(R.id.reset);
-            reset.setVisibility(View.GONE);
+
             personalize(getDifficultyLevel(),getHiddenEquipment());
             refresh = false;
         }else{
             //The sorting category chosen by the user in CategorySelector.java.  Will be used to shrink the exercise pool
-            Button reset = (Button) findViewById(R.id.reset);
-
             Bundle extras = getIntent().getExtras();
             ArrayList<SortingCategory> chosenScList = (ArrayList<SortingCategory>) extras.getSerializable("chosen_sorting_category");
             String dbSortCategory = "";
@@ -126,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 dbSortBy.append(chosenSc.getSortBy()).append("/");
             }
-            int visibility = chosenOptions.isEmpty() ? View.GONE : View.VISIBLE;
-            reset.setVisibility(visibility);
 
             dbSearch(remainingDb, dbSortBy.toString(), dbSortCategory);
         }
@@ -172,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
         exerciseNames.clear();
 
         Workout beginnerUpper = new Workout("Beginner Upperbody");
-        //exerciseNames.add("1");//Bench Press
-        //exerciseNames.add("671");//Band Assisted Chip Ups
+        exerciseNames.add("1");//Bench Press
+        exerciseNames.add("671");//Band Assisted Chip Ups
         exerciseNames.add("Shoulders&Shoulders&Primary#Overhead Press&Overhead&Movement#Beginner&1&Difficulty#");
         exerciseNames.add("Rear Delts&Rear Delts&Primary#Beginner&1&Difficulty#");
         exerciseNames.add("Biceps&Biceps&Primary#Dumbbell&Dumbbell&Equipment#");
