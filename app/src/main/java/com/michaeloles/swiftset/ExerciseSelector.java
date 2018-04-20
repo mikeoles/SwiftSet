@@ -57,6 +57,7 @@ public class ExerciseSelector extends AppCompatActivity {
         //Creates a list with each exercise and stores the exercise name and url in the intent
         String[] exerciseNames = new String[searchResults.length];//Convert searchResults which contains IDs to names
         HashMap<String,String> namesMap = ExerciseDb.getNames();
+        final HashMap<String,String> idsMap = ExerciseDb.getIds();
         for(int i=0; i<searchResults.length; i++) {
             exerciseNames[i] = namesMap.get(searchResults[i]);
         }
@@ -66,9 +67,9 @@ public class ExerciseSelector extends AppCompatActivity {
         exListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                String selectedFromList = searchResults[position];
+                String selectedFromList = (String) (exListView.getItemAtPosition(position));
                 Intent intent = new Intent(view.getContext(), ExerciseViewer.class);
-                intent.putExtra("selected_exercise", selectedFromList);
+                intent.putExtra("selected_exercise", idsMap.get(selectedFromList));
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class ExerciseDb extends SQLiteAssetHelper {
 
-    public static final String DATABASE_NAME = "main_exercises_13.db";
+    public static final String DATABASE_NAME = "main_exercises_15.db";
     private static final String EXERCISE_TABLE = "exercises";
     private static final int DATABASE_VERSION = 1;
     private static final String EXERCISE_ID_COL = "_id";
@@ -24,12 +24,13 @@ public class ExerciseDb extends SQLiteAssetHelper {
     private static final String URL_COL = "Url";
     private static final HashMap<String,String> urls = new HashMap<>();//Map exercise ID to exercise URL
     private static final HashMap<String,String> names = new HashMap<>();//Map exercise ID to exercise Name
+    private static final HashMap<String,String> ids = new HashMap<>();//Map exercise Name to exercise ID
 
     public ExerciseDb(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    //Returns a list of all the columns remaining in the database
+    //Returns a list of all the columns remaining in the database by id
     //Also fills a matching arrayList of the urls of all the exercises
     public ArrayList<String> getColumnsList(){
         SQLiteDatabase db = getReadableDatabase();
@@ -48,6 +49,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
                 urls.put(colID,url);
                 String name = c.getString(c.getColumnIndex(EXERCISE_NAME_COL));
                 names.put(colID,name);
+                ids.put(name,colID);
             } while (c.moveToNext());
         }catch (CursorIndexOutOfBoundsException ae){
             Log.e("Cursor Error", ae.toString());
@@ -187,4 +189,5 @@ public class ExerciseDb extends SQLiteAssetHelper {
         return urls;
     }
     public static HashMap<String,String> getNames() { return names; }
+    public static HashMap<String,String> getIds() {return ids;}
 }

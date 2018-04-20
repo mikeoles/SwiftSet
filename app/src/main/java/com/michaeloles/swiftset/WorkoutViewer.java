@@ -371,6 +371,7 @@ public class WorkoutViewer extends AppCompatActivity {
         //Creates a list with each exercise and stores the exercise name and url in the intent
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayNames);
         final ListView exListView = (ListView) findViewById(R.id.workoutExerciseList);
+        final HashMap<String,String> idsMap = ExerciseDb.getIds();
 
         exListView.setAdapter(adapter);
         exListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -381,6 +382,7 @@ public class WorkoutViewer extends AppCompatActivity {
                 if(!isTemplate.get(position)) {
                     //If the list item is not  a template just open the exercise
                     selectedFromList = (String) (exListView.getItemAtPosition(position));
+                    selectedFromList = idsMap.get(selectedFromList);
                 }else{
                     //If it is a template find a random exercise matching those search results
                     selectedFromList = openRandomExFromTemplate(position,getApplicationContext());
@@ -451,6 +453,7 @@ public class WorkoutViewer extends AppCompatActivity {
         isTemplate = new ArrayList<>();//Keeps track of which exercises in the workout are templates
         templatesByIndex = new HashMap<>();
         ArrayList<String> displayNames = new ArrayList<>();
+        ExerciseDb remaining = MainActivity.getRemainingDb();
         for(int i=0;i<en.size();i++){
             String name = en.get(i);
             if(name.contains("&")){//& denotes that something is a template
@@ -471,6 +474,7 @@ public class WorkoutViewer extends AppCompatActivity {
                 name = newTemplateString;
             }else{
                 isTemplate.add(false);
+                name = ExerciseDb.getNameFromExerciseId(name);
             }
             displayNames.add(name);
         }

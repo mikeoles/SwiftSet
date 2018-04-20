@@ -149,10 +149,10 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> exerciseNames = new ArrayList<>();
         exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary#Bodyweight&Bodyweight&Equipment#");
         exerciseNames.add("Chest&Chest&Primary#Pushups&Pushup&Movement#");
-        exerciseNames.add("Human Pullover");
+        exerciseNames.add("182");//Human Pullover
         exerciseNames.add("Bodyweight&Bodyweight&Equipment#Shoulders&Shoulders&Primary#");
         exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary#Bodyweight&Bodyweight&Equipment#Unilateral&1&Unilateral#");
-        exerciseNames.add("Doorway Bicep Curls");
+        exerciseNames.add("631");//Doorway Bicep Curls
         exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Hip Flexion&Hip Flexion&Movement#");
         exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Rotation&Rotation&Movement#");
         exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Lateral Flexion&Lateral Flexion&Movement#");
@@ -161,19 +161,19 @@ public class MainActivity extends AppCompatActivity {
         exerciseNames.clear();
 
         Workout beginnerLower = new Workout("Beginner Lowerbody");
-        exerciseNames.add("Goblet Squat");
-        exerciseNames.add("Calf Raises");
+        exerciseNames.add("263");//Goblet Squat
+        exerciseNames.add("335");//Calf Raises
         exerciseNames.add("Hamstrings&Hamstrings&Primary#Beginner&1&Difficulty#");
         exerciseNames.add("Quads&Quads&Primary#Beginner&1&Difficulty#");
-        exerciseNames.add("Banded Good Mornings");
+        exerciseNames.add("298");//Banded Good Mornings
         exerciseNames.add("Glutes&Glutes&Primary#Unilateral&1&Unilateral#Beginner&1&Difficulty#");
         beginnerLower.setTemplate(true);
         beginnerLower.setExerciseNames(exerciseNames);
         exerciseNames.clear();
 
         Workout beginnerUpper = new Workout("Beginner Upperbody");
-        exerciseNames.add("Bench Press");
-        exerciseNames.add("Band Assisted Chip Ups");
+        //exerciseNames.add("1");//Bench Press
+        //exerciseNames.add("671");//Band Assisted Chip Ups
         exerciseNames.add("Shoulders&Shoulders&Primary#Overhead Press&Overhead&Movement#Beginner&1&Difficulty#");
         exerciseNames.add("Rear Delts&Rear Delts&Primary#Beginner&1&Difficulty#");
         exerciseNames.add("Biceps&Biceps&Primary#Dumbbell&Dumbbell&Equipment#");
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         exerciseNames.clear();
 
         Workout core = new Workout("Core Circuit");
-        exerciseNames.add("DB Farmers Carry");
+        exerciseNames.add("3");//Dumbbell Farmers Carries
         exerciseNames.add("Core&Core&Primary#Anti-Extension&Anti Extension&Movement#");
         exerciseNames.add("Core&Core&Primary#Anti-Rotation&Anti Rotation&Movement#");
         exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Hip Flexion&Hip Flexion&Movement#");
