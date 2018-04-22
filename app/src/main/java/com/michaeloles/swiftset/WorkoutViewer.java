@@ -264,8 +264,8 @@ public class WorkoutViewer extends AppCompatActivity {
         ArrayList<String> exerciseList = w.getExerciseNames();
         showEditButtons(true);
         //remove items from the workout list
-        ListView l = (ListView) findViewById(R.id.workoutExerciseList);
-        l.setAdapter(null);
+        ListView listView = (ListView) findViewById(R.id.workoutExerciseList);
+        listView.setAdapter(null);
 
         exerciseList.remove("");
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
@@ -329,7 +329,7 @@ public class WorkoutViewer extends AppCompatActivity {
         }
 
         initList(exerciseList);
-        setListViewHeightBasedOnChildren(l);
+        setListViewHeightBasedOnChildren(listView);
     }
 
     @Override
@@ -454,6 +454,7 @@ public class WorkoutViewer extends AppCompatActivity {
         templatesByIndex = new HashMap<>();
         ArrayList<String> displayNames = new ArrayList<>();
         ExerciseDb remaining = MainActivity.getRemainingDb();
+        remaining.getColumnsList();
         for(int i=0;i<en.size();i++){
             String name = en.get(i);
             if(name.contains("&")){//& denotes that something is a template

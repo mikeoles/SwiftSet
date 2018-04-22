@@ -180,9 +180,7 @@ public class ExerciseDb extends SQLiteAssetHelper {
         return url;
     }
 
-    public static String getNameFromExerciseId(String id){
-        return names.get(id);
-    }
+    public static String getNameFromExerciseId(String id){ return names.get(id); }
 
     //Getters and Setters
     public HashMap<String,String> getUrls() {
