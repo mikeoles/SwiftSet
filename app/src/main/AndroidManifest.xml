@@ -41,7 +41,6 @@
         </activity>
         <activity android:name=".WorkoutCalendar" />
         <activity android:name=".OnboardingActivity" />
-        <activity android:name=".ChooseLevel"></activity>
     </application>
 
 </manifest>

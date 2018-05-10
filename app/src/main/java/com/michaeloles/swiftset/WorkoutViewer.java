@@ -60,7 +60,20 @@ public class WorkoutViewer extends AppCompatActivity {
         this.create();
     }
 
-    public void create(){
+    @Override
+    public void onBackPressed() {
+        //Avoids going back to the calendar when a user presses back, it seems better to just go to the main actvity
+        if(getIntent().hasExtra("calendar_selection")) {
+            Intent intent = new Intent(WorkoutViewer.this,MainActivity.class);
+            intent.putExtra("reset_main",true);
+            startActivity(intent);
+        }else{
+            super.onBackPressed();
+        }
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    private void create(){
         setTitle("Workouts");
         //If the user has selected a saved workout
         if(getIntent().hasExtra("calendar_selection")) {
@@ -113,6 +126,7 @@ public class WorkoutViewer extends AppCompatActivity {
         }else{
             input.setText(workoutName.getText());
         }
+
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
@@ -258,16 +272,16 @@ public class WorkoutViewer extends AppCompatActivity {
     }
 
     //Adds the exercise buttons to the screen
-    public void addExerciseButtons(Workout w){
+    private void addExerciseButtons(Workout w){
         String name = w.getName();
         Calendar date = w.getDate();
         ArrayList<String> exerciseList = w.getExerciseNames();
         showEditButtons(true);
-        //remove items from the workout list
+
         ListView listView = (ListView) findViewById(R.id.workoutExerciseList);
         listView.setAdapter(null);
 
-        exerciseList.remove("");
+        //exerciseList.remove("");
         TextView workoutName = (TextView) findViewById(R.id.workoutName);
         workoutDate = (TextView) findViewById(R.id.workoutDate);
         makeWorkout = (Button) findViewById(R.id.makeWorkout);
@@ -332,19 +346,6 @@ public class WorkoutViewer extends AppCompatActivity {
         setListViewHeightBasedOnChildren(listView);
     }
 
-    @Override
-    public void onBackPressed() {
-        //Avoids going back to the calendar when a user presses back, it seems better to just go to the main actvity
-        if(getIntent().hasExtra("calendar_selection")) {
-            Intent intent = new Intent(WorkoutViewer.this,MainActivity.class);
-            intent.putExtra("reset_main",true);
-            startActivity(intent);
-        }else{
-            super.onBackPressed();
-        }
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
     //Either hides or shows the edit buttons to the user
     //No edit buttons are shown if there's no exercises to save or clear from a workout
     public void showEditButtons(boolean b) {
@@ -387,9 +388,9 @@ public class WorkoutViewer extends AppCompatActivity {
                     //If it is a template find a random exercise matching those search results
                     selectedFromList = openRandomExFromTemplate(position,getApplicationContext());
                 }
+
                 if(selectedFromList==null){
                     Toast.makeText(view.getContext(),"No Matching Exercises Found",Toast.LENGTH_LONG).show();
-
                 }else {
                     //Open the exercise in exerciseViewer
                     Intent intent = new Intent(view.getContext(), ExerciseViewer.class);
