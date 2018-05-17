@@ -70,14 +70,11 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
     public void addWorkout(Workout workout){
         ContentValues values = new ContentValues();
         values.put(COLUMN_WORKOUTNAME,workout.getName());
+        Log.v("olesy",workout.exerciseNamesToString());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
-        if(workout.isTemplate()){
-            values.put(COLUMN_TEMPLATE,1);
-            values.put(COLUMN_DATE,Calendar.getInstance().getTime().toString());
-        }else{
-            values.put(COLUMN_DATE,workout.getDate().getTime().toString());
-            values.put(COLUMN_TEMPLATE,0);
-        }
+        int isTemplate = workout.isTemplate() ? 1 : 0;
+        values.put(COLUMN_TEMPLATE,isTemplate);
+        values.put(COLUMN_DATE,workout.getDate().getTime().toString());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_WORKOUTS, null, values);
         db.close();

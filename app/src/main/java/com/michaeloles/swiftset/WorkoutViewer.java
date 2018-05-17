@@ -130,18 +130,9 @@ public class WorkoutViewer extends AppCompatActivity {
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 name = input.getText().toString();
-                Workout w;
-                if(!firstSave){
-                        //Save the loaded workout with updated date if necessary
-                        if(newDate!=null) {
-                            w = new Workout(name,newDate,SavedExercises.getSavedExerciseList());
-                        }else{
-                            w = new Workout(name,loadedWorkout.getDate(),SavedExercises.getSavedExerciseList());
-                        }
-                }else{
-                    //Create a new workout to save
-                    w = new Workout(name,Calendar.getInstance(),SavedExercises.getSavedExerciseList());
-                }
+                if(firstSave) newDate = Calendar.getInstance();//If it has never been saved set date to current date
+                if(newDate==null) newDate = loadedWorkout.getDate();//If no new date has been set, use the old one
+                Workout w = new Workout(name,newDate,SavedExercises.getSavedExerciseList());
                 w.setTemplate(isTemplate.contains(true));//If there's any template exercises in the workout its a template workout
 
                 if(name.length()<1){
