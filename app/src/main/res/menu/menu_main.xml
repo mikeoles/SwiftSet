@@ -22,4 +22,11 @@
         android:title="@string/play_store_rating"
         android:icon="@drawable/ic_rate"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/privacy_policy"
+        android:orderInCategory="300"
+        android:title="@string/privacy_policy"
+        android:icon="@drawable/ic_rate"
+        app:showAsAction="never" />
 </menu>

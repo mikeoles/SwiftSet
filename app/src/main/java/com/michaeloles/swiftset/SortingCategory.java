@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SortingCategory implements Serializable{
     public String name = "";
     //Options that are now made available because this sorting group was chosen
-    //Ex: Fly is available after chest is chosen
+    //Ex: Chest movement patterns are available after chest is chosen
     public ArrayList<SortingGroup> newOptions = new ArrayList<>();
     //The name of the column in the database that this category will sort by
     public String dbColumnName;

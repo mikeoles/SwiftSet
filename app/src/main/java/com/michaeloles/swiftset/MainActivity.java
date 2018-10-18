@@ -326,6 +326,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.privacy_policy) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://swiftsetapp.com/privacy.html")));
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
