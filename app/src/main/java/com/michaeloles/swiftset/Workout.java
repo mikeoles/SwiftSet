@@ -56,7 +56,10 @@ public class Workout implements Serializable{
         this.exerciseNames = exerciseNames;
     }
 
-    public Calendar getDate() {return date;}
+    public Calendar getDate() {
+        if(date==null) this.date = Calendar.getInstance();
+        return date;
+    }
 
     public void setDate(Calendar date) {this.date = date;}
 

@@ -70,7 +70,6 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
     public void addWorkout(Workout workout){
         ContentValues values = new ContentValues();
         values.put(COLUMN_WORKOUTNAME,workout.getName());
-        Log.v("olesy",workout.exerciseNamesToString());
         values.put(COLUMN_EXERCISENAMES,workout.exerciseNamesToString());
         int isTemplate = workout.isTemplate() ? 1 : 0;
         values.put(COLUMN_TEMPLATE,isTemplate);
@@ -120,8 +119,12 @@ public class WorkoutDBHandler extends SQLiteOpenHelper{
     }
 
     //Returns the number of rows in the exercise table
-    public int numWorkouts(){
+    public int numWorkouts(boolean template){
         String countQuery = "SELECT  * FROM " + TABLE_WORKOUTS;
+        countQuery += " WHERE " + COLUMN_TEMPLATE + "=";
+        String isTemplate = "0";
+        if(template) isTemplate = "1";
+        countQuery += isTemplate;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = cursor.getCount();

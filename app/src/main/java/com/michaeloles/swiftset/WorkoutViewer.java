@@ -76,6 +76,15 @@ public class WorkoutViewer extends AppCompatActivity {
     private void create(){
         setTitle("Workouts");
         //If the user has selected a saved workout
+        dbHandler = new WorkoutDBHandler(getApplicationContext(), null, null, 1);
+        Button allExercisesButton = findViewById(R.id.allWorkouts);
+        String numWorkouts = Integer.toString(dbHandler.numWorkouts(false));
+        allExercisesButton.setText("All Workouts (" + numWorkouts + ")");
+
+        Button templatesButton = findViewById(R.id.templates);
+        String numTemplates = Integer.toString(dbHandler.numWorkouts(true));
+        templatesButton.setText("Templates (" + numTemplates + ")");
+
         if(getIntent().hasExtra("calendar_selection")) {
             Bundle extras = getIntent().getExtras();
             loadedWorkout = (Workout) extras.getSerializable("calendar_selection");
@@ -328,7 +337,7 @@ public class WorkoutViewer extends AppCompatActivity {
         if(exerciseList.size()==0){
             showEditButtons(false);
             dbHandler = new WorkoutDBHandler(this, null, null, 1);
-            if(dbHandler.numWorkouts()==0){
+            if(dbHandler.numWorkouts(false)==0){
                 Toast.makeText(this,"Looks like you don't have any saved workouts yet, search for exercises to create workouts",Toast.LENGTH_LONG).show();
             }
         }

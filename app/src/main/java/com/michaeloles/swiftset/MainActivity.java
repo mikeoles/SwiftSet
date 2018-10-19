@@ -27,12 +27,14 @@ import com.michaeloles.swiftset.SortingGroups.Equipment;
 import com.michaeloles.swiftset.SortingGroups.Joints;
 import com.michaeloles.swiftset.SortingGroups.MuscleGroup;
 import com.michaeloles.swiftset.SortingGroups.Plyometrics;
+import com.michaeloles.swiftset.SortingGroups.PredefinedTemplates;
 import com.michaeloles.swiftset.SortingGroups.PushPullLegs;
 import com.michaeloles.swiftset.SortingGroups.Sport;
 import com.michaeloles.swiftset.SortingGroups.Stability;
 import com.michaeloles.swiftset.SortingGroups.Tempo;
 import com.michaeloles.swiftset.SortingGroups.Unilateral;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void create(){
         if(isFirstTimeUser()){
-            setTemplates();
+            PredefinedTemplates.addTemplates(getApplicationContext(),PredefinedTemplates.TemplateType.STARTER);
             showAppDemo();
         }
 
@@ -135,64 +137,6 @@ public class MainActivity extends AppCompatActivity {
     private void showAppDemo() {        Intent intent = new Intent(this, OnboardingActivity.class);
         intent.putExtra("first_time_user",true);
         startActivity(intent);
-    }
-
-    //Makes some preset templates for the user the first time the open the app
-    private void setTemplates() {
-        //Create a workout w for each template and call dbHandler.addWorkout(w);
-        Workout hotel = new Workout("Hotel Workout");
-        ArrayList<String> exerciseNames = new ArrayList<>();
-        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary#Bodyweight&Bodyweight&Equipment#");
-        exerciseNames.add("Chest&Chest&Primary#Pushups&Pushup&Movement#");
-        exerciseNames.add("182");//Human Pullover
-        exerciseNames.add("Bodyweight&Bodyweight&Equipment#Shoulders&Shoulders&Primary#");
-        exerciseNames.add("Legs&Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips/Quads/Hamstrings/Calf/Glutes/Hips&Primary#Bodyweight&Bodyweight&Equipment#Unilateral&1&Unilateral#");
-        exerciseNames.add("631");//Doorway Bicep Curls
-        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Hip Flexion&Hip Flexion&Movement#");
-        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Rotation&Rotation&Movement#");
-        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Lateral Flexion&Lateral Flexion&Movement#");
-        hotel.setTemplate(true);
-        hotel.setExerciseNames(exerciseNames);
-        exerciseNames.clear();
-
-        Workout beginnerLower = new Workout("Beginner Lowerbody");
-        exerciseNames.add("263");//Goblet Squat
-        exerciseNames.add("335");//Calf Raises
-        exerciseNames.add("Hamstrings&Hamstrings&Primary#Beginner&1&Difficulty#");
-        exerciseNames.add("Quads&Quads&Primary#Beginner&1&Difficulty#");
-        exerciseNames.add("298");//Banded Good Mornings
-        exerciseNames.add("Glutes&Glutes&Primary#Unilateral&1&Unilateral#Beginner&1&Difficulty#");
-        beginnerLower.setTemplate(true);
-        beginnerLower.setExerciseNames(exerciseNames);
-        exerciseNames.clear();
-
-        Workout beginnerUpper = new Workout("Beginner Upperbody");
-        exerciseNames.add("1");//Bench Press
-        exerciseNames.add("671");//Band Assisted Chip Ups
-        exerciseNames.add("Shoulders&Shoulders&Primary#Overhead Press&Overhead&Movement#Beginner&1&Difficulty#");
-        exerciseNames.add("Rear Delts&Rear Delts&Primary#Beginner&1&Difficulty#");
-        exerciseNames.add("Biceps&Biceps&Primary#Dumbbell&Dumbbell&Equipment#");
-        exerciseNames.add("Triceps&Triceps&Primary#Isolation&Isolation&Joint#Beginner&1&Difficulty#");
-        beginnerUpper.setTemplate(true);
-        beginnerUpper.setExerciseNames(exerciseNames);
-        exerciseNames.clear();
-
-        Workout core = new Workout("Core Circuit");
-        exerciseNames.add("3");//Dumbbell Farmers Carries
-        exerciseNames.add("Core&Core&Primary#Anti-Extension&Anti Extension&Movement#");
-        exerciseNames.add("Core&Core&Primary#Anti-Rotation&Anti Rotation&Movement#");
-        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Hip Flexion&Hip Flexion&Movement#");
-        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Rotation&Rotation&Movement#");
-        exerciseNames.add("Core&Core&Primary#Bodyweight&Bodyweight&Equipment#Lateral Flexion&Lateral Flexion&Movement#");
-        core.setTemplate(true);
-        core.setExerciseNames(exerciseNames);
-        exerciseNames.clear();
-
-        WorkoutDBHandler dbHandler = new WorkoutDBHandler(getApplicationContext(), null, null, 1);
-        dbHandler.addWorkout(hotel);
-        dbHandler.addWorkout(beginnerLower);
-        dbHandler.addWorkout(beginnerUpper);
-        dbHandler.addWorkout(core);
     }
 
     //Checks if this is the first time the user has every opened the app by using shared preferences

@@ -24,9 +24,11 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.michaeloles.swiftset.SortingGroups.Difficulty;
 import com.michaeloles.swiftset.SortingGroups.Equipment;
+import com.michaeloles.swiftset.SortingGroups.PredefinedTemplates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,8 +50,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static Context context;
-
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -211,6 +211,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             final ListPreference difficultyPreference = (ListPreference) findPreference("base_difficulty_level");
             setListPreferenceData(difficultyPreference);
+
+            Preference button = findPreference(getString(R.string.pref_key_reset_templates));
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    PredefinedTemplates.addTemplates(getActivity(),PredefinedTemplates.TemplateType.STARTER);
+                    Toast.makeText(getActivity(),"Templates added",Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
+
         }
 
         @Override
